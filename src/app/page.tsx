@@ -1,6 +1,6 @@
 'use client';
 
-import Image from "next/image";
+
 import styles from "./page.module.css";
 import { useRouter } from "next/navigation";
 import { useAuth } from "./hooks/useAuth";
@@ -18,13 +18,16 @@ export default function Home() {
  
 
  
+  if(!user){
+    return (
+      <div>
+        <h1>Welcome to BudgetByte!!</h1>
+        <p>Please log in or register to continue</p>
+        <button onClick={() => router.push('/pages/login')}>Log In</button> 
+        <button onClick={() => router.push('/pages/register')}>Register</button> 
+      </div>
+    );
 
-  return (
-    <div>
-      <h1>Welcome to BudgetByte!!</h1>
-      <p>Please log in or register to continue</p>
-      <button onClick={() => router.push('/pages/login')}>Log In</button> 
-      <button onClick={() => router.push('/pages/register')}>Register</button> 
-    </div>
-  );
+  }
+  
 }
