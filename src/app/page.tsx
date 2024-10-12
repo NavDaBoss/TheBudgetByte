@@ -12,7 +12,7 @@ export default function Home() {
   const user = useAuth();
   useEffect(() => {
     if (user) {
-      router.push('/profile');
+      router.push('pages/profile');
     }
   }, [user, router]);
  
@@ -23,8 +23,8 @@ export default function Home() {
       <div>
         <h1>Welcome to BudgetByte!!</h1>
         <p>Please log in or register to continue</p>
-        <button onClick={() => router.push('/login')}>Log In</button> 
-        <button onClick={() => router.push('/register')}>Register</button> 
+        <button onClick={() => router.push('pages/login')}>Log In</button> 
+        <button onClick={() => router.push('pages/register')}>Register</button> 
       </div>
     );
 
