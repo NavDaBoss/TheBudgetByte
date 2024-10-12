@@ -1,8 +1,7 @@
-// pages/profile.jsx
 'use client';
 
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/router'; // Correct import for Pages Router
+import { useRouter } from 'next/router'; 
 import "./profile.css";
 
 export default function Profile() {
@@ -13,3 +12,4 @@ export default function Profile() {
     </div>
   );
 };
+
