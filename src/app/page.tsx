@@ -25,6 +25,7 @@ export default function Home() {
         <p>Please log in or register to continue</p>
         <button onClick={() => router.push('pages/login')}>Log In</button> 
         <button onClick={() => router.push('pages/register')}>Register</button> 
+        <button onClick={() => router.push('pages/profile')}>Profile</button> 
       </div>
     );
 
