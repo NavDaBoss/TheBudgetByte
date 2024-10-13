@@ -26,8 +26,20 @@ export default function Login() {
 
   return (
     <div>
-      <h1>Username:</h1>
+      <h1>Email:</h1>
+      <input
+        type="email"
+        placeholder="Enter your Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
       <h1>Password:</h1>
+      <input
+        type="password"
+        placeholder="Enter your Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
       <button onClick={login}>Login</button>
       <h1>New to Budget Byte?</h1>
       <button onClick={()=>router.push('/register')}>Register</button>
