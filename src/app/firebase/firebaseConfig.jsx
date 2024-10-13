@@ -20,12 +20,12 @@ const provider = new GoogleAuthProvider();
 const db = getFirestore(app); // Initialize Firestore
 
 // Function to save user data in Firestore
-const saveUserToFirestore = async (user) => {
+const saveUserToFirestore = async (user, displayName) => {
     await setDoc(doc(db, "users", user.uid), {
       uid: user.uid,
-      name: user.displayName || "Anonymous",
+      name: displayName || "Anonymous",
       email: user.email,
-      provider: user.providerData[0].providerId
+      provider: user.providerData[0].providerId || "email"
     });
   };
 
