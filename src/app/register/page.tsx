@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { auth, createUserWithEmailAndPassword, saveUserToFirestore } from '../firebase/firebaseConfig'
 import { useRouter } from 'next/navigation';
 import "./register.css"
-import Login from '../login/page';
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -73,7 +72,7 @@ export default function Register() {
       <button onClick={register}>Register</button>
       {errorMessage && <p>{errorMessage}</p>}
       <h1>Already have an account?</h1>
-      <button onClick={Login}>Continue to Login</button>
+      <button onClick={()=>router.push('/login')}>Continue to Login</button>
     </div>
   );
 }
