@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { auth, createUserWithEmailAndPassword, saveUserToFirestore } from '../firebase/firebaseConfig'
+import { auth, createUserWithEmailAndPassword, saveUserToFirestore, updateProfile } from '../firebase/firebaseConfig'
 import { useRouter } from 'next/navigation';
 import "./register.css"
 
@@ -24,7 +24,11 @@ export default function Register() {
         throw new Error("Password must be at least 6 characters long.")
       }
       const result = await createUserWithEmailAndPassword(auth, email, password);
-      await saveUserToFirestore(result.user, displayName); // Save user to Firestore
+      await updateProfile(result.user, {
+        displayName: displayName, // Set the displayName here
+      });
+
+      await saveUserToFirestore(result.user); // Save user to Firestore
       router.push('/login'); // Redirect to login page
     } catch (error) {
       console.error(error);
