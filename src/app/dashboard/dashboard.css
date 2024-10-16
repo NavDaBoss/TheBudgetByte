@@ -1,0 +1,103 @@
+.page {
+  display: grid;
+  grid-template-rows: 20px 1fr 20px;
+  justify-items: center;
+  min-height: 100svh;
+  margin-top: 220px;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  grid-row-start: 1;
+  width: 1000px;
+}
+
+h1 {
+  font-size: 32px;
+  text-transform: uppercase;
+  padding-top: 50px;
+}
+
+.title-line {
+  content: "";
+  width: 1000px;
+  border-top: 2px solid black;
+  margin: 10px 0 20px 0;
+}
+
+.nav-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.links button {
+  margin: 0 20px;
+}
+
+.dashed-line,
+.dashed-line tr {
+  content: "";
+  width: 100%;
+  border-top: 2px dashed black;
+  font-weight: bold;
+}
+
+.receipt {
+  width: 75%;
+  margin: 10px 0;
+}
+
+.receipt-title {
+  text-transform: uppercase;
+}
+
+.receipt-title p {
+  font-weight: bold;
+  padding: 1rem 0;
+}
+
+.receipt-date {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tbody tr:first-child td {
+  padding-top: 1rem;
+}
+
+tbody tr:last-child td {
+  padding-bottom: 1rem;
+}
+
+.receipt-head {
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.receipt-head th {
+  padding: 1rem 1.5rem;
+}
+
+thead th {
+  border-bottom: 2px dashed black;
+}
+
+.receipt-body {
+  text-transform: uppercase;
+}
+
+.receipt-body td {
+  padding: 0.5rem 1.5rem;
+}
