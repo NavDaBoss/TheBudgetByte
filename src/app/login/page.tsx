@@ -2,7 +2,7 @@
 
 import {useState, useEffect} from 'react';
 import { useRouter } from 'next/navigation';
-import { auth, provider, signInWithPopup, signInWithEmailAndPassword, saveUserToFirestore } from '../firebase/firebaseConfig';
+import { auth, provider, signInWithPopup, signInWithEmailAndPassword, saveUserToFirestore, sendPasswordResetEmail } from '../firebase/firebaseConfig';
 import { FirebaseError } from '@firebase/app';
 import "./login.css"
 
@@ -11,6 +11,9 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
+  const [passwordResetMessage, setpasswordResetMessage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [resetEmail, setResetEmail] = useState("");
   const router = useRouter();
 
 
@@ -27,6 +30,22 @@ export default function Login() {
       
     }
   };
+
+  const forgotPassword = async() => {
+    try {
+      if(resetEmail !== null){
+        await sendPasswordResetEmail(auth, resetEmail);
+        setpasswordResetMessage("Password reset email sent. Check your inbox.");
+        setIsModalOpen(false);
+
+      }
+    
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("Error sending password reset email. Please try again.");
+    }
+  };
+
 
 
   return (
@@ -46,7 +65,24 @@ export default function Login() {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={login}>Login</button>
+      <h1>Forgot your Password?</h1>
+      <button onClick={() => setIsModalOpen(true)}>Forgot Password?</button>
+      
+      {passwordResetMessage && <p>{passwordResetMessage}</p>}
       {errorMessage && <p>{errorMessage}</p>}
+      {isModalOpen && (
+        <div className="popup">
+            <h2>Reset Password</h2>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={resetEmail}
+              onChange={(e) => setResetEmail(e.target.value)}
+            />
+            <button onClick={forgotPassword}>Send Reset Email</button>
+            <button onClick={() => setIsModalOpen(false)}>Close</button>
+        </div>
+      )}
       <h1>New to Budget Byte?</h1>
       <button onClick={()=>router.push('/register')}>Register</button>
     </div>
