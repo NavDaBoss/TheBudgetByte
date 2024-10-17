@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore"; // Firestore
 
 // Your web app's Firebase configuration
@@ -29,4 +29,4 @@ const saveUserToFirestore = async (user) => {
     });
   };
 
-export { auth, provider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, saveUserToFirestore, updateProfile, getAuth, db, setDoc, doc };
+export { auth, provider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, saveUserToFirestore, updateProfile, getAuth, db, setDoc, doc, sendPasswordResetEmail };

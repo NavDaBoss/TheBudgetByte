@@ -31,6 +31,9 @@ export default function Register() {
       await saveUserToFirestore(result.user); // Save user to Firestore
       router.push('/login'); // Redirect to login page
     } catch (error) {
+      if(password === confirmPassword && password.length >= 6){
+        setErrorMessage("Email is not valid or already in use.")
+      }
       console.error(error);
     }
   };
