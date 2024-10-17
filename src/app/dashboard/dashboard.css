@@ -21,6 +21,27 @@ h1 {
   padding-top: 50px;
 }
 
+input {
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 4px;
+  font-size: 16px;
+  box-shadow: none;
+  transition: border-color 0.3s;
+  background-color: var(--background);
+  color: black;
+}
+
+input::placeholder {
+  color: black;
+  opacity: 1;
+}
+
+input:focus {
+  border-color: blue;
+  outline: none;
+}
+
 .title-line {
   content: "";
   width: 1000px;
@@ -68,6 +89,21 @@ h1 {
   padding: 20px 0;
 }
 
+.receipt-head {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    border-top: 2px dashed black;
+    text-transform: uppercase;
+    gap: 200px;
+}
+
+.receipt-head p {
+    margin-right: 25px;
+    font-weight: bold;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -81,16 +117,45 @@ tbody tr:last-child td {
   padding-bottom: 1rem;
 }
 
-.receipt-head {
+.receipt-table-head {
   text-align: left;
   text-transform: uppercase;
 }
 
-.receipt-head th {
+.receipt-table-head th {
   padding: 1rem 1.5rem;
 }
 
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 15px solid black;
+  margin-left: 20px;
+}
+
+th {
+  position: relative;
+  padding-right: 20px;
+}
+
+th::after {
+  content: "";
+  position: absolute;
+  right: 5px;
+  top: 40%;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid black;
+}
+
+th:hover::after {
+  border-top: 10px solid red;
+}
+
 thead th {
+  border-top: 2px dashed black;
   border-bottom: 2px dashed black;
 }
 
