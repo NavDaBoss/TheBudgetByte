@@ -29,4 +29,4 @@ const saveUserToFirestore = async (user) => {
     });
   };
 
-export { auth, provider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, saveUserToFirestore, updateProfile };
+export { auth, db, provider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, saveUserToFirestore, updateProfile };
