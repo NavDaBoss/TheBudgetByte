@@ -10,15 +10,7 @@ import { useEffect } from "react";
 export default function Home() {
   const router = useRouter();
   const user = useAuth();
-  useEffect(() => {
-    if (user) {
-      router.push('/profile');
-    }
-  }, [user, router]);
- 
 
- 
-  if(!user){
     return (
       <div>
         <h1>Welcome to BudgetByte!!</h1>
@@ -29,6 +21,4 @@ export default function Home() {
       </div>
     );
 
-  }
-  
 }

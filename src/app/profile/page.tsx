@@ -18,7 +18,6 @@ export default function Profile() {
   const [isEditingPic, setIsEditingPic] = useState(false);
   const [newName, setNewName] = useState(''); // State for the new name
   const [newProfilePic, setNewProfilePic] = useState(null); // State for profile picture
-  const [profilePicUrl, setProfilePicUrl] = useState('');
 
   const handleNameChange = async (event) => {
     setNewName(event.target.value); // Update the new name as user types
@@ -30,7 +29,16 @@ export default function Profile() {
       setNewProfilePic(event.target.files[0]);
     }
   };
+  const handleEditName = () => {
+    setIsEditingName(true); // Show the pop-up
+  };
 
+  const handleEditProliePic = () => {
+    setIsEditingPic(true); // Show the profile pic pop-up
+  };
+  const handleHomePage = async () => {
+    router.push("/");
+  }
   // Handle profile update
   const handleUpdateProfile = async () => {
     if (currentUser && newProfilePic) {
@@ -50,21 +58,11 @@ export default function Profile() {
         const userDocRef = doc(db, "users", currentUser.uid);
         await setDoc(userDocRef, { displayName: newName, photoURL: imageUrl }, { merge: true });
 
-        // Update the state to reflect the new profile picture URL
-        setProfilePicUrl(imageUrl);
         setIsEditingPic(false);
       } catch (error) {
         console.error('Error updating profile:', error);
       }
     }
-  };
-
-  const handleEditName = () => {
-    setIsEditingName(true); // Show the pop-up
-  };
-
-  const handleEditProliePic = () => {
-    setIsEditingPic(true); // Show the profile pic pop-up
   };
 
   const handleUpdateName = async () => {
@@ -82,9 +80,6 @@ export default function Profile() {
     }
   };
 
-  const handleHomePage = async () => {
-    router.push("./");
-  }
   return (
     <div>
       <h1>Profile</h1>
