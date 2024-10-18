@@ -16,7 +16,15 @@ export default function Login() {
   const [resetEmail, setResetEmail] = useState("");
   const router = useRouter();
 
-
+  const googleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      await saveUserToFirestore(result.user); // Save user to Firestore
+      router.push("/profile");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
 
   const login = async () => {
@@ -67,6 +75,10 @@ export default function Login() {
       <button onClick={login}>Login</button>
       <h1>Forgot your Password?</h1>
       <button onClick={() => setIsModalOpen(true)}>Forgot Password?</button>
+      <h1>Sign In With Google</h1>
+      <div onClick={googleSignIn}>
+        <img src="/assets/continue_with_google.svg" alt="Continue with Google" />
+      </div>
       
       {passwordResetMessage && <p>{passwordResetMessage}</p>}
       {errorMessage && <p>{errorMessage}</p>}
