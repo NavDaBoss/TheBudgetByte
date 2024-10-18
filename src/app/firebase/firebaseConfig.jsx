@@ -30,5 +30,5 @@ const saveUserToFirestore = async (user) => {
     });
   };
 
-export const storage = getStorage(app);
+  export const storage = getStorage(app);
 export { auth, provider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, saveUserToFirestore, updateProfile, getAuth, db, setDoc, doc, sendPasswordResetEmail };
