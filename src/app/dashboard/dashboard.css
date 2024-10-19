@@ -16,7 +16,9 @@ main {
 }
 
 h1 {
-  font-size: 32px;
+  font-family: var(--font-silkscreen);
+  font-size: 36px;
+  font-weight: 400;
   text-transform: uppercase;
   padding-top: 50px;
 }
@@ -78,15 +80,12 @@ input:focus {
   text-transform: uppercase;
 }
 
-.receipt-title p {
-  font-weight: bold;
-  padding: 1rem 0;
-}
-
 .receipt-date {
+  font-size: 16px;
+  font-weight: bold;
   display: flex;
   justify-content: center;
-  padding: 20px 0;
+  padding: 1rem 0;
 }
 
 .receipt-head {

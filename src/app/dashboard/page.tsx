@@ -74,17 +74,19 @@ const ReceiptTableHead = ({ sortColumn }) => {
 };
 
 const ReceiptTableRow = ({ item }) => {
-    return (
-        <tr>
-          <td className="quantityColumn">{item.quantity}</td>
-          <td className="itemNameColumn">{item.itemName}</td>
-          <td className="categoryColumn">{item.category}</td>
-          <td className="priceColumn">${item.price}</td>
-        </tr>
-    );
+  return (
+    <tr>
+      <td className="quantityColumn">
+        {item.quantity < 10 ? `0${item.quantity}` : item.quantity}
+      </td>
+      <td className="itemNameColumn">{item.itemName}</td>
+      <td className="categoryColumn">{item.category}</td>
+      <td className="priceColumn">${item.price}</td>
+    </tr>
+  );
 };
 
-const ReceiptTable = ({groceries, filterText, sortColumn}) => {
+const ReceiptTable = ({ groceries, filterText, sortColumn }) => {
   const rows = [];
 
   groceries.map((item) => {
@@ -145,17 +147,17 @@ const FilterableReceiptTable = ({ groceries }) => {
   };
 
   return (
-      <div>
-        <div className="receipt-head">
-          <p>Grocery Trip #0001 for Eric</p>
-          <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
-        </div>
-        <ReceiptTable
-          groceries={tableData}
-          filterText={filterText}
-          sortColumn={sortColumn}
-        />
+    <div>
+      <div className="receipt-head">
+        <p>Grocery Trip #0001 for Eric</p>
+        <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
       </div>
+      <ReceiptTable
+        groceries={tableData}
+        filterText={filterText}
+        sortColumn={sortColumn}
+      />
+    </div>
   );
 };
 
@@ -167,7 +169,7 @@ const Receipt = ({ groceries }) => {
           <h3>Thursday, October 10, 2024</h3>
         </div>
       </div>
-      <FilterableReceiptTable groceries={groceries}/>
+      <FilterableReceiptTable groceries={groceries} />
       <div className="dashed-line"></div>
     </div>
   );
@@ -178,7 +180,7 @@ const Dashboard = () => {
     <div className="page">
       <main>
         <NavigationBar />
-        <Receipt groceries={GroceryData.groceries}/>
+        <Receipt groceries={GroceryData.groceries} />
       </main>
     </div>
   );
