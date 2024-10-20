@@ -1,0 +1,167 @@
+.page {
+  display: grid;
+  grid-template-rows: 20px 1fr 20px;
+  justify-items: center;
+  min-height: 100svh;
+  margin-top: 220px;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  grid-row-start: 1;
+  width: 1000px;
+}
+
+h1 {
+  font-family: var(--font-silkscreen);
+  font-size: 36px;
+  font-weight: 400;
+  text-transform: uppercase;
+  padding-top: 50px;
+}
+
+input {
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 4px;
+  font-size: 16px;
+  box-shadow: none;
+  transition: border-color 0.3s;
+  background-color: var(--background);
+  color: black;
+}
+
+input::placeholder {
+  color: black;
+  opacity: 1;
+}
+
+input:focus {
+  border-color: blue;
+  outline: none;
+}
+
+.title-line {
+  content: "";
+  width: 1000px;
+  border-top: 2px solid black;
+  margin: 10px 0 20px 0;
+}
+
+.nav-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.links button {
+  margin: 0 20px;
+}
+
+.dashed-line,
+.dashed-line tr {
+  content: "";
+  width: 100%;
+  border-top: 2px dashed black;
+  font-weight: bold;
+}
+
+.receipt {
+  width: 75%;
+  margin: 10px 0;
+}
+
+.receipt-title {
+  text-transform: uppercase;
+}
+
+.receipt-date {
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.receipt-head {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    border-top: 2px dashed black;
+    text-transform: uppercase;
+    gap: 200px;
+}
+
+.receipt-head p {
+    margin-right: 25px;
+    font-weight: bold;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tbody tr:first-child td {
+  padding-top: 1rem;
+}
+
+tbody tr:last-child td {
+  padding-bottom: 1rem;
+}
+
+.receipt-table-head {
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.receipt-table-head th {
+  padding: 1rem 1.5rem;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 15px solid black;
+  margin-left: 20px;
+}
+
+th {
+  position: relative;
+  padding-right: 20px;
+}
+
+th::after {
+  content: "";
+  position: absolute;
+  right: 5px;
+  top: 40%;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid black;
+}
+
+th:hover::after {
+  border-top: 10px solid red;
+}
+
+thead th {
+  border-top: 2px dashed black;
+  border-bottom: 2px dashed black;
+}
+
+.receipt-body {
+  text-transform: uppercase;
+}
+
+.receipt-body td {
+  padding: 0.5rem 1.5rem;
+}
