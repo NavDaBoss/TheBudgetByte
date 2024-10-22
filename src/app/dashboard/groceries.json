@@ -1,0 +1,22 @@
+{
+  "groceries": [
+    {
+      "itemName": "bagels",
+      "category": "grains",
+      "price": 4.66,
+      "quantity": 1
+    },
+    {
+      "itemName": "cheese",
+      "category": "dairy",
+      "price": 3.45,
+      "quantity": 2
+    },
+    {
+      "itemName": "apples",
+      "category": "fruits",
+      "price": 1.99,
+      "quantity": 3
+    }
+  ]
+}
