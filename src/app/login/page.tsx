@@ -57,25 +57,33 @@ export default function Login() {
 
 
   return (
-    <div>
-      <h1>Email:</h1>
-      <input
-        type="email"
-        placeholder="Enter your Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <h1>Password:</h1>
-      <input
-        type="password"
-        placeholder="Enter your Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+    <div className="main">
+      <h1>Login</h1>
+      <div className="title-line"></div>
+      <div className="login-container">
+        <div className="email">
+          <h2>Email:</h2>
+          <input
+            type="email"
+            placeholder="Enter your Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="password">
+          <h2>Password:</h2>
+          <input
+            type="password"
+            placeholder="Enter your Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+      </div>
       <button onClick={login}>Login</button>
-      <h1>Forgot your Password?</h1>
-      <button onClick={() => setIsModalOpen(true)}>Forgot Password?</button>
-      <h1>Sign In With Google</h1>
+      <h3>Forgot your Password?</h3>
+      <button onClick={() => setIsModalOpen(true)}>Forgot Password</button>
+      <div className="title-line"></div>
       <div onClick={googleSignIn}>
         <img src="/assets/continue_with_google.svg" alt="Continue with Google" />
       </div>
@@ -95,7 +103,8 @@ export default function Login() {
             <button onClick={() => setIsModalOpen(false)}>Close</button>
         </div>
       )}
-      <h1>New to Budget Byte?</h1>
+      <div className="title-line"></div>
+      <h3>New to Budget Byte?</h3>
       <button onClick={()=>router.push('/register')}>Register</button>
     </div>
   );
