@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { auth, db, signOut, updateProfile, doc, setDoc, storage } from '../firebase/firebaseConfig'
+import { auth, db, signOut, updateProfile, doc, setDoc, storage } from '../../firebase/firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import "./profile.css";
 

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Tesseract from 'tesseract.js';
-import { db } from '../firebase/firebaseConfig'; // Import Firestore
+import { db } from '../../firebase/firebaseConfig'; // Import Firestore
 import { collection, addDoc } from 'firebase/firestore'; // Import Firestore methods
 
 export default function OcrPage() {
