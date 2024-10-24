@@ -2,7 +2,8 @@
 
 import {useState, useEffect} from 'react';
 import { useRouter } from 'next/navigation';
-import { auth, provider, signInWithPopup, signInWithEmailAndPassword, saveUserToFirestore, sendPasswordResetEmail } from '../firebase/firebaseConfig';
+import Link from "next/link";
+import { auth, provider, signInWithPopup, signInWithEmailAndPassword, saveUserToFirestore, sendPasswordResetEmail } from '../../firebase/firebaseConfig';
 import { FirebaseError } from '@firebase/app';
 import "./login.css"
 
@@ -30,7 +31,7 @@ export default function Login() {
   const login = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push('/profile'); // Redirect to profile
+      router.push("/profile");
     } catch (error) {
       if (error instanceof FirebaseError){
           setErrorMessage('Invalid Email or Password. Please try again.');
@@ -105,7 +106,9 @@ export default function Login() {
       )}
       <div className="title-line"></div>
       <h3>New to Budget Byte?</h3>
-      <button onClick={()=>router.push('/register')}>Register</button>
+      <Link href="/register">
+        <button>Register</button>
+      </Link>
     </div>
   );
 }

@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { auth, createUserWithEmailAndPassword, saveUserToFirestore, updateProfile } from '../firebase/firebaseConfig'
+import { auth, createUserWithEmailAndPassword, saveUserToFirestore, updateProfile } from '../../firebase/firebaseConfig'
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import "./register.css"
 
 export default function Register() {
@@ -79,7 +80,9 @@ export default function Register() {
       <button onClick={register}>Register</button>
       {errorMessage && <p>{errorMessage}</p>}
       <h1>Already have an account?</h1>
-      <button onClick={()=>router.push('/login')}>Continue to Login</button>
+      <Link href="/login">
+        <button>Continue to Login</button>
+      </Link>
     </div>
   );
 }

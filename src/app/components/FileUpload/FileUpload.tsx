@@ -1,6 +1,6 @@
 // components/FileUpload.tsx
 import { useState } from "react";
-import { storage, db } from "../firebase/firebaseConfig"; // Adjust the path if necessary
+import { storage, db } from "../../firebase/firebaseConfig"; // Adjust the path if necessary
 import { ref, uploadBytes } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 

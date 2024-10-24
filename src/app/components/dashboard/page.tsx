@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { auth, signOut } from "../firebase/firebaseConfig";
+import { auth, signOut } from "../../firebase/firebaseConfig";
 import "./dashboard.css";
 import GroceryData from "./groceries.json";
 
