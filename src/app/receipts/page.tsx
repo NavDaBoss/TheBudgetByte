@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { auth, db, storage } from "../../firebase/firebaseConfig"; // Adjust the path if necessary
+import { auth, db, storage } from "../firebase/firebaseConfig"; // Adjust the path if necessary
 import { ref, listAll, getDownloadURL } from "firebase/storage";
 import { onAuthStateChanged } from "firebase/auth"; // Import onAuthStateChanged
 
