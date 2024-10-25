@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { auth, createUserWithEmailAndPassword, saveUserToFirestore, updateProfile } from '../../firebase/firebaseConfig'
+import { auth, createUserWithEmailAndPassword, saveUserToFirestore, updateProfile } from '../firebase/firebaseConfig'
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import "./register.css"

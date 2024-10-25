@@ -3,7 +3,7 @@
 import {useState, useEffect} from 'react';
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
-import { auth, provider, signInWithPopup, signInWithEmailAndPassword, saveUserToFirestore, sendPasswordResetEmail } from '../../firebase/firebaseConfig';
+import { auth, provider, signInWithPopup, signInWithEmailAndPassword, saveUserToFirestore, sendPasswordResetEmail } from '../firebase/firebaseConfig';
 import { FirebaseError } from '@firebase/app';
 import "./login.css"
 
