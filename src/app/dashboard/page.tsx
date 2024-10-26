@@ -184,6 +184,8 @@ const SummaryHead = ({ sortColumn }) => {
       if (order === "asc") {
         sortOrder = "desc";
       } else if (order === "desc") {
+        sortOrder = "none";
+      } else if (order === "none") {
         sortOrder = "asc";
       }
     }
@@ -232,10 +234,14 @@ const SummaryTable = ({ groups, sortColumn }) => {
 };
 
 const Summary = ({ groups }) => {
-  const initialSortedData = [...groups].sort((a, b) => b.count - a.count);
-  const [tableData, setTableData] = useState(initialSortedData);
+  const [tableData, setTableData] = useState(groups);
 
   const sortColumn = (sortField, sortOrder) => {
+    if (sortOrder === "none") {
+      setTableData(groups);
+      return;
+    }
+
     const sorted = [...groups].sort((a, b) => {
       if (sortField == "check") {
         const checkA = a.count > 0 ? 1 : 0;
