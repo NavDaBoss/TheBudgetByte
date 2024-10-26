@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { auth, signOut } from "../firebase/firebaseConfig";
 import "./dashboard.css";
 import GroceryData from "./groceries.json";
+import SummaryData from "./food_summary.json";
 
 const NavigationBar = () => {
   const router = useRouter();
@@ -33,7 +34,7 @@ const NavigationBar = () => {
   );
 };
 
-const ReceiptTableHead = ({ sortColumn }) => {
+const ReceiptHead = ({ sortColumn }) => {
   const [sortField, setSortField] = useState("");
   const [order, setOrder] = useState("asc");
 
@@ -62,8 +63,8 @@ const ReceiptTableHead = ({ sortColumn }) => {
         <th key="itemName" onClick={() => handleSortChange("itemName")}>
           ITEMS
         </th>
-        <th key="category" onClick={() => handleSortChange("category")}>
-          CATEGORY
+        <th key="group" onClick={() => handleSortChange("group")}>
+          GROUP
         </th>
         <th key="price" onClick={() => handleSortChange("price")}>
           PRICE
@@ -73,14 +74,14 @@ const ReceiptTableHead = ({ sortColumn }) => {
   );
 };
 
-const ReceiptTableRow = ({ item }) => {
+const ReceiptRow = ({ item }) => {
   return (
     <tr>
       <td className="quantityColumn">
         {item.quantity < 10 ? `0${item.quantity}` : item.quantity}
       </td>
       <td className="itemNameColumn">{item.itemName}</td>
-      <td className="categoryColumn">{item.category}</td>
+      <td className="groupColumn">{item.group}</td>
       <td className="priceColumn">${item.price}</td>
     </tr>
   );
@@ -93,16 +94,14 @@ const ReceiptTable = ({ groceries, filterText, sortColumn }) => {
     if (item.itemName.toLowerCase().indexOf(filterText.toLowerCase()) === -1) {
       return;
     }
-    rows.push(<ReceiptTableRow item={item} key={item.itemName} />);
+    rows.push(<ReceiptRow item={item} key={item.itemName} />);
   });
 
   return (
-    <>
-      <table>
-        <ReceiptTableHead sortColumn={sortColumn} />
-        <tbody className="receipt-body">{rows}</tbody>
-      </table>
-    </>
+    <table>
+      <ReceiptHead sortColumn={sortColumn} />
+      <tbody className="receipt-body">{rows}</tbody>
+    </table>
   );
 };
 
@@ -118,7 +117,7 @@ const SearchBar = ({ filterText, onFilterTextChange }) => {
   );
 };
 
-const FilterableReceiptTable = ({ groceries }) => {
+const FilterableReceipt= ({ groceries }) => {
   const [tableData, setTableData] = useState(groceries);
   const [filterText, setFilterText] = useState("");
 
@@ -169,8 +168,99 @@ const Receipt = ({ groceries }) => {
           <h3>Thursday, October 10, 2024</h3>
         </div>
       </div>
-      <FilterableReceiptTable groceries={groceries} />
+      <FilterableReceipt groceries={groceries} />
       <div className="dashed-line"></div>
+    </div>
+  );
+};
+
+const SummaryHead = ({ sortColumn }) => {
+  const [sortField, setSortField] = useState("");
+  const [order, setOrder] = useState("asc");
+
+  const handleSortChange = (accessor) => {
+    let sortOrder = "asc";
+    if (accessor === sortField) {
+      if (order === "asc") {
+        sortOrder = "desc";
+      } else if (order === "desc") {
+        sortOrder = "asc";
+      }
+    }
+    setSortField(accessor);
+    setOrder(sortOrder);
+    sortColumn(accessor, sortOrder);
+  };
+
+  return (
+    <thead>
+      <tr>
+        <th key="check" onClick={() => handleSortChange("check")}></th>
+        <th key="group" onClick={() => handleSortChange("type")}>
+          GROUP
+        </th>
+        <th key="count" onClick={() => handleSortChange("count")}>
+          COUNT
+        </th>
+        <th key="price" onClick={() => handleSortChange("totalPrice")}>
+          PRICE
+        </th>
+      </tr>
+    </thead>
+  );
+};
+
+const SummaryTable = ({ groups, sortColumn }) => {
+  const rows = [];
+
+  groups.map((group) => {
+    rows.push(
+      <tr key={group.type}>
+        <td>{group.count > 0 ? 1 : 0}</td>
+        <td>{group.type}</td>
+        <td>{group.count} ${group.totalPrice}</td>
+      </tr>
+    );
+  });
+
+  return (
+    <table>
+      <SummaryHead sortColumn={sortColumn} />
+      <tbody>{rows}</tbody>
+    </table>
+  );
+};
+
+const Summary = ({ groups }) => {
+  const initialSortedData = [...groups].sort((a, b) => b.count - a.count);
+  const [tableData, setTableData] = useState(initialSortedData);
+
+  const sortColumn = (sortField, sortOrder) => {
+    const sorted = [...groups].sort((a, b) => {
+      if (sortField == "check") {
+        const checkA = a.count > 0 ? 1 : 0;
+        const checkB = b.count > 0 ? 1 : 0;
+        return sortOrder === "asc" ? checkA - checkB : checkB - checkA;
+      }
+      if (typeof a[sortField] === "number") {
+          return (a[sortField] - b[sortField]) * (sortOrder === "asc" ? 1 : -1);
+      }
+      a = a[sortField].toLowerCase();
+      b = b[sortField].toLowerCase();
+
+      return (
+        a.localeCompare(b, "en", {
+          numeric: true,
+        }) * (sortOrder === "asc" ? 1 : -1)
+      );
+    });
+    setTableData(sorted);
+  };
+
+  return (
+    <div className="food-checklist">
+      <h1>Summary</h1>
+      <SummaryTable groups={tableData} sortColumn={sortColumn} />
     </div>
   );
 };
@@ -181,6 +271,7 @@ const Dashboard = () => {
       <main>
         <NavigationBar />
         <Receipt groceries={GroceryData.groceries} />
+        <Summary groups={SummaryData.foodGroups} />
       </main>
     </div>
   );

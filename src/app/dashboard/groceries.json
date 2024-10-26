@@ -2,21 +2,24 @@
   "groceries": [
     {
       "itemName": "bagels",
-      "category": "grains",
+      "group": "grains",
       "price": 4.66,
-      "quantity": 1
+      "quantity": 1,
+      "totalPrice": 4.66
     },
     {
       "itemName": "cheese",
-      "category": "dairy",
+      "group": "dairy",
       "price": 3.45,
-      "quantity": 2
+      "quantity": 2,
+      "totalPrice": 6.90
     },
     {
       "itemName": "apples",
-      "category": "fruits",
+      "group": "fruits",
       "price": 1.99,
-      "quantity": 3
+      "quantity": 3,
+      "totalPrice": 5.97
     }
   ]
 }
