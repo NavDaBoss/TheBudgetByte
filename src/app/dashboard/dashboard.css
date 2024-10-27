@@ -1,26 +1,14 @@
-.page {
-  display: grid;
-  grid-template-rows: 20px 1fr 20px;
-  justify-items: center;
-  min-height: 100svh;
-  margin-top: 220px;
-}
-
-main {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  grid-row-start: 1;
-  width: 1000px;
+.section-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
 }
 
 h1 {
-  font-family: var(--font-silkscreen);
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 400;
-  text-transform: uppercase;
-  padding-top: 50px;
 }
 
 input {
@@ -95,28 +83,33 @@ input:focus {
     padding: 10px 0;
     border-top: 2px dashed black;
     text-transform: uppercase;
-    gap: 200px;
+    position: relative;
 }
 
 .receipt-head p {
-    margin-right: 25px;
+    margin-right: auto;
+    margin-left: 20px;
     font-weight: bold;
 }
 
-table {
+.search-bar {
+  margin-right: 20px;
+}
+
+.receipt-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-tbody tr:first-child td {
+.receipt-table tr:first-child td {
   padding-top: 1rem;
 }
 
-tbody tr:last-child td {
+.receipt-table tr:last-child td {
   padding-bottom: 1rem;
 }
 
-.receipt-table-head {
+thead {
   text-align: left;
   text-transform: uppercase;
 }
@@ -134,12 +127,12 @@ tbody tr:last-child td {
   margin-left: 20px;
 }
 
-th {
+.receipt-table th {
   position: relative;
   padding-right: 20px;
 }
 
-th::after {
+.receipt-table th::after {
   content: "";
   position: absolute;
   right: 5px;
@@ -149,11 +142,11 @@ th::after {
   border-top: 10px solid black;
 }
 
-th:hover::after {
+.receipt-table th:hover::after {
   border-top: 10px solid red;
 }
 
-thead th {
+.receipt-table thead th {
   border-top: 2px dashed black;
   border-bottom: 2px dashed black;
 }
@@ -164,4 +157,20 @@ thead th {
 
 .receipt-body td {
   padding: 0.5rem 1.5rem;
+}
+
+/* Summary */
+.summary-table {
+    text-transform: uppercase;
+}
+
+.summary-table th {
+    padding-left: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px dashed black;
+    /* background-color: red; */
+}
+
+.summary-table td {
+    padding: 0.5rem 1rem;
 }

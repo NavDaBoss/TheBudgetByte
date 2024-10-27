@@ -2,37 +2,12 @@
 
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { auth, signOut } from "../firebase/firebaseConfig";
-import "./dashboard.css";
+
+import Navbar from "../components/Navbar/Navbar";
 import GroceryData from "./groceries.json";
 import SummaryData from "./food_summary.json";
 
-const NavigationBar = () => {
-  const router = useRouter();
-  const profile = async () => {
-    router.push("/profile"); // Redirect to profile
-  };
-  const scanReceipt = async () => {
-    console.log("Scanning receipt...");
-  };
-  const logout = async () => {
-    await signOut(auth);
-    router.push("/login"); // Redirect to login
-  };
-
-  return (
-    <div className="nav-bar">
-      <h1>Budget Byte</h1>
-      <div className="title-line"></div>
-      <div className="links">
-        <button onClick={profile}>Profile</button>
-        <button onClick={scanReceipt}>Scan Receipt</button>
-        <button onClick={logout}>Logout</button>
-      </div>
-    </div>
-  );
-};
+import "./dashboard.css";
 
 const ReceiptHead = ({ sortColumn }) => {
   const [sortField, setSortField] = useState("");
@@ -61,7 +36,7 @@ const ReceiptHead = ({ sortColumn }) => {
           QTY
         </th>
         <th key="itemName" onClick={() => handleSortChange("itemName")}>
-          ITEMS
+          ITEM
         </th>
         <th key="group" onClick={() => handleSortChange("group")}>
           GROUP
@@ -77,12 +52,10 @@ const ReceiptHead = ({ sortColumn }) => {
 const ReceiptRow = ({ item }) => {
   return (
     <tr>
-      <td className="quantityColumn">
-        {item.quantity < 10 ? `0${item.quantity}` : item.quantity}
-      </td>
+      <td className="quantityColumn">{item.quantity}</td>
       <td className="itemNameColumn">{item.itemName}</td>
       <td className="groupColumn">{item.group}</td>
-      <td className="priceColumn">${item.price}</td>
+      <td className="priceColumn">${item.price.toFixed(2)}</td>
     </tr>
   );
 };
@@ -98,7 +71,7 @@ const ReceiptTable = ({ groceries, filterText, sortColumn }) => {
   });
 
   return (
-    <table>
+    <table className="receipt-table">
       <ReceiptHead sortColumn={sortColumn} />
       <tbody className="receipt-body">{rows}</tbody>
     </table>
@@ -184,8 +157,6 @@ const SummaryHead = ({ sortColumn }) => {
       if (order === "asc") {
         sortOrder = "desc";
       } else if (order === "desc") {
-        sortOrder = "none";
-      } else if (order === "none") {
         sortOrder = "asc";
       }
     }
@@ -197,7 +168,9 @@ const SummaryHead = ({ sortColumn }) => {
   return (
     <thead>
       <tr>
-        <th key="check" onClick={() => handleSortChange("check")}></th>
+        <th key="check" onClick={() => handleSortChange("check")}>
+          X
+        </th>
         <th key="group" onClick={() => handleSortChange("type")}>
           GROUP
         </th>
@@ -220,13 +193,14 @@ const SummaryTable = ({ groups, sortColumn }) => {
       <tr key={group.type}>
         <td>{group.count > 0 ? 1 : 0}</td>
         <td>{group.type}</td>
-        <td>{group.count} ${group.totalPrice}</td>
+        <td>{group.count}</td>
+        <td>${group.totalPrice.toFixed(2)}</td>
       </tr>
     );
   });
 
   return (
-    <table>
+    <table className="summary-table">
       <SummaryHead sortColumn={sortColumn} />
       <tbody>{rows}</tbody>
     </table>
@@ -271,14 +245,15 @@ const Summary = ({ groups }) => {
   );
 };
 
+// <NavigationBar />
 const Dashboard = () => {
   return (
-    <div className="page">
-      <main>
-        <NavigationBar />
+    <div>
+      <Navbar />
+      <div class="section-container">
         <Receipt groceries={GroceryData.groceries} />
         <Summary groups={SummaryData.foodGroups} />
-      </main>
+      </div>
     </div>
   );
 };
