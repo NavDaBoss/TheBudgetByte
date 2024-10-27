@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.13.0",
     "@firebase/app": "^0.10.13",
     "@firebase/auth": "^1.7.9",
+    "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.5",
     "@mui/x-charts": "^7.22.0",
     "firebase": "^10.14.1",
