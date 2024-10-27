@@ -3,6 +3,11 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 
+import { PieChart } from '@mui/x-charts/PieChart';
+import CheckBoxIcon from '@mui/icons-material/CheckBoxSharp';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlankSharp';
+import EditIcon from '@mui/icons-material/EditOutlined';
+
 import Navbar from "../components/Navbar/Navbar";
 import GroceryData from "./groceries.json";
 import SummaryData from "./food_summary.json";
@@ -54,7 +59,10 @@ const ReceiptRow = ({ item }) => {
     <tr>
       <td className="quantityColumn">{item.quantity}</td>
       <td className="itemNameColumn">{item.itemName}</td>
-      <td className="groupColumn">{item.group}</td>
+      <td className="groupColumn">
+        {item.group}
+        <EditIcon />
+      </td>
       <td className="priceColumn">${item.price.toFixed(2)}</td>
     </tr>
   );
@@ -129,6 +137,7 @@ const FilterableReceipt= ({ groceries }) => {
         filterText={filterText}
         sortColumn={sortColumn}
       />
+        <Summary groups={SummaryData.foodGroups} />
     </div>
   );
 };
@@ -142,7 +151,6 @@ const Receipt = ({ groceries }) => {
         </div>
       </div>
       <FilterableReceipt groceries={groceries} />
-      <div className="dashed-line"></div>
     </div>
   );
 };
@@ -169,16 +177,16 @@ const SummaryHead = ({ sortColumn }) => {
     <thead>
       <tr>
         <th key="check" onClick={() => handleSortChange("check")}>
-          X
+          Complete
         </th>
         <th key="group" onClick={() => handleSortChange("type")}>
-          GROUP
+          Group
         </th>
         <th key="count" onClick={() => handleSortChange("count")}>
-          COUNT
+          Count
         </th>
         <th key="price" onClick={() => handleSortChange("totalPrice")}>
-          PRICE
+          Price
         </th>
       </tr>
     </thead>
@@ -191,7 +199,9 @@ const SummaryTable = ({ groups, sortColumn }) => {
   groups.map((group) => {
     rows.push(
       <tr key={group.type}>
-        <td>{group.count > 0 ? 1 : 0}</td>
+        <td>
+          {group.count > 0 ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon/>}
+        </td>
         <td>{group.type}</td>
         <td>{group.count}</td>
         <td>${group.totalPrice.toFixed(2)}</td>
@@ -237,10 +247,30 @@ const Summary = ({ groups }) => {
     setTableData(sorted);
   };
 
+  const pieData = tableData.map(group => ({
+      name: group.type,
+      value: group.pricePercentage,
+  }));
+
   return (
-    <div className="food-checklist">
-      <h1>Summary</h1>
-      <SummaryTable groups={tableData} sortColumn={sortColumn} />
+    <div className="summary-container">
+      <div className="summary-table-container">
+        <h1>Summary</h1>
+        <SummaryTable groups={tableData} sortColumn={sortColumn} />
+      </div>
+      <div className="pie-chart-container">
+        <PieChart
+          series={[
+            {
+              data: pieData,
+              highlightScope: { fade: 'global', highlight: 'item' },
+              faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+            },
+          ]}
+          height={300}
+          width={300}
+        />
+      </div>
     </div>
   );
 };
@@ -252,7 +282,6 @@ const Dashboard = () => {
       <Navbar />
       <div class="section-container">
         <Receipt groceries={GroceryData.groceries} />
-        <Summary groups={SummaryData.foodGroups} />
       </div>
     </div>
   );
