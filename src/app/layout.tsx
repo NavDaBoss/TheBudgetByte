@@ -12,6 +12,11 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
+const robotoMono = localFont({
+  src: "./fonts/Roboto_Mono/RobotoMono-VariableFont_wght.ttf",
+  variable: "--font-roboto-mono",
+  weight: "100 900",
+});
 
 export const metadata: Metadata = {
   title: "BudgetByte",
@@ -25,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${robotoMono.variable}`}>
         {children}
       </body>
     </html>

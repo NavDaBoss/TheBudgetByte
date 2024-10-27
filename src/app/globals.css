@@ -3,14 +3,12 @@
   --foreground: #171717;
   --font-roboto-mono: 'Roboto Mono', monospace;
   --font-silkscreen: 'Silkscreen', 'Roboto Mono', monospace;
+  --gutterWidth: 16px;
+  --windowWidth: 100vw;
+  --layoutWidth: calc(var(--windowWidth) - var(--gutterWidth) * 2);
+  --layoutWidthMax: 1080px;
+  --columnPaddingNormal: 16px;
 }
-
-/* @media (prefers-color-scheme: dark) { */
-/*   :root { */
-/*     --background: #0a0a0a; */
-/*     --foreground: #ededed; */
-/*   } */
-/* } */
 
 @font-face {
     font-family: 'Roboto Mono';
@@ -54,16 +52,6 @@ body {
 a {
   color: inherit;
   text-decoration: none;
-}
-
-button {
-  border: none;
-  text-transform: uppercase;
-  padding: 1rem;
-  background-color: black;
-  color: white;
-  font-size: 20px;
-  font-family: 'Silkscreen', 'Roboto Mono', monospace;
 }
 
 @media (prefers-color-scheme: dark) {
