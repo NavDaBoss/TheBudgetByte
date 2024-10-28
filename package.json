@@ -16,9 +16,11 @@
     "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.5",
     "@mui/x-charts": "^7.22.0",
+    "chart.js": "^4.4.5",
     "firebase": "^10.14.1",
     "next": "14.2.15",
     "react": "^18",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
     "tesseract.js": "^5.1.1"
   },
