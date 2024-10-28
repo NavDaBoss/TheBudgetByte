@@ -18,6 +18,7 @@ export default function Home() {
         <button onClick={() => router.push('/profile')}>Profile</button> 
         <button onClick={() => router.push('/dashboard')}>Dashboard</button> 
         <button onClick={() => router.push('/analytics')}>Analytics</button> 
+        <button onClick={() => router.push('/ocrTest')}>ocrTest</button> 
       </div>
     );
 
