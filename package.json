@@ -18,6 +18,7 @@
     "@mui/x-charts": "^7.22.0",
     "chart.js": "^4.4.5",
     "firebase": "^10.14.1",
+    "formidable": "^3.5.2",
     "next": "14.2.15",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",
@@ -25,6 +26,7 @@
     "tesseract.js": "^5.1.1"
   },
   "devDependencies": {
+    "@types/formidable": "^3.4.5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
