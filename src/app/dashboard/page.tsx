@@ -142,13 +142,25 @@ const FilterableReceipt = ({ groceries }) => {
   );
 };
 
+const CurrentDate = () => {
+  const currentDate = new Date();
+  const day = String(currentDate.getDate()).padStart(2, '0');
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const year = currentDate.getFullYear();
+  const formattedDate = `${month} / ${day} / ${year}`;
+
+  return (
+    <div className="receipt-date">
+      <h2>{formattedDate}</h2>
+    </div>
+  );
+};
+
 const Receipt = ({ groceries }) => {
   return (
     <div className="receipt">
       <div className="receipt-title">
-        <div className="receipt-date">
-          <h3>Thursday, October 10, 2024</h3>
-        </div>
+        <CurrentDate />
       </div>
       <FilterableReceipt groceries={groceries} />
     </div>

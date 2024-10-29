@@ -6,6 +6,12 @@
   overflow: hidden;
 }
 
+.header-logo {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
 .header-nav {
   display: flex;
   justify-content: center;
@@ -25,9 +31,10 @@
 .header-nav-list button {
   border: none;
   outline: none;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 700;
-  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   padding: 10px 20px;
   background-color: transparent;
   color: black;

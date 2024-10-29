@@ -1,11 +1,17 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import "./analytics.css";
-import Navbar from "../components/Navbar/Navbar";
+import './analytics.css';
+import Navbar from '../components/Navbar/Navbar';
 import { Line } from 'react-chartjs-2';
-import { ApiResponse, FoodGroupInfo, userData, FoodGroups } from './user'; 
-import { Card, CardContent, Typography, FormControlLabel, Checkbox } from '@mui/material';
+import { ApiResponse, FoodGroupInfo, userData, FoodGroups } from './user';
+import {
+  Card,
+  CardContent,
+  Typography,
+  FormControlLabel,
+  Checkbox,
+} from '@mui/material';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -34,7 +40,12 @@ interface DropDownProps {
   drop_label: string; // Label for the dropdown
 }
 
-const DropDown: React.FC<DropDownProps>= ({ selectedValue, setSelectedValue, values, drop_label }) => {
+const DropDown: React.FC<DropDownProps> = ({
+  selectedValue,
+  setSelectedValue,
+  values,
+  drop_label,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleValueChange = (val: string) => {
@@ -82,8 +93,9 @@ interface CategoryLegend {
   [category: string]: boolean;
 }
 
-const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({selectedYear}) => {
-
+const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({
+  selectedYear,
+}) => {
   // get the data for all populated months of the selected year
   const monthlyData = userData.yearlyOverview[selectedYear];
   if (!monthlyData) {
@@ -105,18 +117,23 @@ const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({selectedYear}) =
   // Get the total cost spent on a category
   const getCategoryData = (category: Category) => {
     return months.map((month) => {
-        const foodGroup = monthlyData[month].foodGroups.find((group: FoodGroups) => group[category]);
-        return foodGroup ? foodGroup[category].totalCost : 0;
+      const foodGroup = monthlyData[month].foodGroups.find(
+        (group: FoodGroups) => group[category],
+      );
+      return foodGroup ? foodGroup[category].totalCost : 0;
     });
-};
+  };
 
   // Calculate total spending for the visible categories
   const calculateTotalData = () => {
     return months.map((month) => {
       let sum = 0;
       for (const category in categoryLegend) {
-        if (categoryLegend[category] && category !== 'total') { // Check if category is checkmarked
-          const foodGroup = monthlyData[month].foodGroups.find((group: FoodGroups) => group[category]);
+        if (categoryLegend[category] && category !== 'total') {
+          // Check if category is checkmarked
+          const foodGroup = monthlyData[month].foodGroups.find(
+            (group: FoodGroups) => group[category],
+          );
           sum += foodGroup ? foodGroup[category].totalCost : 0;
         }
       }
@@ -168,7 +185,9 @@ const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({selectedYear}) =
   };
 
   const getBorderColor = (category: string) => {
-    const dataset = graphData.datasets.find(d => d.label.toLowerCase() === category);
+    const dataset = graphData.datasets.find(
+      (d) => d.label.toLowerCase() === category,
+    );
     return dataset ? dataset.borderColor : 'rgba(0, 0, 0, 1)'; // Replace 'defaultColor' with a fallback color if necessary
   };
 
@@ -207,11 +226,10 @@ const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({selectedYear}) =
         <Typography variant="h5" component="div">
           Monthly Spending Overview ({selectedYear})
         </Typography>
-        
+
         {/* Custom Legend with Checkboxes */}
         <div className="legend-container">
           {Object.keys(categoryLegend).map((category) => {
-            
             return (
               <FormControlLabel
                 key={category}
@@ -227,17 +245,16 @@ const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({selectedYear}) =
             );
           })}
         </div>
-  
+
         <Line data={graphData} options={options} />
       </CardContent>
     </Card>
   );
-  
 };
 
 const Analytics = () => {
-  const [selectedYear, setSelectedYear] = useState("2024");
-  const years = ["2024", "2023"];
+  const [selectedYear, setSelectedYear] = useState('2024');
+  const years = ['2024', '2023'];
 
   return (
     <div className="page">
@@ -245,7 +262,12 @@ const Analytics = () => {
         <Navbar />
       </div>
       <div className="section-container">
-        <DropDown selectedValue={selectedYear} setSelectedValue={setSelectedYear} values={years} drop_label="Selected Year:" />
+        <DropDown
+          selectedValue={selectedYear}
+          setSelectedValue={setSelectedYear}
+          values={years}
+          drop_label="Selected Year:"
+        />
       </div>
       <div>
         <AnalyticsLineGraph selectedYear={selectedYear} />

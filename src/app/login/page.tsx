@@ -12,9 +12,8 @@ import {
   sendPasswordResetEmail,
 } from '../firebase/firebaseConfig';
 import { FirebaseError } from '@firebase/app';
-import "./login.css"
-import Image from "next/image";
-
+import './login.css';
+import Image from 'next/image';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -65,12 +64,12 @@ export default function Login() {
       <div className="title-line"></div>
       <div className="input-container">
         <Image
-        src="/assets/email_icon.svg"
-        alt="Email Icon"
-        width={20}
-        height={22.5}
-        className="email-icon"
-         />
+          src="/assets/email_icon.svg"
+          alt="Email Icon"
+          width={20}
+          height={22.5}
+          className="email-icon"
+        />
         <input
           type="email"
           placeholder="Email"
@@ -86,7 +85,7 @@ export default function Login() {
           width={20}
           height={22.5}
           className="lock-icon"
-          />
+        />
         <input
           type="password"
           placeholder="Password"
@@ -94,45 +93,57 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
           className="password-input"
         />
-        
       </div>
-      <Link href="#" className="forgot-password-link" onClick={(e) => { e.preventDefault(); setIsModalOpen(true); }}>
+      <Link
+        href="#"
+        className="forgot-password-link"
+        onClick={(e) => {
+          e.preventDefault();
+          setIsModalOpen(true);
+        }}
+      >
         Forgot Password?
       </Link>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
-      {passwordResetMessage && <p className="success-message">{passwordResetMessage}</p>}
+      {passwordResetMessage && (
+        <p className="success-message">{passwordResetMessage}</p>
+      )}
       <button onClick={login} className="login">
         Login
       </button>
       <div className="or-separator">Or</div>
       <div className="google-sign-in-container">
-        <img src="/assets/continue_with_google.svg" alt="Continue with Google" onClick={googleSignIn} className="google-sign-in"/>
+        <img
+          src="/assets/continue_with_google.svg"
+          alt="Continue with Google"
+          onClick={googleSignIn}
+          className="google-sign-in"
+        />
       </div>
-      
-      
+
       {isModalOpen && (
         <div className="modal-overlay">
-        <div className="modal-content">
-          <h2>Reset Password</h2>
-          <div className="input-container">
-            <Image
-              src="/assets/email_icon.svg"
-              alt="Email Icon"
-              width={20}
-              height={22.5}
-              className="email-icon"
-            />
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={resetEmail}
-              onChange={(e) => setResetEmail(e.target.value)}
-            />
+          <div className="modal-content">
+            <h2>Reset Password</h2>
+            <div className="input-container">
+              <Image
+                src="/assets/email_icon.svg"
+                alt="Email Icon"
+                width={20}
+                height={22.5}
+                className="email-icon"
+              />
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+              />
+            </div>
+            <button onClick={forgotPassword}>Send Reset Email</button>
+            <button onClick={() => setIsModalOpen(false)}>Close</button>
           </div>
-          <button onClick={forgotPassword}>Send Reset Email</button>
-          <button onClick={() => setIsModalOpen(false)}>Close</button>
         </div>
-      </div>
       )}
       <div className="title-line"></div>
       <div className="register-container">
@@ -141,7 +152,6 @@ export default function Login() {
           Create a BudgetByte Account
         </Link>
       </div>
-      
     </div>
   );
 }
