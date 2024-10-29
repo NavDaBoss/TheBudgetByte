@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { auth, db, storage } from "../firebase/firebaseConfig"; // Adjust the path if necessary
-import { ref, listAll, getDownloadURL } from "firebase/storage";
-import { onAuthStateChanged } from "firebase/auth"; // Import onAuthStateChanged
+import { auth, db, storage } from '../firebase/firebaseConfig'; // Adjust the path if necessary
+import { ref, listAll, getDownloadURL } from 'firebase/storage';
+import { onAuthStateChanged } from 'firebase/auth'; // Import onAuthStateChanged
 
 const Receipts = () => {
   const [receiptUrls, setReceiptUrls] = useState<string[]>([]);
@@ -11,7 +11,6 @@ const Receipts = () => {
   const [currentUser, setCurrentUser] = useState(null); // Store the user in state
 
   useEffect(() => {
-
     // Listen for auth state changes and update currentUser when available
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -36,10 +35,12 @@ const Receipts = () => {
 
         const result = await listAll(storageRef);
 
-        const urls = await Promise.all(result.items.map((itemRef) => getDownloadURL(itemRef)));
+        const urls = await Promise.all(
+          result.items.map((itemRef) => getDownloadURL(itemRef)),
+        );
         setReceiptUrls(urls);
       } catch (error) {
-        console.error("Error fetching receipt images:", error);
+        console.error('Error fetching receipt images:', error);
       } finally {
         setLoading(false);
       }
@@ -57,11 +58,28 @@ const Receipts = () => {
   return (
     <div>
       <h1>Receipts</h1>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          gap: '20px',
+        }}
+      >
         {receiptUrls.length > 0 ? (
           receiptUrls.map((url, index) => (
-            <div key={index} style={{ border: '1px solid #ddd', padding: '10px', borderRadius: '10px' }}>
-              <img src={url} alt={`Receipt ${index + 1}`} style={{ width: '100%', height: 'auto' }} />
+            <div
+              key={index}
+              style={{
+                border: '1px solid #ddd',
+                padding: '10px',
+                borderRadius: '10px',
+              }}
+            >
+              <img
+                src={url}
+                alt={`Receipt ${index + 1}`}
+                style={{ width: '100%', height: 'auto' }}
+              />
             </div>
           ))
         ) : (

@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check-format": "npx prettier --check .",
+    "check-lint": "npx eslint src",
+    "format": "npx prettier --write .",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -16,9 +20,11 @@
     "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.5",
     "@mui/x-charts": "^7.22.0",
+    "chart.js": "^4.4.5",
     "firebase": "^10.14.1",
     "next": "14.2.15",
     "react": "^18",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
     "tesseract.js": "^5.1.1"
   },
@@ -26,8 +32,14 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
+    "@typescript-eslint/eslint-plugin": "^8.12.1",
+    "@typescript-eslint/parser": "^8.12.1",
+    "eslint": "^8.57.1",
+    "eslint-config-google": "^0.14.0",
     "eslint-config-next": "14.2.15",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^8.0.0",
+    "prettier": "^3.3.3",
     "typescript": "^5"
   }
 }

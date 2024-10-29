@@ -1,62 +1,63 @@
 'use client';
 
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from "next/link";
-import { auth, provider, signInWithPopup, signInWithEmailAndPassword, saveUserToFirestore, sendPasswordResetEmail } from '../firebase/firebaseConfig';
+import Link from 'next/link';
+import {
+  auth,
+  provider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  saveUserToFirestore,
+  sendPasswordResetEmail,
+} from '../firebase/firebaseConfig';
 import { FirebaseError } from '@firebase/app';
 import "./login.css"
 import Image from "next/image";
 
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("")
-  const [passwordResetMessage, setpasswordResetMessage] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [resetEmail, setResetEmail] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [passwordResetMessage, setpasswordResetMessage] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
   const router = useRouter();
 
   const googleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       await saveUserToFirestore(result.user); // Save user to Firestore
-      router.push("/profile");
+      router.push('/profile');
     } catch (error) {
       console.error(error);
     }
   };
-
 
   const login = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/profile");
+      router.push('/profile');
     } catch (error) {
-      if (error instanceof FirebaseError){
-          setErrorMessage('Invalid Email or Password. Please try again.');
+      if (error instanceof FirebaseError) {
+        setErrorMessage('Invalid Email or Password. Please try again.');
       }
-      
     }
   };
 
-  const forgotPassword = async() => {
+  const forgotPassword = async () => {
     try {
-      if(resetEmail !== null){
+      if (resetEmail !== null) {
         await sendPasswordResetEmail(auth, resetEmail);
-        setpasswordResetMessage("Password reset email sent. Check your inbox.");
+        setpasswordResetMessage('Password reset email sent. Check your inbox.');
         setIsModalOpen(false);
-
       }
-    
     } catch (error) {
       console.error(error);
-      setErrorMessage("Error sending password reset email. Please try again.");
+      setErrorMessage('Error sending password reset email. Please try again.');
     }
   };
-
-
 
   return (
     <div className="main">
