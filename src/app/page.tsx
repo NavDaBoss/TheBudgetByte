@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "./hooks/useAuth";
 import { useEffect } from "react";
 
+import OcrUploadButton from './components/OcrUploadButton/OcrUploadButton';
+import FileUpload from './components/FileUpload/FileUpload';
+import FileUploadContainer from './components/FileUpload/FileUploadContainer';
+
 export default function Home() {
   const router = useRouter();
   const user = useAuth();
@@ -18,7 +22,8 @@ export default function Home() {
         <button onClick={() => router.push('/profile')}>Profile</button> 
         <button onClick={() => router.push('/dashboard')}>Dashboard</button> 
         <button onClick={() => router.push('/analytics')}>Analytics</button> 
-        <button onClick={() => router.push('/ocrTest')}>ocrTest</button> 
+        <OcrUploadButton />
+        <FileUploadContainer userId={'5eCJXbEzBzVkIA2hwnr61UmOtDp1'} />
       </div>
     );
 
