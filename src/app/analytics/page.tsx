@@ -76,6 +76,8 @@ interface AnalyticsLineGraphProps {
   selectedYear: string;
 }
 
+type Category = keyof CategoryLegend;
+
 interface CategoryLegend {
   [category: string]: boolean;
 }
@@ -121,10 +123,6 @@ const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({selectedYear}) =
       return sum;
     });
   };
-  useEffect(() => {
-  // Logic that might change the rendered output
-  console.log('Category Legend updated:', categoryLegend);
-}, [categoryLegend]); // Adjust dependencies as needed
 
   const graphData = {
     labels: months,
@@ -213,9 +211,6 @@ const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({selectedYear}) =
         {/* Custom Legend with Checkboxes */}
         <div className="legend-container">
           {Object.keys(categoryLegend).map((category) => {
-            // Log the border color for the current category
-            const borderColor = getBorderColor(category);
-            console.log('Border color for', category, 'is', borderColor);
             
             return (
               <FormControlLabel
@@ -224,7 +219,7 @@ const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({selectedYear}) =
                   <Checkbox
                     checked={categoryLegend[category]}
                     onChange={() => handleCheckboxChange(category)}
-                    style={{ color: borderColor }} // Use the logged border color here
+                    style={{ color: getBorderColor(category) }} // Use the logged border color here
                   />
                 }
                 label={category.charAt(0).toUpperCase() + category.slice(1)}
