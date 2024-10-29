@@ -8,7 +8,7 @@
                     "totalQuantity": 15,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 80,
                                 "quantity": 4
                             },
@@ -36,7 +36,7 @@
                     "totalQuantity": 14,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 70,
                                 "quantity": 3
                             },
@@ -64,7 +64,7 @@
                     "totalQuantity": 18,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 90,
                                 "quantity": 4
                             },
@@ -92,7 +92,7 @@
                     "totalQuantity": 20,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 100,
                                 "quantity": 5
                             },
@@ -120,7 +120,7 @@
                     "totalQuantity": 25,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 120,
                                 "quantity": 6
                             },
@@ -150,7 +150,7 @@
                     "totalQuantity": 18,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 100,
                                 "quantity": 3
                             },
@@ -178,7 +178,7 @@
                     "totalQuantity": 16,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 90,
                                 "quantity": 4
                             },
@@ -206,7 +206,7 @@
                     "totalQuantity": 20,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 110,
                                 "quantity": 5
                             },
@@ -234,7 +234,7 @@
                     "totalQuantity": 15,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 80,
                                 "quantity": 3
                             },
@@ -262,7 +262,7 @@
                     "totalQuantity": 22,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 120,
                                 "quantity": 6
                             },
@@ -290,7 +290,7 @@
                     "totalQuantity": 19,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 100,
                                 "quantity": 4
                             },
@@ -318,7 +318,7 @@
                     "totalQuantity": 21,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 110,
                                 "quantity": 5
                             },
@@ -346,7 +346,7 @@
                     "totalQuantity": 20,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 100,
                                 "quantity": 4
                             },
@@ -374,7 +374,7 @@
                     "totalQuantity": 17,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 90,
                                 "quantity": 3
                             },
@@ -402,7 +402,7 @@
                     "totalQuantity": 25,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 120,
                                 "quantity": 5
                             },
@@ -430,7 +430,7 @@
                     "totalQuantity": 19,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 90,
                                 "quantity": 4
                             },
@@ -458,7 +458,7 @@
                     "totalQuantity": 30,
                     "food-groups": [
                         {
-                            "veggie": {
+                            "veggies": {
                                 "totalCost": 140,
                                 "quantity": 6
                             },

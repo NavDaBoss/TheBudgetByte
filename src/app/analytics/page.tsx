@@ -5,7 +5,8 @@ import "./analytics.css";
 import Navbar from "../components/Navbar/Navbar";
 import userData from './user.json';
 import { Line } from 'react-chartjs-2';
-import { Card, CardContent, Typography } from '@mui/material';
+import type { ApiResponse } from './user'; 
+import { Card, CardContent, Typography, FormControlLabel, Checkbox } from '@mui/material';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -18,7 +19,7 @@ import {
 } from 'chart.js';
 
 ChartJS.register(
-  CategoryScale,   // This registers the 'category' scale
+  CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -27,16 +28,23 @@ ChartJS.register(
   Legend
 );
 
-const DropDown = ({ selectedValue, setSelectedValue, values, drop_label }) => {
-  const [isOpen, setIsOpen] = useState(false); // State to manage dropdown visibility
+interface DropDownProps {
+  selectedValue: string; // Current selected value
+  setSelectedValue: (value: string) => void; // Function to update the selected value
+  values: string[]; // Array of values to display in the dropdown
+  drop_label: string; // Label for the dropdown
+}
 
-  const handleYearChange = (year) => {
-    setSelectedValue(year);
+const DropDown: React.FC<DropDownProps>= ({ selectedValue, setSelectedValue, values, drop_label }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleValueChange = (val: string) => {
+    setSelectedValue(val);
     setIsOpen(false);
   };
 
   const toggleDropdown = () => {
-    setIsOpen(prev => !prev); // Toggle dropdown visibility
+    setIsOpen((prev) => !prev);
   };
 
   return (
@@ -53,7 +61,7 @@ const DropDown = ({ selectedValue, setSelectedValue, values, drop_label }) => {
               <div
                 key={value}
                 className="dropdown-option"
-                onClick={() => handleYearChange(value)}
+                onClick={() => handleValueChange(value)}
               >
                 {value}
               </div>
@@ -65,41 +73,111 @@ const DropDown = ({ selectedValue, setSelectedValue, values, drop_label }) => {
   );
 };
 
-const AnalyticsLineGraph = ({selectedYear}) => {
+interface AnalyticsLineGraphProps {
+  selectedYear: string;
+}
+
+interface CategoryLegend {
+  [category: string]: boolean;
+}
+
+const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({selectedYear}) => {
+
+  // get the data for all populated months of the selected year
   const monthlyData = userData.user.yearlyOverview[selectedYear];
   if (!monthlyData) {
     return <div>No data available for {selectedYear}</div>;
   }
+
+  const [categoryLegend, setCategoryLegend] = useState<CategoryLegend>({
+    fruits: true,
+    veggies: true,
+    protein: true,
+    grain: true,
+    dairy: true,
+  });
+
+  // get the months that have data
   const months = Object.keys(monthlyData);
-  const spendingData = months.map(month => monthlyData[month].totalSpent);
-  // return (
-  // <div> {spendingData}</div>);
-  // Line chart data
-  const data = {
+
+  // Get the total cost spent on a category
+  const getCategoryData = (category: string) => {
+    return months.map((month) => {
+      const foodGroup = monthlyData[month]["food-groups"].find((group) => group[category]);
+      return foodGroup ? foodGroup[category].totalCost : 0;
+    });
+  };
+
+  // Calculate total spending for the visible categories
+  const calculateTotalData = () => {
+    return months.map((month) => {
+      let sum = 0;
+      for (const category in categoryLegend) {
+        if (categoryLegend[category] && category !== 'total') { // Check if category is checkmarked
+          const foodGroup = monthlyData[month]["food-groups"].find((group) => group[category]);
+          sum += foodGroup ? foodGroup[category].totalCost : 0;
+        }
+      }
+      return sum;
+    });
+  };
+  useEffect(() => {
+  // Logic that might change the rendered output
+  console.log('Category Legend updated:', categoryLegend);
+}, [categoryLegend]); // Adjust dependencies as needed
+
+  const graphData = {
     labels: months,
     datasets: [
       {
-        label: 'Total Spent ($)',
-        data: spendingData,
-        fill: false,
+        label: 'Fruits',
+        data: getCategoryData('fruits'),
+        borderColor: 'rgba(255, 99, 132, 1)',
+        hidden: !categoryLegend.fruits,
+      },
+      {
+        label: 'Veggies',
+        data: getCategoryData('veggies'),
+        borderColor: 'rgba(54, 162, 235, 1)',
+        hidden: !categoryLegend.veggies,
+      },
+      {
+        label: 'Protein',
+        data: getCategoryData('protein'),
         borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        tension: 0.1, // Line tension for smooth curves
+        hidden: !categoryLegend.protein,
+      },
+      {
+        label: 'Grain',
+        data: getCategoryData('grain'),
+        borderColor: 'rgba(255, 206, 86, 1)',
+        hidden: !categoryLegend.grain,
+      },
+      {
+        label: 'Dairy',
+        data: getCategoryData('dairy'),
+        fill: false,
+        borderColor: 'rgba(153, 102, 255, 1)',
+        hidden: !categoryLegend.dairy,
+      },
+      {
+        label: 'Total',
+        data: calculateTotalData(),
+        borderColor: 'rgba(0, 0, 0, 1)',
+        hidden: !categoryLegend.total,
       },
     ],
   };
 
-  // Chart options
+  const getBorderColor = (category) => {
+    const dataset = graphData.datasets.find(d => d.label.toLowerCase() === category);
+    return dataset ? dataset.borderColor : 'rgba(0, 0, 0, 1)'; // Replace 'defaultColor' with a fallback color if necessary
+  };
+
   const options = {
-    responsive: true,
     plugins: {
       legend: {
-        display: true,
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text:  `Monthly Spending in ${selectedYear}`,
+        display: false, // Hide the default legend
       },
     },
     scales: {
@@ -112,11 +190,17 @@ const AnalyticsLineGraph = ({selectedYear}) => {
       y: {
         title: {
           display: true,
-          text: 'Total Spent ($)',
+          text: 'Amount Spent ($)',
         },
-        beginAtZero: true,
       },
     },
+  };
+
+  const handleCheckboxChange = (category: string) => {
+    setCategoryLegend((prevState) => ({
+      ...prevState,
+      [category]: !prevState[category],
+    }));
   };
 
   return (
@@ -125,27 +209,51 @@ const AnalyticsLineGraph = ({selectedYear}) => {
         <Typography variant="h5" component="div">
           Monthly Spending Overview ({selectedYear})
         </Typography>
-        <Line data={data} options={options} />
+        
+        {/* Custom Legend with Checkboxes */}
+        <div className="legend-container">
+          {Object.keys(categoryLegend).map((category) => {
+            // Log the border color for the current category
+            const borderColor = getBorderColor(category);
+            console.log('Border color for', category, 'is', borderColor);
+            
+            return (
+              <FormControlLabel
+                key={category}
+                control={
+                  <Checkbox
+                    checked={categoryLegend[category]}
+                    onChange={() => handleCheckboxChange(category)}
+                    style={{ color: borderColor }} // Use the logged border color here
+                  />
+                }
+                label={category.charAt(0).toUpperCase() + category.slice(1)}
+              />
+            );
+          })}
+        </div>
+  
+        <Line data={graphData} options={options} />
       </CardContent>
     </Card>
   );
+  
 };
 
-
-
 const Analytics = () => {
-  const [selectedYear, setSelectedYear] = useState("2024"); // Default to 2024
+  const [selectedYear, setSelectedYear] = useState("2024");
   const years = ["2024", "2023"];
+
   return (
     <div className="page">
       <div>
         <Navbar />
       </div>
-      <div className = "section-container">
-        <DropDown selectedValue={selectedYear} setSelectedValue={setSelectedYear} values={years}drop_label="Selected Year:"/>
+      <div className="section-container">
+        <DropDown selectedValue={selectedYear} setSelectedValue={setSelectedYear} values={years} drop_label="Selected Year:" />
       </div>
-      <div className = "section-container">
-      <AnalyticsLineGraph selectedYear={selectedYear}/>
+      <div>
+        <AnalyticsLineGraph selectedYear={selectedYear} />
       </div>
     </div>
   );
