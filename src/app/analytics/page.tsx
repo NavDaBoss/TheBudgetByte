@@ -3,9 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import "./analytics.css";
 import Navbar from "../components/Navbar/Navbar";
-import userData from './user.json';
 import { Line } from 'react-chartjs-2';
-import type { ApiResponse } from './user'; 
+import { ApiResponse, FoodGroupInfo, userData, FoodGroups } from './user'; 
 import { Card, CardContent, Typography, FormControlLabel, Checkbox } from '@mui/material';
 import {
   Chart as ChartJS,
@@ -84,7 +83,7 @@ interface CategoryLegend {
 const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({selectedYear}) => {
 
   // get the data for all populated months of the selected year
-  const monthlyData = userData.user.yearlyOverview[selectedYear];
+  const monthlyData = userData.yearlyOverview[selectedYear];
   if (!monthlyData) {
     return <div>No data available for {selectedYear}</div>;
   }
@@ -95,18 +94,19 @@ const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({selectedYear}) =
     protein: true,
     grain: true,
     dairy: true,
+    total: true,
   });
 
   // get the months that have data
   const months = Object.keys(monthlyData);
 
   // Get the total cost spent on a category
-  const getCategoryData = (category: string) => {
+  const getCategoryData = (category: Category) => {
     return months.map((month) => {
-      const foodGroup = monthlyData[month]["food-groups"].find((group) => group[category]);
-      return foodGroup ? foodGroup[category].totalCost : 0;
+        const foodGroup = monthlyData[month].foodGroups.find((group: FoodGroups) => group[category]);
+        return foodGroup ? foodGroup[category].totalCost : 0;
     });
-  };
+};
 
   // Calculate total spending for the visible categories
   const calculateTotalData = () => {
@@ -114,7 +114,7 @@ const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({selectedYear}) =
       let sum = 0;
       for (const category in categoryLegend) {
         if (categoryLegend[category] && category !== 'total') { // Check if category is checkmarked
-          const foodGroup = monthlyData[month]["food-groups"].find((group) => group[category]);
+          const foodGroup = monthlyData[month].foodGroups.find((group: FoodGroups) => group[category]);
           sum += foodGroup ? foodGroup[category].totalCost : 0;
         }
       }
@@ -169,7 +169,7 @@ const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({selectedYear}) =
     ],
   };
 
-  const getBorderColor = (category) => {
+  const getBorderColor = (category: string) => {
     const dataset = graphData.datasets.find(d => d.label.toLowerCase() === category);
     return dataset ? dataset.borderColor : 'rgba(0, 0, 0, 1)'; // Replace 'defaultColor' with a fallback color if necessary
   };
