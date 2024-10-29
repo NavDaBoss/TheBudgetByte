@@ -2,16 +2,24 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { auth, db, signOut, updateProfile, doc, setDoc, storage } from '../firebase/firebaseConfig'
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import "./profile.css";
+import {
+  auth,
+  db,
+  signOut,
+  updateProfile,
+  doc,
+  setDoc,
+  storage,
+} from '../firebase/firebaseConfig';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import './profile.css';
 
 export default function Profile() {
   const router = useRouter();
   const currentUser = auth.currentUser;
   const logout = async () => {
     await signOut(auth);
-    router.push("/login"); // Redirect to login
+    router.push('/login'); // Redirect to login
   };
 
   const [isEditingName, setIsEditingName] = useState(false); // Control the pop-up state
@@ -21,7 +29,7 @@ export default function Profile() {
 
   const handleNameChange = async (event) => {
     setNewName(event.target.value); // Update the new name as user types
-  }
+  };
 
   // Handle image file selection
   const handleProfilePicChange = (event) => {
@@ -37,8 +45,8 @@ export default function Profile() {
     setIsEditingPic(true); // Show the profile pic pop-up
   };
   const handleHomePage = async () => {
-    router.push("/");
-  }
+    router.push('/');
+  };
   // Handle profile update
   const handleUpdateProfile = async () => {
     if (currentUser && newProfilePic) {
@@ -55,8 +63,12 @@ export default function Profile() {
         });
 
         // Save data to Firestore
-        const userDocRef = doc(db, "users", currentUser.uid);
-        await setDoc(userDocRef, { displayName: newName, photoURL: imageUrl }, { merge: true });
+        const userDocRef = doc(db, 'users', currentUser.uid);
+        await setDoc(
+          userDocRef,
+          { displayName: newName, photoURL: imageUrl },
+          { merge: true },
+        );
 
         setIsEditingPic(false);
       } catch (error) {
@@ -71,7 +83,7 @@ export default function Profile() {
         await updateProfile(currentUser, {
           displayName: newName, // Set the new displayName here
         });
-        const userDocRef = doc(db, "users", currentUser.uid);
+        const userDocRef = doc(db, 'users', currentUser.uid);
         await setDoc(userDocRef, { displayName: newName }, { merge: true });
         setIsEditingName(false); // Hide the pop-up after updating
       } catch (error) {
@@ -83,12 +95,20 @@ export default function Profile() {
   return (
     <div>
       <h1>Profile</h1>
-      {currentUser ? <p>Hey {currentUser.displayName || "User"}</p> : <p>"User"</p>}
-      {currentUser ? <p>Email: {currentUser.email || "N/A"}</p> : <p>"N/A"</p>}
+      {currentUser ? (
+        <p>Hey {currentUser.displayName || 'User'}</p>
+      ) : (
+        <p>"User"</p>
+      )}
+      {currentUser ? <p>Email: {currentUser.email || 'N/A'}</p> : <p>"N/A"</p>}
       {/* Display profile picture */}
       <div>
         {currentUser?.photoURL ? (
-          <img src={currentUser.photoURL} alt="Profile" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
+          <img
+            src={currentUser.photoURL}
+            alt="Profile"
+            style={{ width: '100px', height: '100px', borderRadius: '50%' }}
+          />
         ) : (
           <p>No Profile Picture</p>
         )}
@@ -97,7 +117,9 @@ export default function Profile() {
       <button onClick={handleEditName}>Edit Name</button>
       <button onClick={handleEditProliePic}>Upload Image</button>
       <button onClick={handleHomePage}>Return to Home Page</button>
-      <div><button onClick={logout}>Logout</button></div>
+      <div>
+        <button onClick={logout}>Logout</button>
+      </div>
 
       {/* Pop-up for editing profile name */}
       {isEditingName && (
@@ -127,5 +149,4 @@ export default function Profile() {
       )}
     </div>
   );
-};
-
+}
