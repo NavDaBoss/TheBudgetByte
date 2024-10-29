@@ -1,6 +1,6 @@
-import { useProfileRedirect, useLogout } from '../../hooks/clientUtils';
+import { useProfileRedirect, useLogout } from '../hooks/clientUtils';
 
-import '../../styles/Navbar.css';
+import '../styles/Navbar.css';
 
 const Navbar = () => {
   const profile = useProfileRedirect();
