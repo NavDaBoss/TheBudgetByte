@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect } from 'react';
+import { useState } from 'react';
 
 import { PieChart } from '@mui/x-charts/PieChart';
 import CheckBoxIcon from '@mui/icons-material/CheckBoxSharp';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlankSharp';
 import EditIcon from '@mui/icons-material/EditOutlined';
 
-import Navbar from "../components/Navbar/Navbar";
-import GroceryData from "./groceries.json";
-import SummaryData from "./food_summary.json";
+import Navbar from '../components/Navbar/Navbar';
+import GroceryData from './groceries.json';
+import SummaryData from './food_summary.json';
 
-import "./dashboard.css";
+import './dashboard.css';
 
 const ReceiptHead = ({ sortColumn }) => {
-  const [sortField, setSortField] = useState("");
-  const [order, setOrder] = useState("asc");
+  const [sortField, setSortField] = useState('');
+  const [order, setOrder] = useState('asc');
 
   const handleSortChange = (accessor) => {
-    let sortOrder = "asc";
+    let sortOrder = 'asc';
     if (accessor === sortField) {
-      if (order === "asc") {
-        sortOrder = "desc";
-      } else if (order === "desc") {
-        sortOrder = "none";
-      } else if (order === "none") {
-        sortOrder = "asc";
+      if (order === 'asc') {
+        sortOrder = 'desc';
+      } else if (order === 'desc') {
+        sortOrder = 'none';
+      } else if (order === 'none') {
+        sortOrder = 'asc';
       }
     }
     setSortField(accessor);
@@ -37,16 +37,16 @@ const ReceiptHead = ({ sortColumn }) => {
   return (
     <thead className="receipt-table-head">
       <tr>
-        <th key="quantity" onClick={() => handleSortChange("quantity")}>
+        <th key="quantity" onClick={() => handleSortChange('quantity')}>
           QTY
         </th>
-        <th key="itemName" onClick={() => handleSortChange("itemName")}>
+        <th key="itemName" onClick={() => handleSortChange('itemName')}>
           ITEM
         </th>
-        <th key="group" onClick={() => handleSortChange("group")}>
+        <th key="group" onClick={() => handleSortChange('group')}>
           GROUP
         </th>
-        <th key="price" onClick={() => handleSortChange("price")}>
+        <th key="price" onClick={() => handleSortChange('price')}>
           PRICE
         </th>
       </tr>
@@ -98,28 +98,28 @@ const SearchBar = ({ filterText, onFilterTextChange }) => {
   );
 };
 
-const FilterableReceipt= ({ groceries }) => {
+const FilterableReceipt = ({ groceries }) => {
   const [tableData, setTableData] = useState(groceries);
-  const [filterText, setFilterText] = useState("");
+  const [filterText, setFilterText] = useState('');
 
   const sortColumn = (sortField, sortOrder) => {
-    if (sortOrder === "none") {
+    if (sortOrder === 'none') {
       setTableData(groceries);
       return;
     }
 
     if (sortField) {
       const sorted = [...groceries].sort((a, b) => {
-        if (typeof a[sortField] === "number") {
-          return (a[sortField] - b[sortField]) * (sortOrder === "asc" ? 1 : -1);
+        if (typeof a[sortField] === 'number') {
+          return (a[sortField] - b[sortField]) * (sortOrder === 'asc' ? 1 : -1);
         }
         a = a[sortField].toLowerCase();
         b = b[sortField].toLowerCase();
 
         return (
-          a.localeCompare(b, "en", {
+          a.localeCompare(b, 'en', {
             numeric: true,
-          }) * (sortOrder === "asc" ? 1 : -1)
+          }) * (sortOrder === 'asc' ? 1 : -1)
         );
       });
       setTableData(sorted);
@@ -137,7 +137,7 @@ const FilterableReceipt= ({ groceries }) => {
         filterText={filterText}
         sortColumn={sortColumn}
       />
-        <Summary groups={SummaryData.foodGroups} />
+      <Summary groups={SummaryData.foodGroups} />
     </div>
   );
 };
@@ -156,16 +156,16 @@ const Receipt = ({ groceries }) => {
 };
 
 const SummaryHead = ({ sortColumn }) => {
-  const [sortField, setSortField] = useState("");
-  const [order, setOrder] = useState("asc");
+  const [sortField, setSortField] = useState('');
+  const [order, setOrder] = useState('asc');
 
   const handleSortChange = (accessor) => {
-    let sortOrder = "asc";
+    let sortOrder = 'asc';
     if (accessor === sortField) {
-      if (order === "asc") {
-        sortOrder = "desc";
-      } else if (order === "desc") {
-        sortOrder = "asc";
+      if (order === 'asc') {
+        sortOrder = 'desc';
+      } else if (order === 'desc') {
+        sortOrder = 'asc';
       }
     }
     setSortField(accessor);
@@ -176,16 +176,16 @@ const SummaryHead = ({ sortColumn }) => {
   return (
     <thead>
       <tr>
-        <th key="check" onClick={() => handleSortChange("check")}>
+        <th key="check" onClick={() => handleSortChange('check')}>
           Complete
         </th>
-        <th key="group" onClick={() => handleSortChange("type")}>
+        <th key="group" onClick={() => handleSortChange('type')}>
           Group
         </th>
-        <th key="count" onClick={() => handleSortChange("count")}>
+        <th key="count" onClick={() => handleSortChange('count')}>
           Count
         </th>
-        <th key="price" onClick={() => handleSortChange("totalPrice")}>
+        <th key="price" onClick={() => handleSortChange('totalPrice')}>
           Price
         </th>
       </tr>
@@ -200,12 +200,12 @@ const SummaryTable = ({ groups, sortColumn }) => {
     rows.push(
       <tr key={group.type}>
         <td>
-          {group.count > 0 ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon/>}
+          {group.count > 0 ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
         </td>
         <td>{group.type}</td>
         <td>{group.count}</td>
         <td>${group.totalPrice.toFixed(2)}</td>
-      </tr>
+      </tr>,
     );
   });
 
@@ -221,35 +221,35 @@ const Summary = ({ groups }) => {
   const [tableData, setTableData] = useState(groups);
 
   const sortColumn = (sortField, sortOrder) => {
-    if (sortOrder === "none") {
+    if (sortOrder === 'none') {
       setTableData(groups);
       return;
     }
 
     const sorted = [...groups].sort((a, b) => {
-      if (sortField == "check") {
+      if (sortField == 'check') {
         const checkA = a.count > 0 ? 1 : 0;
         const checkB = b.count > 0 ? 1 : 0;
-        return sortOrder === "asc" ? checkA - checkB : checkB - checkA;
+        return sortOrder === 'asc' ? checkA - checkB : checkB - checkA;
       }
-      if (typeof a[sortField] === "number") {
-          return (a[sortField] - b[sortField]) * (sortOrder === "asc" ? 1 : -1);
+      if (typeof a[sortField] === 'number') {
+        return (a[sortField] - b[sortField]) * (sortOrder === 'asc' ? 1 : -1);
       }
       a = a[sortField].toLowerCase();
       b = b[sortField].toLowerCase();
 
       return (
-        a.localeCompare(b, "en", {
+        a.localeCompare(b, 'en', {
           numeric: true,
-        }) * (sortOrder === "asc" ? 1 : -1)
+        }) * (sortOrder === 'asc' ? 1 : -1)
       );
     });
     setTableData(sorted);
   };
 
-  const pieData = tableData.map(group => ({
-      name: group.type,
-      value: group.pricePercentage,
+  const pieData = tableData.map((group) => ({
+    name: group.type,
+    value: group.pricePercentage,
   }));
 
   return (

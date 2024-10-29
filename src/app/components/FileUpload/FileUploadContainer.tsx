@@ -1,17 +1,21 @@
-import { useState } from "react";
-import FileUpload from "./FileUpload"; // Adjust the path if necessary
+import { useState } from 'react';
+import FileUpload from './FileUpload'; // Adjust the path if necessary
 
 // for use in another file
-{/* <FileUploadContainer userId={currentUser.uid} />
+{
+  /* <FileUploadContainer userId={currentUser.uid} />
     ) : (
     <p>Sign In to upload</p>  // Handle the case where currentUser is not yet available
-    )} */}
+    )} */
+}
 
 interface FileUploadContainerProps {
   userId: string; // The ID of the user uploading the file
 }
 
-const FileUploadContainer: React.FC<FileUploadContainerProps> = ({ userId }) => {
+const FileUploadContainer: React.FC<FileUploadContainerProps> = ({
+  userId,
+}) => {
   const [showUpload, setShowUpload] = useState(false); // State to track if the upload form should be shown
 
   const handleButtonClick = () => {
@@ -27,11 +31,11 @@ const FileUploadContainer: React.FC<FileUploadContainerProps> = ({ userId }) => 
       {!showUpload && (
         <button onClick={handleButtonClick}>Upload an Reciept</button>
       )}
-      
+
       {showUpload && (
-        <div style={{ position: "absolute", top: 0, left: 0, width: "100%" }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%' }}>
           {/* Show the FileUpload component */}
-          <FileUpload userId={userId} closePopup={closePopup}/>
+          <FileUpload userId={userId} closePopup={closePopup} />
         </div>
       )}
     </div>

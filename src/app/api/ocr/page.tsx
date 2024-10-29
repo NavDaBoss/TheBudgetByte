@@ -7,8 +7,8 @@ import { collection, addDoc } from 'firebase/firestore'; // Import Firestore met
 
 export default function OcrPage() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [ocrResult, setOcrResult] = useState<string>('');  // Store OCR result
-  const [loading, setLoading] = useState(false);  // Manage loading state
+  const [ocrResult, setOcrResult] = useState<string>(''); // Store OCR result
+  const [loading, setLoading] = useState(false); // Manage loading state
 
   // Handle image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,13 +21,13 @@ export default function OcrPage() {
   // Handle OCR parsing and sending to Firestore
   const handleParseImage = async () => {
     if (!selectedImage) return;
-    
+
     setLoading(true);
     try {
       const result = await Tesseract.recognize(
         selectedImage,
-        'eng',  // OCR language: English
-        { logger: (m) => console.log(m) }  // Optional logger for debugging
+        'eng', // OCR language: English
+        { logger: (m) => console.log(m) }, // Optional logger for debugging
       );
       const text = result.data.text;
       setOcrResult(text);
@@ -39,7 +39,6 @@ export default function OcrPage() {
         fileName: selectedImage.name, // Optional: Save the file name
       });
       console.log('Document written with ID:', docRef.id);
-
     } catch (error) {
       console.error('Error extracting text or saving to Firestore:', error);
     } finally {
@@ -50,16 +49,18 @@ export default function OcrPage() {
   return (
     <div>
       <h1>OCR Page</h1>
-      <p>This page allows you to upload a grocery receipt and parse it using OCR.</p>
-      
+      <p>
+        This page allows you to upload a grocery receipt and parse it using OCR.
+      </p>
+
       {/* Image Upload Input */}
       <input type="file" accept="image/*" onChange={handleImageUpload} />
-      
+
       {/* Button to trigger OCR */}
       <button onClick={handleParseImage} disabled={loading || !selectedImage}>
         {loading ? 'Processing...' : 'Parse Receipt'}
       </button>
-      
+
       {/* Display OCR result */}
       {ocrResult && (
         <div>

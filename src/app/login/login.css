@@ -1,15 +1,15 @@
 .main {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .title-line {
-    content: "";
-    width: 1000px;
-    border-top: 2px solid black;
-    margin: 10px 0 20px 0;
+  content: '';
+  width: 1000px;
+  border-top: 2px solid black;
+  margin: 10px 0 20px 0;
 }
 
 .or-separator {
