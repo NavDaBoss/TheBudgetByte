@@ -6,6 +6,7 @@ import Link from "next/link";
 import { auth, provider, signInWithPopup, signInWithEmailAndPassword, saveUserToFirestore, sendPasswordResetEmail } from '../firebase/firebaseConfig';
 import { FirebaseError } from '@firebase/app';
 import "./login.css"
+import Image from "next/image";
 
 
 export default function Login() {
@@ -61,54 +62,85 @@ export default function Login() {
     <div className="main">
       <h1>Login</h1>
       <div className="title-line"></div>
-      <div className="login-container">
-        <div className="email">
-          <h2>Email:</h2>
-          <input
-            type="email"
-            placeholder="Enter your Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="password">
-          <h2>Password:</h2>
-          <input
-            type="password"
-            placeholder="Enter your Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+      <div className="input-container">
+        <Image
+        src="/assets/email_icon.svg"
+        alt="Email Icon"
+        width={20}
+        height={22.5}
+        className="email-icon"
+         />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="email-input"
+        />
       </div>
-      <button onClick={login}>Login</button>
-      <h3>Forgot your Password?</h3>
-      <button onClick={() => setIsModalOpen(true)}>Forgot Password</button>
-      <div className="title-line"></div>
-      <div onClick={googleSignIn}>
-        <img src="/assets/continue_with_google.svg" alt="Continue with Google" />
+      <div className="input-container">
+        <Image
+          src="/assets/lock_icon.svg"
+          alt="Lock Icon"
+          width={20}
+          height={22.5}
+          className="lock-icon"
+          />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="password-input"
+        />
+        
+      </div>
+      <Link href="#" className="forgot-password-link" onClick={(e) => { e.preventDefault(); setIsModalOpen(true); }}>
+        Forgot Password?
+      </Link>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {passwordResetMessage && <p className="success-message">{passwordResetMessage}</p>}
+      <button onClick={login} className="login">
+        Login
+      </button>
+      <div className="or-separator">Or</div>
+      <div className="google-sign-in-container">
+        <img src="/assets/continue_with_google.svg" alt="Continue with Google" onClick={googleSignIn} className="google-sign-in"/>
       </div>
       
-      {passwordResetMessage && <p>{passwordResetMessage}</p>}
-      {errorMessage && <p>{errorMessage}</p>}
+      
       {isModalOpen && (
-        <div className="popup">
-            <h2>Reset Password</h2>
+        <div className="modal-overlay">
+        <div className="modal-content">
+          <h2>Reset Password</h2>
+          <div className="input-container">
+            <Image
+              src="/assets/email_icon.svg"
+              alt="Email Icon"
+              width={20}
+              height={22.5}
+              className="email-icon"
+            />
             <input
               type="email"
               placeholder="Enter your email"
               value={resetEmail}
               onChange={(e) => setResetEmail(e.target.value)}
             />
-            <button onClick={forgotPassword}>Send Reset Email</button>
-            <button onClick={() => setIsModalOpen(false)}>Close</button>
+          </div>
+          <button onClick={forgotPassword}>Send Reset Email</button>
+          <button onClick={() => setIsModalOpen(false)}>Close</button>
         </div>
+      </div>
       )}
       <div className="title-line"></div>
-      <h3>New to Budget Byte?</h3>
-      <Link href="/register">
-        <button>Register</button>
-      </Link>
+      <div className="register-container">
+        <p>New to Budget Byte?</p>
+        <Link href="/register" className="register-link">
+          Create a BudgetByte Account
+        </Link>
+      </div>
+      
     </div>
   );
 }
