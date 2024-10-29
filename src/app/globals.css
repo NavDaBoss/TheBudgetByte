@@ -1,5 +1,5 @@
 :root {
-  --background: #D9D3D0;
+  --background: #d9d3d0;
   --foreground: #171717;
   --font-roboto-mono: 'Roboto Mono', monospace;
   --font-silkscreen: 'Silkscreen', 'Roboto Mono', monospace;
@@ -11,22 +11,23 @@
 }
 
 @font-face {
-    font-family: 'Roboto Mono';
-    src: url('./fonts/Roboto_Mono/RobotoMono-VariableFont_wght.ttf') format('truetype');
-    font-weight: 100 900;
-    style: normal;
+  font-family: 'Roboto Mono';
+  src: url('./fonts/Roboto_Mono/RobotoMono-VariableFont_wght.ttf')
+    format('truetype');
+  font-weight: 100 900;
+  style: normal;
 }
 @font-face {
-    font-family: 'Silkscreen';
-    src: url('./fonts/Silkscreen/Silkscreen-Regular.ttf') format('truetype');
-    font-weight: 400;
-    style: normal;
+  font-family: 'Silkscreen';
+  src: url('./fonts/Silkscreen/Silkscreen-Regular.ttf') format('truetype');
+  font-weight: 400;
+  style: normal;
 }
 @font-face {
-    font-family: 'Silkscreen';
-    src: url('./fonts/Silkscreen/Silkscreen-Bold.ttf') format('truetype');
-    font-weight: 700;
-    style: normal;
+  font-family: 'Silkscreen';
+  src: url('./fonts/Silkscreen/Silkscreen-Bold.ttf') format('truetype');
+  font-weight: 700;
+  style: normal;
 }
 
 html,

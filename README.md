@@ -3,6 +3,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 ## Setup
 
 #### Install tesseract.js to use OCR
+
 ```bash
 npm install tesseract.js
 ```

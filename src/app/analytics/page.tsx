@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import "./analytics.css";
-import Navbar from "../components/Navbar/Navbar";
+import './analytics.css';
+import Navbar from '../components/Navbar/Navbar';
 import userData from './user.json';
 import { Line } from 'react-chartjs-2';
 import { Card, CardContent, Typography } from '@mui/material';
@@ -18,13 +18,13 @@ import {
 } from 'chart.js';
 
 ChartJS.register(
-  CategoryScale,   // This registers the 'category' scale
+  CategoryScale, // This registers the 'category' scale
   LinearScale,
   PointElement,
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 const DropDown = ({ selectedValue, setSelectedValue, values, drop_label }) => {
@@ -36,7 +36,7 @@ const DropDown = ({ selectedValue, setSelectedValue, values, drop_label }) => {
   };
 
   const toggleDropdown = () => {
-    setIsOpen(prev => !prev); // Toggle dropdown visibility
+    setIsOpen((prev) => !prev); // Toggle dropdown visibility
   };
 
   return (
@@ -65,13 +65,13 @@ const DropDown = ({ selectedValue, setSelectedValue, values, drop_label }) => {
   );
 };
 
-const AnalyticsLineGraph = ({selectedYear}) => {
+const AnalyticsLineGraph = ({ selectedYear }) => {
   const monthlyData = userData.user.yearlyOverview[selectedYear];
   if (!monthlyData) {
     return <div>No data available for {selectedYear}</div>;
   }
   const months = Object.keys(monthlyData);
-  const spendingData = months.map(month => monthlyData[month].totalSpent);
+  const spendingData = months.map((month) => monthlyData[month].totalSpent);
   // return (
   // <div> {spendingData}</div>);
   // Line chart data
@@ -99,7 +99,7 @@ const AnalyticsLineGraph = ({selectedYear}) => {
       },
       title: {
         display: true,
-        text:  `Monthly Spending in ${selectedYear}`,
+        text: `Monthly Spending in ${selectedYear}`,
       },
     },
     scales: {
@@ -131,21 +131,24 @@ const AnalyticsLineGraph = ({selectedYear}) => {
   );
 };
 
-
-
 const Analytics = () => {
-  const [selectedYear, setSelectedYear] = useState("2024"); // Default to 2024
-  const years = ["2024", "2023"];
+  const [selectedYear, setSelectedYear] = useState('2024'); // Default to 2024
+  const years = ['2024', '2023'];
   return (
     <div className="page">
       <div>
         <Navbar />
       </div>
-      <div className = "section-container">
-        <DropDown selectedValue={selectedYear} setSelectedValue={setSelectedYear} values={years}drop_label="Selected Year:"/>
+      <div className="section-container">
+        <DropDown
+          selectedValue={selectedYear}
+          setSelectedValue={setSelectedYear}
+          values={years}
+          drop_label="Selected Year:"
+        />
       </div>
-      <div className = "section-container">
-      <AnalyticsLineGraph selectedYear={selectedYear}/>
+      <div className="section-container">
+        <AnalyticsLineGraph selectedYear={selectedYear} />
       </div>
     </div>
   );
