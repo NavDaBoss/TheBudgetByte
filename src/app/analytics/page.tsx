@@ -3,7 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import './analytics.css';
 import Navbar from '../components/Navbar';
-import { AnalyticsLineGraph, CategoryLegend, GraphParams, Category } from '../components/YearlyGraph'
+import {
+  AnalyticsLineGraph,
+  CategoryLegend,
+  GraphParams,
+  Category,
+} from '../components/YearlyGraph';
 import { ApiResponse, FoodGroupInfo, userData, FoodGroups } from './user';
 import { CategoryRounded } from '@mui/icons-material';
 
@@ -151,13 +156,13 @@ const createYearlyMoneySpentGraphParams = (selectedYear: string) => {
   };
 
   return graphParams;
-}
+};
 
 const Analytics = () => {
   const [selectedYear, setSelectedYear] = useState('2024');
   const years = ['2024', '2023'];
   const [selectedMonth, setSelectedMonth] = useState('January');
-  const monthsInSelectedYear = ['January', 'February']
+  const monthsInSelectedYear = ['January', 'February'];
   const graphParams = createYearlyMoneySpentGraphParams(selectedYear);
   return (
     <div className="page">
