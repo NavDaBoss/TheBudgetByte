@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-import { PieChart } from '@mui/x-charts/PieChart';
+import SummaryPie from '../components/SummaryPie';
+
 import CheckBoxIcon from '@mui/icons-material/CheckBoxSharp';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlankSharp';
 
@@ -13,11 +14,7 @@ const SummaryHead = ({ sortColumn }) => {
   const handleSortChange = (accessor) => {
     let sortOrder = 'asc';
     if (accessor === sortField) {
-      if (order === 'asc') {
-        sortOrder = 'desc';
-      } else if (order === 'desc') {
-        sortOrder = 'asc';
-      }
+      sortOrder = order === 'asc' ? 'desc' : 'asc';
     }
     setSortField(accessor);
     setOrder(sortOrder);
@@ -27,14 +24,9 @@ const SummaryHead = ({ sortColumn }) => {
   return (
     <thead>
       <tr>
-        <th key="check" onClick={() => handleSortChange('check')}>
-          Complete
-        </th>
+        <th key="check" onClick={() => handleSortChange('check')}></th>
         <th key="group" onClick={() => handleSortChange('type')}>
           Group
-        </th>
-        <th key="count" onClick={() => handleSortChange('count')}>
-          Count
         </th>
         <th key="price" onClick={() => handleSortChange('totalPrice')}>
           Price
@@ -50,12 +42,14 @@ const SummaryTable = ({ groups, sortColumn }) => {
   groups.map((group) => {
     rows.push(
       <tr key={group.type}>
-        <td>
+        <td className="checkbox-column">
           {group.count > 0 ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
         </td>
-        <td>{group.type}</td>
-        <td>{group.count}</td>
-        <td>${group.totalPrice.toFixed(2)}</td>
+        <td className="summary-group-column">
+          {group.type}
+          <div className="group-count">x{group.count}</div>
+        </td>
+        <td className="total-price-column">${group.totalPrice.toFixed(2)}</td>
       </tr>,
     );
   });
@@ -70,7 +64,6 @@ const SummaryTable = ({ groups, sortColumn }) => {
 
 const Summary = ({ groups }) => {
   const [tableData, setTableData] = useState(groups);
-
   const sortColumn = (sortField, sortOrder) => {
     if (sortOrder === 'none') {
       setTableData(groups);
@@ -79,9 +72,7 @@ const Summary = ({ groups }) => {
 
     const sorted = [...groups].sort((a, b) => {
       if (sortField == 'check') {
-        const checkA = a.count > 0 ? 1 : 0;
-        const checkB = b.count > 0 ? 1 : 0;
-        return sortOrder === 'asc' ? checkA - checkB : checkB - checkA;
+        return sortOrder === 'asc' ? a.count - b.count : b.count - a.count;
       }
       if (typeof a[sortField] === 'number') {
         return (a[sortField] - b[sortField]) * (sortOrder === 'asc' ? 1 : -1);
@@ -103,25 +94,14 @@ const Summary = ({ groups }) => {
     value: group.pricePercentage,
   }));
 
+  // <SummaryPie data={pieData} />
   return (
     <div className="summary-container">
       <div className="summary-table-container">
         <h1>Summary</h1>
         <SummaryTable groups={tableData} sortColumn={sortColumn} />
       </div>
-      <div className="pie-chart-container">
-        <PieChart
-          series={[
-            {
-              data: pieData,
-              highlightScope: { fade: 'global', highlight: 'item' },
-              faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-            },
-          ]}
-          height={300}
-          width={300}
-        />
-      </div>
+      <SummaryPie data={pieData} />
     </div>
   );
 };

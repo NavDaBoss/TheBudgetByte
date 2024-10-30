@@ -48,13 +48,13 @@ const ReceiptHead = ({ sortColumn }) => {
 const ReceiptRow = ({ item }) => {
   return (
     <tr>
-      <td className="quantityColumn">{item.quantity}</td>
-      <td className="itemNameColumn">{item.itemName}</td>
-      <td className="groupColumn">
-        {item.group}
+      <td className="quantity-column">{item.quantity}</td>
+      <td className="item-name-column">
+        {item.itemName}
         <EditIcon />
       </td>
-      <td className="priceColumn">${item.price.toFixed(2)}</td>
+      <td className="group-column">{item.group}</td>
+      <td className="price-column">${item.price.toFixed(2)}</td>
     </tr>
   );
 };
@@ -71,6 +71,17 @@ const ReceiptTable = ({ groceries, filterText, sortColumn }) => {
 
   return (
     <table className="receipt-table">
+      <colgroup>
+        {/* Quantity */}
+        <col style={{ width: '15%' }} />
+        {/* Symbol */}
+        <col style={{ width: '40%' }} />
+        {/* Change */}
+        <col style={{ width: '25%' }} />
+        {/* Group */}
+        <col style={{ width: '20%' }} />
+      </colgroup>
+
       <ReceiptHead sortColumn={sortColumn} />
       <tbody className="receipt-body">{rows}</tbody>
     </table>

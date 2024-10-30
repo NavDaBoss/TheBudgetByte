@@ -1,11 +1,17 @@
 .summary-container {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin: 20px 0;
 }
 
 .pie-chart-container {
   position: relative;
-  left: 100px;
+  left: 50px;
+}
+
+.summary-table-container {
+  width: 500px;
 }
 
 .summary-table-container h1 {
@@ -13,8 +19,9 @@
 }
 
 .summary-table {
-  text-transform: uppercase;
+  width: 100%;
   margin: 20px 0;
+  text-transform: uppercase;
 }
 
 .summary-table th {
@@ -22,6 +29,12 @@
   padding: 0 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 2px dashed black;
+  text-align: left;
+  letter-spacing: 0.5px;
+}
+
+.price {
+  text-align: right;
 }
 
 .summary-table th::after {
@@ -41,6 +54,25 @@
   padding: 0.5rem 1rem;
 }
 
-.summary-table td:first-child {
+.summary-table th:last-child {
+  text-align: right;
+}
+
+.check-column {
   text-align: center;
+}
+
+.summary-group-column {
+  display: flex;
+  justify-content: space-between;
+}
+
+.group-count {
+  text-transform: initial;
+  font-weight: 700;
+}
+
+.total-price-column {
+  text-align: right;
+  letter-spacing: 0.5px;
 }
