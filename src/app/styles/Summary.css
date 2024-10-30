@@ -5,13 +5,9 @@
   margin: 20px 0;
 }
 
-.pie-chart-container {
-  position: relative;
-  left: 50px;
-}
-
 .summary-table-container {
-  width: 500px;
+  width: 450px;
+  margin-right: 50px;
 }
 
 .summary-table-container h1 {
@@ -28,9 +24,7 @@
   position: relative;
   padding: 0 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px dashed black;
   text-align: left;
-  letter-spacing: 0.5px;
 }
 
 .price {
@@ -52,22 +46,19 @@
 
 .summary-table td {
   padding: 0.5rem 1rem;
+  vertical-align: middle;
 }
 
 .summary-table th:last-child {
   text-align: right;
 }
 
-.check-column {
-  text-align: center;
-}
-
 .summary-group-column {
-  display: flex;
-  justify-content: space-between;
+  position: relative;
 }
 
 .group-count {
+  float: right;
   text-transform: initial;
   font-weight: 700;
 }
