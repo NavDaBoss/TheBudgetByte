@@ -14,6 +14,7 @@ import {
 import { FirebaseError } from '@firebase/app';
 import './login.css';
 import Image from 'next/image';
+import Navbar from '../components/Navbar';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -60,6 +61,7 @@ export default function Login() {
 
   return (
     <div className="main">
+      <Navbar />
       <h1>Login</h1>
       <div className="title-line"></div>
       <div className="input-container">
