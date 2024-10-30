@@ -125,7 +125,9 @@ export default function Register() {
           className="password-input"
         />
       </div>
-      <button onClick={register} className="register">Register</button>
+      <button onClick={register} className="register">
+        Register
+      </button>
       {errorMessage && <p>{errorMessage}</p>}
       <div className="title-line"></div>
       <div className="login-container">
