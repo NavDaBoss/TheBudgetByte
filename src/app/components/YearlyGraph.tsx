@@ -68,7 +68,7 @@ export const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({
   // Get the assigned colored for this category
   const getBorderColor = (category: string) => {
     const dataset = params.graphData.datasets.find(
-      (d) => d.label.toLowerCase() === category,
+      (d) => d.label === category,
     );
     return dataset ? dataset.borderColor : 'rgba(0, 0, 0, 1)';
   };
@@ -122,7 +122,7 @@ export const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({
                     style={{ color: getBorderColor(category) }} // Use the logged border color here
                   />
                 }
-                label={category.charAt(0).toUpperCase() + category.slice(1)}
+                label={category}
               />
             );
           })}
