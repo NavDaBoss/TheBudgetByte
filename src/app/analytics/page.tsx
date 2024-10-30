@@ -1,37 +1,16 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './analytics.css';
-import Navbar from '../components/Navbar/Navbar';
-import { Line } from 'react-chartjs-2';
-import { ApiResponse, FoodGroupInfo, userData, FoodGroups } from './user';
+import Navbar from '../components/Navbar';
+import SummaryPie from '../components/SummaryPie';
 import {
-  Card,
-  CardContent,
-  Typography,
-  FormControlLabel,
-  Checkbox,
-} from '@mui/material';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-);
+  AnalyticsLineGraph,
+  CategoryLegend,
+  GraphParams,
+  Category,
+} from '../components/YearlyGraph';
+import { userData, FoodTypes, FoodGroupInfo } from './user';
 
 interface DropDownProps {
   selectedValue: string; // Current selected value
@@ -83,179 +62,119 @@ const DropDown: React.FC<DropDownProps> = ({
   );
 };
 
-interface AnalyticsLineGraphProps {
-  selectedYear: string;
-}
+const createYearlyMoneySpentGraphParams = (selectedYear: string) => {
+  const [categoryLegend, setCategoryLegend] = useState<CategoryLegend>({
+    Fruits: true,
+    Veggies: true,
+    Protein: true,
+    Grain: true,
+    Dairy: true,
+    Total: true,
+  });
 
-type Category = keyof CategoryLegend;
-
-interface CategoryLegend {
-  [category: string]: boolean;
-}
-
-const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({
-  selectedYear,
-}) => {
   // get the data for all populated months of the selected year
   const monthlyData = userData.yearlyOverview[selectedYear];
   if (!monthlyData) {
-    return <div>No data available for {selectedYear}</div>;
+    throw new Error(`No data available for ${selectedYear}`);
   }
-
-  const [categoryLegend, setCategoryLegend] = useState<CategoryLegend>({
-    fruits: true,
-    veggies: true,
-    protein: true,
-    grain: true,
-    dairy: true,
-    total: true,
-  });
 
   // get the months that have data
   const months = Object.keys(monthlyData);
 
-  // Get the total cost spent on a category
-  const getCategoryData = (category: Category) => {
-    return months.map((month) => {
-      const foodGroup = monthlyData[month].foodGroups.find(
-        (group: FoodGroups) => group[category],
-      );
-      return foodGroup ? foodGroup[category].totalCost : 0;
-    });
-  };
+// Get the total cost spent on a category
+const getCategoryData = (category: FoodTypes) => {
+  return months.map((month) => {
+    const foodGroup = monthlyData[month].foodGroups.find(
+      (group: FoodGroupInfo) => group.type === category,
+    );
+    return foodGroup ? foodGroup.totalCost : 0;
+  });
+};
 
-  // Calculate total spending for the visible categories
-  const calculateTotalData = () => {
-    return months.map((month) => {
-      let sum = 0;
-      for (const category in categoryLegend) {
-        if (categoryLegend[category] && category !== 'total') {
-          // Check if category is checkmarked
-          const foodGroup = monthlyData[month].foodGroups.find(
-            (group: FoodGroups) => group[category],
-          );
-          sum += foodGroup ? foodGroup[category].totalCost : 0;
-        }
+// Calculate total spending for the visible categories
+const calculateTotalData = () => {
+  return months.map((month) => {
+    let sum = 0;
+    for (const category in categoryLegend) {
+      if (categoryLegend[category] && category !== 'Total') {
+        // Check if category is checkmarked
+        const foodGroup = monthlyData[month].foodGroups.find(
+          (group: FoodGroupInfo) => group.type === category,
+        );
+        sum += foodGroup ? foodGroup.totalCost : 0;
       }
-      return sum;
-    });
-  };
+    }
+    return sum;
+  });
+};
 
   const graphData = {
     labels: months,
     datasets: [
       {
-        label: 'Fruits',
-        data: getCategoryData('fruits'),
+        label: FoodTypes.Fruits,
+        data: getCategoryData(FoodTypes.Fruits),
         borderColor: 'rgba(255, 99, 132, 1)',
-        hidden: !categoryLegend.fruits,
+        hidden: !categoryLegend.Fruits,
       },
       {
-        label: 'Veggies',
-        data: getCategoryData('veggies'),
+        label: FoodTypes.Veggies,
+        data: getCategoryData(FoodTypes.Veggies),
         borderColor: 'rgba(54, 162, 235, 1)',
-        hidden: !categoryLegend.veggies,
+        hidden: !categoryLegend.Veggies,
       },
       {
-        label: 'Protein',
-        data: getCategoryData('protein'),
+        label: FoodTypes.Protein,
+        data: getCategoryData(FoodTypes.Protein),
         borderColor: 'rgba(75, 192, 192, 1)',
-        hidden: !categoryLegend.protein,
+        hidden: !categoryLegend.Protein,
       },
       {
-        label: 'Grain',
-        data: getCategoryData('grain'),
+        label: FoodTypes.Grain,
+        data: getCategoryData(FoodTypes.Grain),
         borderColor: 'rgba(255, 206, 86, 1)',
-        hidden: !categoryLegend.grain,
+        hidden: !categoryLegend.Grain,
       },
       {
-        label: 'Dairy',
-        data: getCategoryData('dairy'),
+        label: FoodTypes.Dairy,
+        data: getCategoryData(FoodTypes.Dairy),
         fill: false,
         borderColor: 'rgba(153, 102, 255, 1)',
-        hidden: !categoryLegend.dairy,
+        hidden: !categoryLegend.Dairy,
       },
       {
         label: 'Total',
         data: calculateTotalData(),
         borderColor: 'rgba(0, 0, 0, 1)',
-        hidden: !categoryLegend.total,
+        hidden: !categoryLegend.Total,
       },
     ],
   };
-
-  const getBorderColor = (category: string) => {
-    const dataset = graphData.datasets.find(
-      (d) => d.label.toLowerCase() === category,
-    );
-    return dataset ? dataset.borderColor : 'rgba(0, 0, 0, 1)'; // Replace 'defaultColor' with a fallback color if necessary
+  const graphParams: GraphParams = {
+    categoryLegend,
+    setCategoryLegend,
+    graphData,
   };
 
-  const options = {
-    plugins: {
-      legend: {
-        display: false, // Hide the default legend
-      },
-    },
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: 'Month',
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: 'Amount Spent ($)',
-        },
-      },
-    },
-  };
-
-  const handleCheckboxChange = (category: string) => {
-    setCategoryLegend((prevState) => ({
-      ...prevState,
-      [category]: !prevState[category],
-    }));
-  };
-
-  return (
-    <Card>
-      <CardContent>
-        <Typography variant="h5" component="div">
-          Monthly Spending Overview ({selectedYear})
-        </Typography>
-
-        {/* Custom Legend with Checkboxes */}
-        <div className="legend-container">
-          {Object.keys(categoryLegend).map((category) => {
-            return (
-              <FormControlLabel
-                key={category}
-                control={
-                  <Checkbox
-                    checked={categoryLegend[category]}
-                    onChange={() => handleCheckboxChange(category)}
-                    style={{ color: getBorderColor(category) }} // Use the logged border color here
-                  />
-                }
-                label={category.charAt(0).toUpperCase() + category.slice(1)}
-              />
-            );
-          })}
-        </div>
-
-        <Line data={graphData} options={options} />
-      </CardContent>
-    </Card>
-  );
+  return graphParams;
 };
+
+const createMonthlySpendingRatioPieData = (selectedYear: string, selectedMonth: string) => {
+  const monthlyData = userData.yearlyOverview[selectedYear][selectedMonth];
+  const pieData = monthlyData.foodGroups.map((category) => ({
+    name: category,
+    value: category.totalCost / monthlyData.totalSpent
+  }))
+return pieData;
+}
 
 const Analytics = () => {
   const [selectedYear, setSelectedYear] = useState('2024');
   const years = ['2024', '2023'];
-
+  const [selectedMonth, setSelectedMonth] = useState('January');
+  const monthsInSelectedYear = ['January', 'February'];
+  const graphParams = createYearlyMoneySpentGraphParams(selectedYear);
+  const pieData = createMonthlySpendingRatioPieData(selectedYear, selectedMonth);
   return (
     <div className="page">
       <div>
@@ -269,8 +188,19 @@ const Analytics = () => {
           drop_label="Selected Year:"
         />
       </div>
-      <div>
-        <AnalyticsLineGraph selectedYear={selectedYear} />
+      <div className="graph-container">
+        <AnalyticsLineGraph selectedYear={selectedYear} params={graphParams} />
+      </div>
+      <div className="section-container">
+        <DropDown
+          selectedValue={selectedMonth}
+          setSelectedValue={setSelectedMonth}
+          values={monthsInSelectedYear}
+          drop_label="Selected Month:"
+        />
+      </div>
+      <div className="section-container">
+        <SummaryPie data={pieData} />
       </div>
     </div>
   );
