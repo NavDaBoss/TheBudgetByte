@@ -10,6 +10,13 @@ export default function OcrUploadButton() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);  // Manage loading state
 
+  // Function to clean up unnecessary lines and characters
+  // function cleanReceiptText(lines: Tesseract.Line[]): Tesseract.Line[] {
+  //   return lines.filter(line => 
+  //     !/(TOTAL|TAX|APPROVED|SUBTOTAL|CHANGE|INSTANT SAVINGS|SEQ#|AID:|VISA|Whse|Trm|Trn|Items Sold|Please Come Again)/i.test(line.text)
+  //   );
+  // }
+
   // Handle image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
@@ -27,28 +34,53 @@ export default function OcrUploadButton() {
       const result = await Tesseract.recognize(
         selectedImage,
         'eng',  // OCR language: English
-        { logger: (m) => console.log(m) }  // Optional logger for debugging
+        // { logger: (m) => console.log(m) }  // Optional logger for debugging
       );
+
+      console.log("Raw OCR Result:", result.data.text)
 
       type GroceryItem = {
         itemName: string;
         price: number
       }
       let grocery: GroceryItem[] = [];
-      // Regex pattern to match item name and price
-      const pattern = /\b\d{6,}\s+([A-Za-z\s]+)\s+(\d+\.\d{2})/;
 
-      // const text = result.data.text;
+      // TESTING: Regex pattern to match item name and price
+      // const pattern = /\b\d{6,}\s+([A-Za-z\s]+)\s+(\d+\.\d{2})/;
+      // const pattern = /([a-zA-Z\s]+)\s+(\d+\.\d{2})/g;
+
+      // Winner so far?
+      // const pattern = /([A-Za-z\s]+)\s+(\d+\.\d{2})/;
+
+      // const pattern = /^[^a-zA-Z0-9]*[\d\s\W]*([A-Za-z\s]+)[\s\d\W]*?(\d+\.\d{2}|\d+\.\d|\d+\,\d{2})/;
+      const pattern = /(?:\d+\s)?([A-Z\s]+)\s+(\d{1,2}(?:[.,]\d{1,2})?)/;
+
+      // const lineConfidenceThreshold = 80;
+      // const lines = result.data.lines.filter(line => line.confidence >= lineConfidenceThreshold);
+      // const filteredText = lines.map(line => line.text).join('\n');
+      // console.log('Filtered Text:', filteredText);
+      const confidenceThreshold = 60;  // Example threshold
+
+      // Filter the recognized text based on confidence score
+      const words = result.data.words.filter(word => word.confidence >= confidenceThreshold);
+
+      // Combine filtered words to get the final text
+      const filteredText = words.map(word => word.text).join(' ');
+
+      console.log('Filtered Text:', filteredText);
+
+      const text = result.data.text;
       result.data.lines.forEach((line, index) => {
-        console.log(`Line ${index + 1}:`, line.text); // Print the line text
-        console.log(`Confidence: ${line.confidence}`); // Print the line confidence
+        // console.log(`Line ${index + 1}:`, line.text); // Print the line text
+        // console.log(`Confidence: ${line.confidence}`); // Print the line confidence
         // console.log(`Bounding Box:`, line.bbox); // Print the bounding box if needed
         
         // Apply regex to extract item name and price
         const match = line.text.match(pattern);
         if (match) {
           const itemName = match[1].trim(); // Extract the item name
-          const price = parseFloat(match[2]); // Extract and convert the price to a number
+          // const price = parseFloat(match[2]); // Extract and convert the price to a number
+          let price = parseFloat(match[2].replace(",", "."));
       
           // Push the extracted item name and price into the grocery array
           grocery.push({
@@ -57,12 +89,14 @@ export default function OcrUploadButton() {
           });
         }
       });
-  
-      // Create a formatted string with line breaks
-      // let formattedText = result.data.lines.map((line) => line.text).join('\n')
+      // let text = result.data.text
+      // console.log("OCR: Result", text)
+      // let match;
 
-      // Create a formatted string with line breaks
-      // let formattedText = result.data.lines.map((line) => line.text).join('\n'); // Join lines with new line character
+      // Use regex to find item and price pairs
+      // while ((match = pattern.exec(text)) !== null) {
+      //   grocery.push({ itemName: match[1].trim(), price: parseFloat(match[2]) });
+      // }
 
       // setOcrResult(formattedText)
 
