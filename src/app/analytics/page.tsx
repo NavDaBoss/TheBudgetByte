@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import './analytics.css';
-import Navbar from '../components/Navbar/Navbar';
+import Navbar from '../components/Navbar';
 import { Line } from 'react-chartjs-2';
 import { ApiResponse, FoodGroupInfo, userData, FoodGroups } from './user';
 import {
