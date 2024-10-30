@@ -1,15 +1,18 @@
 .header-nav-container {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
   padding: 0 var(--columnPaddingNormal);
   overflow: hidden;
 }
 
 .header-logo {
+  margin: 10px;
   text-transform: uppercase;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.2rem;
 }
 
 .header-nav {
@@ -32,10 +35,16 @@
   border: none;
   outline: none;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.2rem;
   padding: 10px 20px;
-  background-color: transparent;
-  color: black;
+  margin: 0 10px;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.header-nav-list button:hover {
+  background-color: var(--foreground);
+  color: var(--background);
 }

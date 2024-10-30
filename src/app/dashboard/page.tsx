@@ -48,13 +48,13 @@ const ReceiptHead = ({ sortColumn }) => {
 const ReceiptRow = ({ item }) => {
   return (
     <tr>
-      <td className="quantityColumn">{item.quantity}</td>
-      <td className="itemNameColumn">{item.itemName}</td>
-      <td className="groupColumn">
-        {item.group}
+      <td className="quantity-column">{item.quantity}</td>
+      <td className="item-name-column">
+        {item.itemName}
         <EditIcon />
       </td>
-      <td className="priceColumn">${item.price.toFixed(2)}</td>
+      <td className="group-column">{item.group}</td>
+      <td className="price-column">${item.price.toFixed(2)}</td>
     </tr>
   );
 };
@@ -71,6 +71,17 @@ const ReceiptTable = ({ groceries, filterText, sortColumn }) => {
 
   return (
     <table className="receipt-table">
+      <colgroup>
+        {/* Quantity */}
+        <col style={{ width: '15%' }} />
+        {/* Symbol */}
+        <col style={{ width: '40%' }} />
+        {/* Change */}
+        <col style={{ width: '25%' }} />
+        {/* Group */}
+        <col style={{ width: '20%' }} />
+      </colgroup>
+
       <ReceiptHead sortColumn={sortColumn} />
       <tbody className="receipt-body">{rows}</tbody>
     </table>
@@ -120,7 +131,7 @@ const FilterableReceipt = ({ groceries }) => {
   return (
     <div>
       <div className="receipt-head">
-        <p>Grocery Trip #0001 for Eric</p>
+        <h1>Receipt</h1>
         <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
       </div>
       <ReceiptTable
@@ -133,27 +144,9 @@ const FilterableReceipt = ({ groceries }) => {
   );
 };
 
-const CurrentDate = () => {
-  const currentDate = new Date();
-  const formattedDate = currentDate.toLocaleDateString('en-US', {
-    month: '2-digit',
-    day: '2-digit',
-    year: 'numeric',
-  });
-
-  return (
-    <div className="receipt-date">
-      <h2>{formattedDate}</h2>
-    </div>
-  );
-};
-
 const Receipt = ({ groceries }) => {
   return (
     <div className="receipt">
-      <div className="receipt-title">
-        <CurrentDate />
-      </div>
       <FilterableReceipt groceries={groceries} />
     </div>
   );

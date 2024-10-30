@@ -55,15 +55,13 @@ input:focus {
   align-items: center;
   justify-content: center;
   padding: 10px 0;
-  border-top: 2px dashed black;
-  text-transform: uppercase;
   position: relative;
 }
 
-.receipt-head p {
+.receipt-head h1 {
+  text-transform: uppercase;
   margin-right: auto;
-  margin-left: 20px;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .search-bar {
@@ -83,9 +81,10 @@ input:focus {
   padding-bottom: 1rem;
 }
 
-thead {
+.receipt-table thead {
   text-align: left;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .receipt-table-head th {
@@ -115,6 +114,14 @@ thead {
   border-bottom: 2px dashed black;
 }
 
+.receipt-table th:last-child {
+  text-align: right;
+}
+
+.receipt-table td:last-child {
+  letter-spacing: 0.5px;
+}
+
 .receipt-body {
   text-transform: uppercase;
 }
@@ -127,7 +134,11 @@ thead {
   border-bottom: 2px dashed black;
 }
 
-.groupColumn {
+.price-column {
+  text-align: right;
+}
+
+.item-name-column {
   display: flex;
   align-items: center;
   gap: 30px;
