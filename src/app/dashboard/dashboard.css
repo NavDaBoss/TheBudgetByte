@@ -55,15 +55,13 @@ input:focus {
   align-items: center;
   justify-content: center;
   padding: 10px 0;
-  border-top: 2px dashed black;
-  text-transform: uppercase;
   position: relative;
 }
 
-.receipt-head p {
+.receipt-head h1 {
+  text-transform: uppercase;
   margin-right: auto;
-  margin-left: 20px;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .search-bar {

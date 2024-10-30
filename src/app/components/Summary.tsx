@@ -94,7 +94,6 @@ const Summary = ({ groups }) => {
     value: group.pricePercentage,
   }));
 
-  // <SummaryPie data={pieData} />
   return (
     <div className="summary-container">
       <div className="summary-table-container">
