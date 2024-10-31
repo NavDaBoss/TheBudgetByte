@@ -13,6 +13,7 @@ import {
 } from '../firebase/firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import './profile.css';
+import Navbar from '../components/Navbar';
 
 export default function Profile() {
   const router = useRouter();
@@ -94,6 +95,7 @@ export default function Profile() {
 
   return (
     <div>
+      <Navbar />
       <h1>Profile</h1>
       {currentUser ? (
         <p>Hey {currentUser.displayName || 'User'}</p>

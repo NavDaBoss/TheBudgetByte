@@ -4,6 +4,8 @@ import styles from './page.module.css';
 import { useRouter } from 'next/navigation';
 import { useAuth } from './hooks/useAuth';
 import { useEffect } from 'react';
+import Navbar from './components/Navbar';
+import OcrUploadButton from './components/OcrUploadButton';
 
 export default function Home() {
   const router = useRouter();
@@ -11,14 +13,15 @@ export default function Home() {
 
   return (
     <div>
+      <Navbar />
       <h1>Welcome to BudgetByte!!</h1>
       <p>Please log in or register to continue</p>
       <button onClick={() => router.push('/login')}>Log In</button>
       <button onClick={() => router.push('/register')}>Register</button>
       <button onClick={() => router.push('/profile')}>Profile</button>
       <button onClick={() => router.push('/dashboard')}>Dashboard</button>
-      <button onClick={() => router.push('/ocr')}>OCR</button>
       <button onClick={() => router.push('/analytics')}>Analytics</button>
+      <OcrUploadButton />
     </div>
   );
 }
