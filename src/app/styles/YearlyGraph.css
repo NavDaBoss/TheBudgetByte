@@ -1,0 +1,19 @@
+.section-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-bottom: 100px;
+  padding-top: 20px;
+  max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
+}
+
+.graph-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  width: 75%;
+  margin: 0 auto;
+  padding-bottom: 20px;
+}

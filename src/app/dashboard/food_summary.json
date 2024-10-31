@@ -9,7 +9,7 @@
     {
       "type": "vegetables",
       "count": 0,
-      "totalPrice": 0.00,
+      "totalPrice": 0.0,
       "pricePercentage": 0
     },
     {
@@ -21,18 +21,18 @@
     {
       "type": "protein",
       "count": 0,
-      "totalPrice": 0.00,
+      "totalPrice": 0.0,
       "pricePercentage": 0
     },
     {
       "type": "dairy",
       "count": 2,
-      "totalPrice": 6.90,
+      "totalPrice": 6.9,
       "pricePercentage": 39.4
     }
   ],
-  "summary" : {
-      "totalCount": 6,
-      "totalPrice": 17.53
+  "summary": {
+    "totalCount": 6,
+    "totalPrice": 17.53
   }
 }

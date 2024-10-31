@@ -1,6 +1,6 @@
-import { useProfileRedirect, useLogout } from "../../hooks/clientUtils";
+import { useProfileRedirect, useLogout } from '../hooks/clientUtils';
 
-import "../../styles/Navbar.css";
+import '../styles/Navbar.css';
 
 const Navbar = () => {
   const profile = useProfileRedirect();
@@ -8,7 +8,7 @@ const Navbar = () => {
 
   return (
     <div className="header-nav-container">
-      <h1 className="header-logo">BudgetByte</h1>
+      <h1 className="header-logo">Budget Byte</h1>
       <nav className="header-nav">
         <ul className="header-nav-list">
           <li className="header-nav-item">

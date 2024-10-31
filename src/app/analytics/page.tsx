@@ -1,42 +1,39 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import "./analytics.css";
-import Navbar from "../components/Navbar/Navbar";
-import userData from './user.json';
-import { Line } from 'react-chartjs-2';
-import { Card, CardContent, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import './analytics.css';
+import Navbar from '../components/Navbar';
+import SummaryPie from '../components/SummaryPie';
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+  AnalyticsLineGraph,
+  CategoryLegend,
+  GraphParams,
+  Category,
+} from '../components/YearlyGraph';
+import { userData, FoodTypes, FoodGroupInfo } from './user';
 
-ChartJS.register(
-  CategoryScale,   // This registers the 'category' scale
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+interface DropDownProps {
+  selectedValue: string; // Current selected value
+  setSelectedValue: (value: string) => void; // Function to update the selected value
+  values: string[]; // Array of values to display in the dropdown
+  drop_label: string; // Label for the dropdown
+}
 
-const DropDown = ({ selectedValue, setSelectedValue, values, drop_label }) => {
-  const [isOpen, setIsOpen] = useState(false); // State to manage dropdown visibility
+const DropDown: React.FC<DropDownProps> = ({
+  selectedValue,
+  setSelectedValue,
+  values,
+  drop_label,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleYearChange = (year) => {
-    setSelectedValue(year);
+  const handleValueChange = (val: string) => {
+    setSelectedValue(val);
     setIsOpen(false);
   };
 
   const toggleDropdown = () => {
-    setIsOpen(prev => !prev); // Toggle dropdown visibility
+    setIsOpen((prev) => !prev);
   };
 
   return (
@@ -53,7 +50,7 @@ const DropDown = ({ selectedValue, setSelectedValue, values, drop_label }) => {
               <div
                 key={value}
                 className="dropdown-option"
-                onClick={() => handleYearChange(value)}
+                onClick={() => handleValueChange(value)}
               >
                 {value}
               </div>
@@ -65,87 +62,151 @@ const DropDown = ({ selectedValue, setSelectedValue, values, drop_label }) => {
   );
 };
 
-const AnalyticsLineGraph = ({selectedYear}) => {
-  const monthlyData = userData.user.yearlyOverview[selectedYear];
+const createYearlyMoneySpentGraphParams = (selectedYear: string) => {
+  const [categoryLegend, setCategoryLegend] = useState<CategoryLegend>({
+    Fruits: true,
+    Veggies: true,
+    Protein: true,
+    Grain: true,
+    Dairy: true,
+    Total: true,
+  });
+
+  // get the data for all populated months of the selected year
+  const monthlyData = userData.yearlyOverview[selectedYear];
   if (!monthlyData) {
-    return <div>No data available for {selectedYear}</div>;
+    throw new Error(`No data available for ${selectedYear}`);
   }
+
+  // get the months that have data
   const months = Object.keys(monthlyData);
-  const spendingData = months.map(month => monthlyData[month].totalSpent);
-  // return (
-  // <div> {spendingData}</div>);
-  // Line chart data
-  const data = {
+
+  // Get the total cost spent on a category
+  const getCategoryData = (category: FoodTypes) => {
+    return months.map((month) => {
+      const foodGroup = monthlyData[month].foodGroups.find(
+        (group: FoodGroupInfo) => group.type === category,
+      );
+      return foodGroup ? foodGroup.totalCost : 0;
+    });
+  };
+
+  // Calculate total spending for the visible categories
+  const calculateTotalData = () => {
+    return months.map((month) => {
+      let sum = 0;
+      for (const category in categoryLegend) {
+        if (categoryLegend[category] && category !== 'Total') {
+          // Check if category is checkmarked
+          const foodGroup = monthlyData[month].foodGroups.find(
+            (group: FoodGroupInfo) => group.type === category,
+          );
+          sum += foodGroup ? foodGroup.totalCost : 0;
+        }
+      }
+      return sum;
+    });
+  };
+
+  const graphData = {
     labels: months,
     datasets: [
       {
-        label: 'Total Spent ($)',
-        data: spendingData,
-        fill: false,
+        label: FoodTypes.Fruits,
+        data: getCategoryData(FoodTypes.Fruits),
+        borderColor: 'rgba(255, 99, 132, 1)',
+        hidden: !categoryLegend.Fruits,
+      },
+      {
+        label: FoodTypes.Veggies,
+        data: getCategoryData(FoodTypes.Veggies),
+        borderColor: 'rgba(54, 162, 235, 1)',
+        hidden: !categoryLegend.Veggies,
+      },
+      {
+        label: FoodTypes.Protein,
+        data: getCategoryData(FoodTypes.Protein),
         borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        tension: 0.1, // Line tension for smooth curves
+        hidden: !categoryLegend.Protein,
+      },
+      {
+        label: FoodTypes.Grain,
+        data: getCategoryData(FoodTypes.Grain),
+        borderColor: 'rgba(255, 206, 86, 1)',
+        hidden: !categoryLegend.Grain,
+      },
+      {
+        label: FoodTypes.Dairy,
+        data: getCategoryData(FoodTypes.Dairy),
+        fill: false,
+        borderColor: 'rgba(153, 102, 255, 1)',
+        hidden: !categoryLegend.Dairy,
+      },
+      {
+        label: 'Total',
+        data: calculateTotalData(),
+        borderColor: 'rgba(0, 0, 0, 1)',
+        hidden: !categoryLegend.Total,
       },
     ],
   };
-
-  // Chart options
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: true,
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text:  `Monthly Spending in ${selectedYear}`,
-      },
-    },
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: 'Month',
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: 'Total Spent ($)',
-        },
-        beginAtZero: true,
-      },
-    },
+  const graphParams: GraphParams = {
+    categoryLegend,
+    setCategoryLegend,
+    graphData,
   };
 
-  return (
-    <Card>
-      <CardContent>
-        <Typography variant="h5" component="div">
-          Monthly Spending Overview ({selectedYear})
-        </Typography>
-        <Line data={data} options={options} />
-      </CardContent>
-    </Card>
-  );
+  return graphParams;
 };
 
-
+const createMonthlySpendingRatioPieData = (
+  selectedYear: string,
+  selectedMonth: string,
+) => {
+  const monthlyData = userData.yearlyOverview[selectedYear][selectedMonth];
+  const pieData = monthlyData.foodGroups.map((category) => ({
+    name: category,
+    value: category.totalCost / monthlyData.totalSpent,
+  }));
+  return pieData;
+};
 
 const Analytics = () => {
-  const [selectedYear, setSelectedYear] = useState("2024"); // Default to 2024
-  const years = ["2024", "2023"];
+  const [selectedYear, setSelectedYear] = useState('2024');
+  const years = ['2024', '2023'];
+  const [selectedMonth, setSelectedMonth] = useState('January');
+  const monthsInSelectedYear = ['January', 'February'];
+  const graphParams = createYearlyMoneySpentGraphParams(selectedYear);
+  const pieData = createMonthlySpendingRatioPieData(
+    selectedYear,
+    selectedMonth,
+  );
   return (
     <div className="page">
       <div>
         <Navbar />
       </div>
-      <div className = "section-container">
-        <DropDown selectedValue={selectedYear} setSelectedValue={setSelectedYear} values={years}drop_label="Selected Year:"/>
+      <div className="section-container">
+        <DropDown
+          selectedValue={selectedYear}
+          setSelectedValue={setSelectedYear}
+          values={years}
+          drop_label="Selected Year:"
+        />
       </div>
-      <div className = "section-container">
-      <AnalyticsLineGraph selectedYear={selectedYear}/>
+      <div className="graph-container">
+        <AnalyticsLineGraph selectedYear={selectedYear} params={graphParams} />
+      </div>
+      <div className="section-container">
+        <DropDown
+          selectedValue={selectedMonth}
+          setSelectedValue={setSelectedMonth}
+          values={monthsInSelectedYear}
+          drop_label="Selected Month:"
+        />
+      </div>
+      <div className="section-container">
+        <SummaryPie data={pieData} />
       </div>
     </div>
   );

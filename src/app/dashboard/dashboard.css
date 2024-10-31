@@ -1,177 +1,145 @@
 .section-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
 }
 
 input {
-    padding: 10px;
-    border: 2px solid black;
-    border-radius: 4px;
-    font-size: 16px;
-    box-shadow: none;
-    transition: border-color 0.3s;
-    background-color: var(--background);
-    color: black;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-shadow: none;
+  transition: border-color 0.3s;
+  background-color: var(--background);
+  color: black;
 }
 
 input::placeholder {
-    color: black;
-    opacity: 1;
+  color: black;
+  opacity: 1;
 }
 
 input:focus {
-    border-color: blue;
-    outline: none;
+  border-color: blue;
+  outline: none;
 }
 
 .nav-bar {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
 }
 
 .receipt {
-    width: 60%;
-    margin: 10px 0;
+  width: 60%;
+  margin: 10px 0;
 }
 
 .receipt-title {
-    text-transform: uppercase;
+  text-transform: uppercase;
 }
 
 .receipt-date {
-    font-size: 16px;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    padding: 1rem 0;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
 }
 
 .receipt-head {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 0;
-    border-top: 2px dashed black;
-    text-transform: uppercase;
-    position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  position: relative;
 }
 
-.receipt-head p {
-    margin-right: auto;
-    margin-left: 20px;
-    font-weight: bold;
+.receipt-head h1 {
+  text-transform: uppercase;
+  margin-right: auto;
+  font-weight: 700;
 }
 
 .search-bar {
-    margin-right: 20px;
+  margin-right: 20px;
 }
 
 .receipt-table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .receipt-table tr:first-child td {
-    padding-top: 1rem;
+  padding-top: 1rem;
 }
 
 .receipt-table tr:last-child td {
-    padding-bottom: 1rem;
+  padding-bottom: 1rem;
 }
 
-thead {
-    text-align: left;
-    text-transform: uppercase;
+.receipt-table thead {
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .receipt-table-head th {
-    padding: 1rem 1.5rem;
+  padding: 1rem 1.5rem;
 }
 
 .receipt-table th {
-    position: relative;
-    padding-right: 20px;
+  position: relative;
+  padding-right: 20px;
 }
 
 .receipt-table th::after {
-    content: "";
-    display: inline-block;
-    margin-left: 20px;
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
-    border-top: 10px solid black;
+  content: '';
+  display: inline-block;
+  margin-left: 20px;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid black;
 }
 
 .receipt-table th:hover::after {
-    border-top: 10px solid red;
+  border-top: 10px solid red;
 }
 
 .receipt-table thead th {
-    border-top: 2px dashed black;
-    border-bottom: 2px dashed black;
+  border-top: 2px dashed black;
+  border-bottom: 2px dashed black;
+}
+
+.receipt-table th:last-child {
+  text-align: right;
+}
+
+.receipt-table td:last-child {
+  letter-spacing: 0.5px;
 }
 
 .receipt-body {
-    text-transform: uppercase;
+  text-transform: uppercase;
 }
 
 .receipt-body td {
-    padding: 0.5rem 1.5rem;
+  padding: 0.5rem 1.5rem;
 }
 
 .receipt-body tr:last-child {
-    border-bottom: 2px dashed black;
+  border-bottom: 2px dashed black;
 }
 
-.groupColumn {
-    display: flex;
-    align-items: center;
-    gap: 30px;
+.price-column {
+  text-align: right;
 }
 
-/* Summary */
-.summary-container {
-    display: flex;
-}
-
-.pie-chart-container {
-    position: relative;
-    left: 100px;
-}
-
-.summary-table {
-    text-transform: uppercase;
-}
-
-.summary-table th {
-    position: relative;
-    padding: 0 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px dashed black;
-}
-
-.summary-table th::after {
-    content: "";
-    display: inline-block;
-    margin-left: 20px;
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
-    border-top: 10px solid black;
-}
-
-.summary-table th:hover::after {
-    border-top: 10px solid red;
-}
-
-.summary-table td {
-    padding: 0.5rem 1rem;
-}
-
-.summary-table td:first-child {
-    text-align: center;
+.item-name-column {
+  display: flex;
+  align-items: center;
+  gap: 30px;
 }
