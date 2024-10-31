@@ -4,6 +4,7 @@ import styles from './page.module.css';
 import { useRouter } from 'next/navigation';
 import { useAuth } from './hooks/useAuth';
 import { useEffect } from 'react';
+import Navbar from './components/Navbar';
 
 export default function Home() {
   const router = useRouter();
@@ -11,6 +12,7 @@ export default function Home() {
 
   return (
     <div>
+      <Navbar />
       <h1>Welcome to BudgetByte!!</h1>
       <p>Please log in or register to continue</p>
       <button onClick={() => router.push('/login')}>Log In</button>
