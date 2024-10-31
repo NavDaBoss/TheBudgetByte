@@ -46,59 +46,61 @@ export default function OcrUploadButton() {
       let grocery: GroceryItem[] = [];
 
       // TESTING: Regex pattern to match item name and price
-      // const pattern = /\b\d{6,}\s+([A-Za-z\s]+)\s+(\d+\.\d{2})/;
-      // const pattern = /([a-zA-Z\s]+)\s+(\d+\.\d{2})/g;
 
-      // Winner so far?
-      // const pattern = /([A-Za-z\s]+)\s+(\d+\.\d{2})/;
+      // For confidence score paragraph
+      // const pattern = /(?:\d+\s)?([A-Z\/\-\s]+)\s+(\d{1,2}\.\d{2})/g;
 
-      // const pattern = /^[^a-zA-Z0-9]*[\d\s\W]*([A-Za-z\s]+)[\s\d\W]*?(\d+\.\d{2}|\d+\.\d|\d+\,\d{2})/;
-      const pattern = /(?:\d+\s)?([A-Z\s]+)\s+(\d{1,2}(?:[.,]\d{1,2})?)/;
+      // const pattern = /([A-Z\/\-\s]+)\s+(\d{1,2}\.\d{2})/;
+
+
 
       // const lineConfidenceThreshold = 80;
       // const lines = result.data.lines.filter(line => line.confidence >= lineConfidenceThreshold);
       // const filteredText = lines.map(line => line.text).join('\n');
       // console.log('Filtered Text:', filteredText);
-      const confidenceThreshold = 60;  // Example threshold
 
-      // Filter the recognized text based on confidence score
-      const words = result.data.words.filter(word => word.confidence >= confidenceThreshold);
 
-      // Combine filtered words to get the final text
-      const filteredText = words.map(word => word.text).join(' ');
-
-      console.log('Filtered Text:', filteredText);
-
-      const text = result.data.text;
-      result.data.lines.forEach((line, index) => {
-        // console.log(`Line ${index + 1}:`, line.text); // Print the line text
-        // console.log(`Confidence: ${line.confidence}`); // Print the line confidence
-        // console.log(`Bounding Box:`, line.bbox); // Print the bounding box if needed
+      // FOR LINE BY LINE EXTRACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      // Winner so far?
+      // const pattern = /([A-Za-z\s]+)\s+(\d+\.\d{2})/;
+      // const text = result.data.text;
+      // result.data.lines.forEach((line, index) => {
+      //   // console.log(`Line ${index + 1}:`, line.text); // Print the line text
+      //   // console.log(`Confidence: ${line.confidence}`); // Print the line confidence
+      //   // console.log(`Bounding Box:`, line.bbox); // Print the bounding box if needed
         
-        // Apply regex to extract item name and price
-        const match = line.text.match(pattern);
-        if (match) {
-          const itemName = match[1].trim(); // Extract the item name
-          // const price = parseFloat(match[2]); // Extract and convert the price to a number
-          let price = parseFloat(match[2].replace(",", "."));
+      //   // Apply regex to extract item name and price
+      //   const match = line.text.match(pattern);
+      //   if (match) {
+      //     const itemName = match[1].trim(); // Extract the item name
+      //     // const price = parseFloat(match[2]); // Extract and convert the price to a number
+      //     let price = parseFloat(match[2].replace(",", "."));
       
-          // Push the extracted item name and price into the grocery array
-          grocery.push({
-            itemName: itemName,
-            price: price,
-          });
-        }
-      });
-      // let text = result.data.text
-      // console.log("OCR: Result", text)
-      // let match;
+      //     // Push the extracted item name and price into the grocery array
+      //     grocery.push({
+      //       itemName: itemName,
+      //       price: price,
+      //     });
+      //   }
+      // });
+
+
+      // FOR MULTILINE PARAGRAPH EXTRACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+      const pattern = /(?:\d+\s)?([A-Z\/\-\s]+)\s+(\d{1,2}\.\d{2})/g;
+      // const pattern = /(?:\d+\s)?([A-Z0-9\/\-\s]+)\s+(\d{1,2}\.\d{2})/g;
+
+
+      const confidenceThreshold = 30;  
+      const words = result.data.words.filter(word => word.confidence >= confidenceThreshold);
+      const filteredText = words.map(word => word.text).join(' ');
+      console.log('Filtered Text:', filteredText);
+      let match;
 
       // Use regex to find item and price pairs
-      // while ((match = pattern.exec(text)) !== null) {
-      //   grocery.push({ itemName: match[1].trim(), price: parseFloat(match[2]) });
-      // }
+      while ((match = pattern.exec(filteredText)) !== null) {
+        grocery.push({ itemName: match[1].trim(), price: parseFloat(match[2]) });
+      }
 
-      // setOcrResult(formattedText)
 
       // Send the OCR result to Firestore (to your 'receiptData' collection)
       await addDoc(collection(db, 'receiptData'), {
