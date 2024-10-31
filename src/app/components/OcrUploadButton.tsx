@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Tesseract from 'tesseract.js';
-import { db } from '../../firebase/firebaseConfig'; // Import Firestore config
+import { db } from '../firebase/firebaseConfig'; // Import Firestore config
 import { collection, addDoc } from 'firebase/firestore'; // Import Firestore methods
 
 // Define the component as a reusable upload button
