@@ -1,9 +1,9 @@
-export enum FoodTypes{
-  Veggies = "Veggies",
-  Fruits = "Fruits",
-  Grain = "Grain",
-  Protein = "Protein",
-  Dairy = "Dairy",
+export enum FoodTypes {
+  Veggies = 'Veggies',
+  Fruits = 'Fruits',
+  Grain = 'Grain',
+  Protein = 'Protein',
+  Dairy = 'Dairy',
 }
 // Define the type for the individual food group items
 interface FoodGroupInfo {
@@ -11,7 +11,6 @@ interface FoodGroupInfo {
   totalCost: number;
   quantity: number;
 }
-
 
 // Define the type for the monthly data
 interface MonthlyData {

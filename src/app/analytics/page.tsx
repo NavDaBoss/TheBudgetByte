@@ -81,32 +81,32 @@ const createYearlyMoneySpentGraphParams = (selectedYear: string) => {
   // get the months that have data
   const months = Object.keys(monthlyData);
 
-// Get the total cost spent on a category
-const getCategoryData = (category: FoodTypes) => {
-  return months.map((month) => {
-    const foodGroup = monthlyData[month].foodGroups.find(
-      (group: FoodGroupInfo) => group.type === category,
-    );
-    return foodGroup ? foodGroup.totalCost : 0;
-  });
-};
+  // Get the total cost spent on a category
+  const getCategoryData = (category: FoodTypes) => {
+    return months.map((month) => {
+      const foodGroup = monthlyData[month].foodGroups.find(
+        (group: FoodGroupInfo) => group.type === category,
+      );
+      return foodGroup ? foodGroup.totalCost : 0;
+    });
+  };
 
-// Calculate total spending for the visible categories
-const calculateTotalData = () => {
-  return months.map((month) => {
-    let sum = 0;
-    for (const category in categoryLegend) {
-      if (categoryLegend[category] && category !== 'Total') {
-        // Check if category is checkmarked
-        const foodGroup = monthlyData[month].foodGroups.find(
-          (group: FoodGroupInfo) => group.type === category,
-        );
-        sum += foodGroup ? foodGroup.totalCost : 0;
+  // Calculate total spending for the visible categories
+  const calculateTotalData = () => {
+    return months.map((month) => {
+      let sum = 0;
+      for (const category in categoryLegend) {
+        if (categoryLegend[category] && category !== 'Total') {
+          // Check if category is checkmarked
+          const foodGroup = monthlyData[month].foodGroups.find(
+            (group: FoodGroupInfo) => group.type === category,
+          );
+          sum += foodGroup ? foodGroup.totalCost : 0;
+        }
       }
-    }
-    return sum;
-  });
-};
+      return sum;
+    });
+  };
 
   const graphData = {
     labels: months,
@@ -159,14 +159,17 @@ const calculateTotalData = () => {
   return graphParams;
 };
 
-const createMonthlySpendingRatioPieData = (selectedYear: string, selectedMonth: string) => {
+const createMonthlySpendingRatioPieData = (
+  selectedYear: string,
+  selectedMonth: string,
+) => {
   const monthlyData = userData.yearlyOverview[selectedYear][selectedMonth];
   const pieData = monthlyData.foodGroups.map((category) => ({
     name: category,
-    value: category.totalCost / monthlyData.totalSpent
-  }))
-return pieData;
-}
+    value: category.totalCost / monthlyData.totalSpent,
+  }));
+  return pieData;
+};
 
 const Analytics = () => {
   const [selectedYear, setSelectedYear] = useState('2024');
@@ -174,7 +177,10 @@ const Analytics = () => {
   const [selectedMonth, setSelectedMonth] = useState('January');
   const monthsInSelectedYear = ['January', 'February'];
   const graphParams = createYearlyMoneySpentGraphParams(selectedYear);
-  const pieData = createMonthlySpendingRatioPieData(selectedYear, selectedMonth);
+  const pieData = createMonthlySpendingRatioPieData(
+    selectedYear,
+    selectedMonth,
+  );
   return (
     <div className="page">
       <div>
