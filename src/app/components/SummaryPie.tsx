@@ -13,6 +13,7 @@ const SummaryPie = ({ data }) => {
             faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
           },
         ]}
+        height={350}
         width={350}
       />
     </div>
