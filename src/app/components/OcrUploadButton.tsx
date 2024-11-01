@@ -7,7 +7,7 @@ import { db } from '../firebase/firebaseConfig'; // Import Firestore config
 import { collection, addDoc } from 'firebase/firestore'; // Import Firestore methods
 
 // MUI
-import Button from '@mui/material/Button'; 
+import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Dialog from '@mui/material/Dialog';
@@ -32,7 +32,7 @@ const VisuallyHiddenInput = styled('input')({
 // Define the component as a reusable upload button
 export default function OcrUploadButton() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -46,7 +46,7 @@ export default function OcrUploadButton() {
     setIsDialogOpen(false);
     setSelectedImage(null); // Optionally reset the selected image
   };
-  
+
   // Handle image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
@@ -94,7 +94,7 @@ export default function OcrUploadButton() {
         if (match) {
           const itemName = match[1].trim(); // Extract the item name
           // const price = parseFloat(match[2]); // Extract and convert the price to a number
-          let price = parseFloat(match[2].replace(",", "."));
+          let price = parseFloat(match[2].replace(',', '.'));
 
           // Push the extracted item name and price into the grocery array
           grocery.push({
@@ -128,7 +128,7 @@ export default function OcrUploadButton() {
       await addDoc(collection(db, 'receiptData'), {
         extractedText: grocery,
         timestamp: new Date(),
-        fileName: selectedImage.name, 
+        fileName: selectedImage.name,
       });
       console.log('OCR result saved to Firestore');
     } catch (error) {
@@ -142,7 +142,11 @@ export default function OcrUploadButton() {
   return (
     <div>
       {/* When Button is clicked, open the Dialog */}
-      <Button variant="contained" onClick={handleDialogOpen} className="uploadButton">
+      <Button
+        variant="contained"
+        onClick={handleDialogOpen}
+        className="uploadButton"
+      >
         Upload Receipt
       </Button>
 
@@ -151,15 +155,26 @@ export default function OcrUploadButton() {
         <DialogTitle>Upload and Parse Receipt</DialogTitle>
         <DialogContent>
           <p className="ocrRequirements">
-            Please ensure the uploaded receipt meets the following requirements for best OCR results:
+            Please ensure the uploaded receipt meets the following requirements
+            for best OCR results:
           </p>
           <ul className="listOcrRequirements">
-            <li>Use a plain, single-color background (e.g., solid black or white) with no patterns or textures.</li>
+            <li>
+              Use a plain, single-color background (e.g., solid black or white)
+              with no patterns or textures.
+            </li>
             <li>Avoid grainy or textured backgrounds.</li>
-            <li>Ensure good lighting with minimal shadows for clear text visibility.</li>
-            <li>Position the camera directly above the receipt to avoid skewing or blurriness.</li>
+            <li>
+              Ensure good lighting with minimal shadows for clear text
+              visibility.
+            </li>
+            <li>
+              Position the camera directly above the receipt to avoid skewing or
+              blurriness.
+            </li>
           </ul>
-          <Button component="label"
+          <Button
+            component="label"
             role={undefined}
             variant="contained"
             tabIndex={-1}
@@ -182,7 +197,6 @@ export default function OcrUploadButton() {
             value={selectedImage ? selectedImage.name : 'No file selected'}
             variant="outlined"
           />
-          
         </DialogContent>
         <DialogActions>
           <Button
@@ -193,7 +207,11 @@ export default function OcrUploadButton() {
           >
             {loading ? 'Processing...' : 'Upload and Parse'}
           </Button>
-          <Button onClick={handleDialogClose} color="secondary" className="dialogCloseButton">
+          <Button
+            onClick={handleDialogClose}
+            color="secondary"
+            className="dialogCloseButton"
+          >
             Close
           </Button>
         </DialogActions>
