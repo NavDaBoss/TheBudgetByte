@@ -1,22 +1,52 @@
 'use client';
 
+import '../styles/OcrUploadButton.css';
 import React, { useState } from 'react';
 import Tesseract from 'tesseract.js';
 import { db } from '../firebase/firebaseConfig'; // Import Firestore config
 import { collection, addDoc } from 'firebase/firestore'; // Import Firestore methods
 
+// MUI
+import Button from '@mui/material/Button'; 
+import { styled } from '@mui/material/styles';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import TextField from '@mui/material/TextField';
+
+// For my MUI Upload Button
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
+
 // Define the component as a reusable upload button
 export default function OcrUploadButton() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false); // Manage loading state
+  const [loading, setLoading] = useState(false); 
 
-  // Function to clean up unnecessary lines and characters
-  // function cleanReceiptText(lines: Tesseract.Line[]): Tesseract.Line[] {
-  //   return lines.filter(line =>
-  //     !/(TOTAL|TAX|APPROVED|SUBTOTAL|CHANGE|INSTANT SAVINGS|SEQ#|AID:|VISA|Whse|Trm|Trn|Items Sold|Please Come Again)/i.test(line.text)
-  //   );
-  // }
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  // Handle dialog open
+  const handleDialogOpen = () => {
+    setIsDialogOpen(true);
+  };
+
+  // Handle dialog close
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    setSelectedImage(null); // Optionally reset the selected image
+  };
+  
   // Handle image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
@@ -34,7 +64,6 @@ export default function OcrUploadButton() {
       const result = await Tesseract.recognize(
         selectedImage,
         'eng', // OCR language: English
-        // { logger: (m) => console.log(m) }  // Optional logger for debugging
       );
 
       console.log('Raw OCR Result:', result.data.text);
@@ -52,60 +81,54 @@ export default function OcrUploadButton() {
 
       // const pattern = /([A-Z\/\-\s]+)\s+(\d{1,2}\.\d{2})/;
 
-      // const lineConfidenceThreshold = 80;
-      // const lines = result.data.lines.filter(line => line.confidence >= lineConfidenceThreshold);
-      // const filteredText = lines.map(line => line.text).join('\n');
-      // console.log('Filtered Text:', filteredText);
-
       // FOR LINE BY LINE EXTRACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       // Winner so far?
-      // const pattern = /([A-Za-z\s]+)\s+(\d+\.\d{2})/;
-      // const text = result.data.text;
-      // result.data.lines.forEach((line, index) => {
-      //   // console.log(`Line ${index + 1}:`, line.text); // Print the line text
-      //   // console.log(`Confidence: ${line.confidence}`); // Print the line confidence
-      //   // console.log(`Bounding Box:`, line.bbox); // Print the bounding box if needed
+      const pattern = /([A-Za-z\s]+)\s+(\d+\.\d{2})/;
+      const text = result.data.text;
+      result.data.lines.forEach((line, index) => {
+        // console.log(`Line ${index + 1}:`, line.text); // Print the line text
+        // console.log(`Confidence: ${line.confidence}`); // Print the line confidence
 
-      //   // Apply regex to extract item name and price
-      //   const match = line.text.match(pattern);
-      //   if (match) {
-      //     const itemName = match[1].trim(); // Extract the item name
-      //     // const price = parseFloat(match[2]); // Extract and convert the price to a number
-      //     let price = parseFloat(match[2].replace(",", "."));
+        // Apply regex to extract item name and price
+        const match = line.text.match(pattern);
+        if (match) {
+          const itemName = match[1].trim(); // Extract the item name
+          // const price = parseFloat(match[2]); // Extract and convert the price to a number
+          let price = parseFloat(match[2].replace(",", "."));
 
-      //     // Push the extracted item name and price into the grocery array
-      //     grocery.push({
-      //       itemName: itemName,
-      //       price: price,
-      //     });
-      //   }
-      // });
+          // Push the extracted item name and price into the grocery array
+          grocery.push({
+            itemName: itemName,
+            price: price,
+          });
+        }
+      });
 
       // FOR MULTILINE PARAGRAPH EXTRACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-      const pattern = /(?:\d+\s)?([A-Z\/\-\s]+)\s+(\d{1,2}\.\d{2})/g;
-      // const pattern = /(?:\d+\s)?([A-Z0-9\/\-\s]+)\s+(\d{1,2}\.\d{2})/g;
+      // const pattern = /(?:\d+\s)?([A-Z\/\-\s]+)\s+(\d{1,2}\.\d{2})/g;
+      // // const pattern = /(?:\d+\s)?([A-Z0-9\/\-\s]+)\s+(\d{1,2}\.\d{2})/g;
 
-      const confidenceThreshold = 30;
-      const words = result.data.words.filter(
-        (word) => word.confidence >= confidenceThreshold,
-      );
-      const filteredText = words.map((word) => word.text).join(' ');
-      console.log('Filtered Text:', filteredText);
-      let match;
+      // const confidenceThreshold = 30;
+      // const words = result.data.words.filter(
+      //   (word) => word.confidence >= confidenceThreshold,
+      // );
+      // const filteredText = words.map((word) => word.text).join(' ');
+      // console.log('Filtered Text:', filteredText);
+      // let match;
 
-      // Use regex to find item and price pairs
-      while ((match = pattern.exec(filteredText)) !== null) {
-        grocery.push({
-          itemName: match[1].trim(),
-          price: parseFloat(match[2]),
-        });
-      }
+      // // Use regex to find item and price pairs
+      // while ((match = pattern.exec(filteredText)) !== null) {
+      //   grocery.push({
+      //     itemName: match[1].trim(),
+      //     price: parseFloat(match[2]),
+      //   });
+      // }
 
-      // Send the OCR result to Firestore (to your 'receiptData' collection)
+      // Send the OCR result to Firestore (to 'receiptData' collection)
       await addDoc(collection(db, 'receiptData'), {
         extractedText: grocery,
         timestamp: new Date(),
-        fileName: selectedImage.name, // Optional: Save the file name
+        fileName: selectedImage.name, 
       });
       console.log('OCR result saved to Firestore');
     } catch (error) {
@@ -118,13 +141,63 @@ export default function OcrUploadButton() {
 
   return (
     <div>
-      {/* Image Upload Input */}
-      <input type="file" accept="image/*" onChange={handleImageUpload} />
+      {/* When Button is clicked, open the Dialog */}
+      <Button variant="contained" onClick={handleDialogOpen} className="uploadButton">
+        Upload Receipt
+      </Button>
 
-      {/* Button to trigger OCR */}
-      <button onClick={handleParseImage} disabled={loading || !selectedImage}>
-        {loading ? 'Processing...' : 'Upload and Parse'}
-      </button>
+      {/* Open/Close Dialog */}
+      <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Upload and Parse Receipt</DialogTitle>
+        <DialogContent>
+          <p className="ocrRequirements">
+            Please ensure the uploaded receipt meets the following requirements for best OCR results:
+          </p>
+          <ul className="listOcrRequirements">
+            <li>Use a plain, single-color background (e.g., solid black or white) with no patterns or textures.</li>
+            <li>Avoid grainy or textured backgrounds.</li>
+            <li>Ensure good lighting with minimal shadows for clear text visibility.</li>
+            <li>Position the camera directly above the receipt to avoid skewing or blurriness.</li>
+          </ul>
+          <Button component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+            className="dialogFileButton"
+          >
+            Upload files
+            <VisuallyHiddenInput
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              multiple
+            />
+          </Button>
+          <TextField
+            disabled
+            fullWidth
+            margin="dense"
+            label="Selected File"
+            value={selectedImage ? selectedImage.name : 'No file selected'}
+            variant="outlined"
+          />
+          
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleParseImage}
+            color="primary"
+            disabled={loading || !selectedImage}
+            className="dialogParseButton"
+          >
+            {loading ? 'Processing...' : 'Upload and Parse'}
+          </Button>
+          <Button onClick={handleDialogClose} color="secondary" className="dialogCloseButton">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
