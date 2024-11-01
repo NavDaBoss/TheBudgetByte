@@ -151,7 +151,7 @@ export default function Login() {
       <div className="register-container">
         <p>New to Budget Byte?</p>
         <Link href="/register" className="register-link">
-          Create a BudgetByte Account
+          Create an account
         </Link>
       </div>
     </div>
