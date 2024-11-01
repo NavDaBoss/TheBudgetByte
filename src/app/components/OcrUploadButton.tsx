@@ -38,37 +38,37 @@ export default function OcrUploadButton() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // For OpenAI API
-  const [gptPrompt, setPrompt] = useState("");
-  const [gptResponse, setResponse] = useState("");
-  const [gptError, setError] = useState("");
+  const [gptPrompt, setPrompt] = useState('');
+  const [gptResponse, setResponse] = useState('');
+  const [gptError, setError] = useState('');
   const instruction = `This is extracted text from a receipt. Please extract the item name, item price, 
   item quantity, grocery store, total receipt balance, and the date of the receipt. If you cannot find 
   certain information, please put N/A.`;
 
   // SENDS REQUEST TO API AND RECEIVES RESPONSE
-  const handleSubmit = async () => {
+  const handleSubmit = async (promptText) => {
     try {
-      const promptText = "Give me a hex color for blue.";
-      setPrompt(promptText)
-      const res = await fetch("/api/openai", {
-        method: "POST",
+      // const promptText = 'Give me a hex color for blue.';
+      // setPrompt(promptText);
+      const res = await fetch('/api/openai', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt : promptText }),
+        body: JSON.stringify({ prompt: promptText }),
       });
       const data = await res.json();
 
       if (res.ok) {
         setResponse(data.response); // response now contains a string
-        console.log("API response received IN CLIENT:", data.response); // Log the response from the server
+        console.log('API response received IN CLIENT:', data.response); // Log the response from the server
       } else {
-        setError(data.error || "An error occurred.");
-        console.log("API error received:", gptError); // Log the response from the server
+        setError(data.error || 'An error occurred.');
+        console.log('API error received:', gptError); // Log the response from the server
       }
     } catch (err) {
-      setError("Failed to fetch response from API.");
-      console.log("API error received:", gptError); // Log the response from the server
+      setError('Failed to fetch response from API.');
+      console.log('API error received:', gptError); // Log the response from the server
     }
   };
 
@@ -103,6 +103,13 @@ export default function OcrUploadButton() {
       );
 
       console.log('Raw OCR Result:', result.data.text);
+
+      // SEND OPENAI REQUEST WITH THE OCR TEXT
+      const completePrompt = `${result.data.text}\n\n${instruction}`;
+      setPrompt(completePrompt);
+
+      // Wait for the state to update and then call handleSubmit
+      await handleSubmit(completePrompt);
 
       type GroceryItem = {
         itemName: string;
@@ -140,14 +147,6 @@ export default function OcrUploadButton() {
         fileName: selectedImage.name,
       });
       console.log('OCR result saved to Firestore');
-
-      // SEND OPENAI REQUEST WITH THE OCR TEXT
-      // const completePrompt = `${result.data.text}\n\n${instruction}`;
-      // setPrompt(completePrompt);
-
-      // Wait for the state to update and then call handleSubmit
-      await handleSubmit();
-
     } catch (error) {
       console.error('Error extracting text or saving to Firestore:', error);
     } finally {

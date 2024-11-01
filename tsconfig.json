@@ -30,10 +30,16 @@
     }
   },
   "include": [
+    
     "next-env.d.ts",
+   
     "**/*.ts",
+   
     "**/*.tsx",
-    ".next/types/**/*.ts", "src/app/api/openai/route.js",
+   
+    ".next/types/**/*.ts",
+    "src/app/api/openai/route.js"
+  ,
     "jest.setup.js",
     "jest.config.js"
   ],
