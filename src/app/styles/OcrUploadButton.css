@@ -1,0 +1,28 @@
+.uploadButton {
+    background-color: #4E8F03; /* Green background */
+}
+
+.dialogFileButton {
+    background-color: #4E8F03; /* Green background */
+}
+
+.dialogParseButton {
+    color: #000000;
+}
+
+.dialogCloseButton {
+    color: #000000;
+}
+
+.ocrRequirements {
+    color: #808080;
+    font-size : 0.9rem;
+    margin-bottom: 3%;
+}
+
+.listOcrRequirements {
+    color: #808080;
+    font-size : 0.9rem;
+    margin-left: 2.75%;
+    margin-bottom: 2%;
+}
