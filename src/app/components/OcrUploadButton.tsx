@@ -34,7 +34,43 @@ export default function OcrUploadButton() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // For Dialog
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  // For OpenAI API
+  const [gptPrompt, setPrompt] = useState("");
+  const [gptResponse, setResponse] = useState("");
+  const [gptError, setError] = useState("");
+  const instruction = `This is extracted text from a receipt. Please extract the item name, item price, 
+  item quantity, grocery store, total receipt balance, and the date of the receipt. If you cannot find 
+  certain information, please put N/A.`;
+
+  // SENDS REQUEST TO API AND RECEIVES RESPONSE
+  const handleSubmit = async () => {
+    try {
+      const promptText = "Give me a hex color for blue.";
+      setPrompt(promptText)
+      const res = await fetch("/api/openai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt : promptText }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        setResponse(data.response); // response now contains a string
+        console.log("API response received IN CLIENT:", data.response); // Log the response from the server
+      } else {
+        setError(data.error || "An error occurred.");
+        console.log("API error received:", gptError); // Log the response from the server
+      }
+    } catch (err) {
+      setError("Failed to fetch response from API.");
+      console.log("API error received:", gptError); // Log the response from the server
+    }
+  };
 
   // Handle dialog open
   const handleDialogOpen = () => {
@@ -74,13 +110,6 @@ export default function OcrUploadButton() {
       };
       let grocery: GroceryItem[] = [];
 
-      // TESTING: Regex pattern to match item name and price
-
-      // For confidence score paragraph
-      // const pattern = /(?:\d+\s)?([A-Z\/\-\s]+)\s+(\d{1,2}\.\d{2})/g;
-
-      // const pattern = /([A-Z\/\-\s]+)\s+(\d{1,2}\.\d{2})/;
-
       // FOR LINE BY LINE EXTRACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       // Winner so far?
       const pattern = /([A-Za-z\s]+)\s+(\d+\.\d{2})/;
@@ -104,26 +133,6 @@ export default function OcrUploadButton() {
         }
       });
 
-      // FOR MULTILINE PARAGRAPH EXTRACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-      // const pattern = /(?:\d+\s)?([A-Z\/\-\s]+)\s+(\d{1,2}\.\d{2})/g;
-      // // const pattern = /(?:\d+\s)?([A-Z0-9\/\-\s]+)\s+(\d{1,2}\.\d{2})/g;
-
-      // const confidenceThreshold = 30;
-      // const words = result.data.words.filter(
-      //   (word) => word.confidence >= confidenceThreshold,
-      // );
-      // const filteredText = words.map((word) => word.text).join(' ');
-      // console.log('Filtered Text:', filteredText);
-      // let match;
-
-      // // Use regex to find item and price pairs
-      // while ((match = pattern.exec(filteredText)) !== null) {
-      //   grocery.push({
-      //     itemName: match[1].trim(),
-      //     price: parseFloat(match[2]),
-      //   });
-      // }
-
       // Send the OCR result to Firestore (to 'receiptData' collection)
       await addDoc(collection(db, 'receiptData'), {
         extractedText: grocery,
@@ -131,6 +140,14 @@ export default function OcrUploadButton() {
         fileName: selectedImage.name,
       });
       console.log('OCR result saved to Firestore');
+
+      // SEND OPENAI REQUEST WITH THE OCR TEXT
+      // const completePrompt = `${result.data.text}\n\n${instruction}`;
+      // setPrompt(completePrompt);
+
+      // Wait for the state to update and then call handleSubmit
+      await handleSubmit();
+
     } catch (error) {
       console.error('Error extracting text or saving to Firestore:', error);
     } finally {
@@ -163,7 +180,6 @@ export default function OcrUploadButton() {
               Use a plain, single-color background (e.g., solid black or white)
               with no patterns or textures.
             </li>
-            <li>Avoid grainy or textured backgrounds.</li>
             <li>
               Ensure good lighting with minimal shadows for clear text
               visibility.
