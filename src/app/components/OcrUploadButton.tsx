@@ -59,14 +59,17 @@ export default function OcrUploadButton() {
       if (res.ok) {
         setResponse(data.response); // response now contains a string
         console.log('API response received IN CLIENT:', data.response); // Log the response from the server
-        console.log('groceries:', data.response.groceries)
+        console.log('groceries:', data.response.groceries);
+        return data.response;
       } else {
         setError(data.error || 'An error occurred.');
         console.log('API error received:', gptError); // Log the response from the server
+        return null;
       }
     } catch (err) {
       setError('Failed to fetch response from API.');
       console.log('API error received:', gptError); // Log the response from the server
+      return null;
     }
   };
 
@@ -106,10 +109,9 @@ export default function OcrUploadButton() {
       setPrompt(result.data.text);
 
       // Extract the valuable data
-      await openaiTextExtraction(result.data.text);
+      // await openaiTextExtraction(result.data.text);
 
-      console.log('groceries2222:', gptResponse.groceries)
-
+      // console.log('groceries2222:', gptResponse.groceries);
 
       // type GroceryItem = {
       //   itemName: string;
@@ -141,12 +143,16 @@ export default function OcrUploadButton() {
       // });
 
       // Send the OCR result to Firestore (to 'receiptData' collection)
-      await addDoc(collection(db, 'receiptData'), {
-        ...gptResponse,
-        timestamp: new Date(),
-        fileName: selectedImage.name,
-      });
-      console.log('OCR result saved to Firestore');
+      const apiResponse = await openaiTextExtraction(result.data.text);
+
+      if (apiResponse) {
+        await addDoc(collection(db, 'receiptData'), {
+          ...apiResponse,
+          timestamp: new Date(),
+          fileName: selectedImage.name,
+        });
+        console.log('OCR result saved to Firestore');
+      }
     } catch (error) {
       console.error('Error extracting text or saving to Firestore:', error);
     } finally {
