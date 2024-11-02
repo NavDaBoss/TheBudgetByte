@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -14,6 +14,7 @@ import {
 import { FirebaseError } from '@firebase/app';
 import './login.css';
 import Image from 'next/image';
+import Navbar from '../components/Navbar';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -28,7 +29,7 @@ export default function Login() {
     try {
       const result = await signInWithPopup(auth, provider);
       await saveUserToFirestore(result.user); // Save user to Firestore
-      router.push('/profile');
+      router.push('/dashboard');
     } catch (error) {
       console.error(error);
     }
@@ -37,7 +38,7 @@ export default function Login() {
   const login = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push('/profile');
+      router.push('/dashboard');
     } catch (error) {
       if (error instanceof FirebaseError) {
         setErrorMessage('Invalid Email or Password. Please try again.');
@@ -60,6 +61,7 @@ export default function Login() {
 
   return (
     <div className="main">
+      <Navbar />
       <h1>Login</h1>
       <div className="title-line"></div>
       <div className="input-container">
@@ -149,7 +151,7 @@ export default function Login() {
       <div className="register-container">
         <p>New to Budget Byte?</p>
         <Link href="/register" className="register-link">
-          Create a BudgetByte Account
+          Create an account
         </Link>
       </div>
     </div>
