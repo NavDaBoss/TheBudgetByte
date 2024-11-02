@@ -11,6 +11,8 @@ import Summary from '../components/Summary';
 import GroceryData from './groceries.json';
 import SummaryData from './food_summary.json';
 
+import OcrUploadButton from '../components/OcrUploadButton';
+
 const ReceiptHead = ({ sortColumn }) => {
   const [sortField, setSortField] = useState('');
   const [order, setOrder] = useState('asc');
@@ -159,6 +161,7 @@ const Dashboard = () => {
       <div className="section-container">
         <Receipt groceries={GroceryData.groceries} />
       </div>
+      <OcrUploadButton />
     </div>
   );
 };

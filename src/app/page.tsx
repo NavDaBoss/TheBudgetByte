@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from './hooks/useAuth';
 import { useEffect } from 'react';
 import Navbar from './components/Navbar';
-import OcrUploadButton from './components/OcrUploadButton';
+// import OcrUploadButton from './components/OcrUploadButton';
 
 export default function Home() {
   const router = useRouter();
@@ -21,7 +21,7 @@ export default function Home() {
       <button onClick={() => router.push('/profile')}>Profile</button>
       <button onClick={() => router.push('/dashboard')}>Dashboard</button>
       <button onClick={() => router.push('/analytics')}>Analytics</button>
-      <OcrUploadButton />
+      
     </div>
   );
 }
