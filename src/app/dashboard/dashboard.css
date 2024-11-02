@@ -1,5 +1,6 @@
 .section-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
@@ -55,7 +56,6 @@ input:focus {
 }
 
 .receipt-head h1 {
-  /* text-transform: uppercase; */
   margin-right: auto;
   font-weight: 700;
 }
