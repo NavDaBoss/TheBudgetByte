@@ -1,0 +1,284 @@
+.titleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh; /* Full viewport height */
+  background-color: #f5f7f9;
+}
+
+.h1 {
+  font-size: 50px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f5f7f9;
+  min-height: 100vh;
+}
+
+.leftSection {
+  width: 40%;
+}
+
+.rightSection {
+  width: 50%;
+  height: 50%;
+  background-color: #ffffff;
+  /* background-color: #f5f7f9; */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.h2 {
+  font-size: 50px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.localclass p {
+  color: #666;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.scanButton {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.loginButton {
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.receipt {
+  text-align: left;
+}
+
+.date {
+  color: #999;
+  font-size: 14px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th,
+.table td {
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.chart {
+  width: 100px;
+  height: 100px;
+  background-color: #e0f7e9;
+  border-radius: 50%;
+  margin-top: 20px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .leftSection,
+  .rightSection {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .localclass h1 {
+    font-size: 20px;
+  }
+
+  .localclass h2 {
+    font-size: 18px;
+  }
+
+  .buttonGroup {
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .chart {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.titleContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh; /* Full viewport height */
+    background-color: #f5f7f9;
+  }
+  
+  .h1 {
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f5f7f9;
+    min-height: 100vh;
+  }
+  
+  .leftSection {
+    width: 40%;
+  }
+  
+  .rightSection {
+    width: 50%;
+    height: 50%;
+    background-color: #ffffff;
+    /* background-color: #f5f7f9; */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .h2 {
+    font-size: 50px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  
+  .localclass p {
+    color: #666;
+  }
+  
+  .buttonGroup {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .scanButton {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .loginButton {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .receipt {
+    text-align: left;
+  }
+  
+  .date {
+    color: #999;
+    font-size: 14px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .table th,
+  .table td {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .summary {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  .chart {
+    width: 100px;
+    height: 100px;
+    background-color: #e0f7e9;
+    border-radius: 50%;
+    margin-top: 20px;
+    position: relative;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+    }
+  
+    .leftSection,
+    .rightSection {
+      width: 100%;
+      margin: 10px 0;
+    }
+  
+    .localclass h1 {
+      font-size: 20px;
+    }
+  
+    .localclass h2 {
+      font-size: 18px;
+    }
+  
+    .buttonGroup {
+      flex-direction: row;
+      gap: 10px;
+    }
+  
+    .chart {
+      width: 80px;
+      height: 80px;
+    }
+  }
+  
