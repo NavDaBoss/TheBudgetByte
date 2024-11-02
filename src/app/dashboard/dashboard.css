@@ -39,10 +39,6 @@ input:focus {
   margin: 10px 0;
 }
 
-.receipt-title {
-  text-transform: uppercase;
-}
-
 .receipt-date {
   font-weight: bold;
   display: flex;
@@ -59,7 +55,7 @@ input:focus {
 }
 
 .receipt-head h1 {
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   margin-right: auto;
   font-weight: 700;
 }
@@ -83,7 +79,6 @@ input:focus {
 
 .receipt-table thead {
   text-align: left;
-  text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
