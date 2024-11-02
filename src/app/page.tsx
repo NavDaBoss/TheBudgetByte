@@ -6,7 +6,6 @@ import { useAuth } from './hooks/useAuth';
 import { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import OcrUploadButton from './components/OcrUploadButton';
-import TestOpenAI from './components/TestOpenAI';
 
 export default function Home() {
   const router = useRouter();
@@ -23,7 +22,6 @@ export default function Home() {
       <button onClick={() => router.push('/dashboard')}>Dashboard</button>
       <button onClick={() => router.push('/analytics')}>Analytics</button>
       <OcrUploadButton />
-      <TestOpenAI />
     </div>
   );
 }

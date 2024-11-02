@@ -41,9 +41,9 @@ export default function OcrUploadButton() {
   const [gptPrompt, setPrompt] = useState('');
   const [gptResponse, setResponse] = useState('');
   const [gptError, setError] = useState('');
-  const instruction = `This is extracted text from a receipt. Please extract the item name, item price, 
-  item quantity, grocery store, total receipt balance, and the date of the receipt. If you cannot find 
-  certain information, please put N/A.`;
+  // const instruction = `This is extracted text from a receipt. Please extract the item name, item price, 
+  // item quantity, grocery store, total receipt balance, and the date of the receipt. If you cannot find 
+  // certain information, please put N/A.`;
 
   // SENDS REQUEST TO API AND RECEIVES RESPONSE
   const handleSubmit = async (promptText) => {
@@ -105,11 +105,11 @@ export default function OcrUploadButton() {
       console.log('Raw OCR Result:', result.data.text);
 
       // SEND OPENAI REQUEST WITH THE OCR TEXT
-      const completePrompt = `${result.data.text}\n\n${instruction}`;
-      setPrompt(completePrompt);
+      // const completePrompt = `${result.data.text}\n\n${instruction}`;
+      setPrompt(result.data.text);
 
       // Wait for the state to update and then call handleSubmit
-      await handleSubmit(completePrompt);
+      await handleSubmit(result.data.text);
 
       type GroceryItem = {
         itemName: string;
