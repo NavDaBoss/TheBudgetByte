@@ -21,7 +21,6 @@ export default function Home() {
       <button onClick={() => router.push('/profile')}>Profile</button>
       <button onClick={() => router.push('/dashboard')}>Dashboard</button>
       <button onClick={() => router.push('/analytics')}>Analytics</button>
-      
     </div>
   );
 }
