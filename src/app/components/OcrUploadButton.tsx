@@ -39,14 +39,11 @@ export default function OcrUploadButton() {
 
   // For OpenAI API
   const [gptPrompt, setPrompt] = useState('');
-  const [gptResponse, setResponse] = useState('');
+  const [gptResponse, setResponse] = useState(null);
   const [gptError, setError] = useState('');
-  // const instruction = `This is extracted text from a receipt. Please extract the item name, item price, 
-  // item quantity, grocery store, total receipt balance, and the date of the receipt. If you cannot find 
-  // certain information, please put N/A.`;
 
   // SENDS REQUEST TO API AND RECEIVES RESPONSE
-  const handleSubmit = async (promptText) => {
+  const openaiTextExtraction = async (promptText) => {
     try {
       // const promptText = 'Give me a hex color for blue.';
       // setPrompt(promptText);
@@ -62,6 +59,7 @@ export default function OcrUploadButton() {
       if (res.ok) {
         setResponse(data.response); // response now contains a string
         console.log('API response received IN CLIENT:', data.response); // Log the response from the server
+        console.log('groceries:', data.response.groceries)
       } else {
         setError(data.error || 'An error occurred.');
         console.log('API error received:', gptError); // Log the response from the server
@@ -105,44 +103,46 @@ export default function OcrUploadButton() {
       console.log('Raw OCR Result:', result.data.text);
 
       // SEND OPENAI REQUEST WITH THE OCR TEXT
-      // const completePrompt = `${result.data.text}\n\n${instruction}`;
       setPrompt(result.data.text);
 
-      // Wait for the state to update and then call handleSubmit
-      await handleSubmit(result.data.text);
+      // Extract the valuable data
+      await openaiTextExtraction(result.data.text);
 
-      type GroceryItem = {
-        itemName: string;
-        price: number;
-      };
-      let grocery: GroceryItem[] = [];
+      console.log('groceries2222:', gptResponse.groceries)
+
+
+      // type GroceryItem = {
+      //   itemName: string;
+      //   price: number;
+      // };
+      // let grocery: GroceryItem[] = [];
 
       // FOR LINE BY LINE EXTRACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       // Winner so far?
-      const pattern = /([A-Za-z\s]+)\s+(\d+\.\d{2})/;
-      const text = result.data.text;
-      result.data.lines.forEach((line, index) => {
-        // console.log(`Line ${index + 1}:`, line.text); // Print the line text
-        // console.log(`Confidence: ${line.confidence}`); // Print the line confidence
+      // const pattern = /([A-Za-z\s]+)\s+(\d+\.\d{2})/;
+      // const text = result.data.text;
+      // result.data.lines.forEach((line, index) => {
+      //   // console.log(`Line ${index + 1}:`, line.text); // Print the line text
+      //   // console.log(`Confidence: ${line.confidence}`); // Print the line confidence
 
-        // Apply regex to extract item name and price
-        const match = line.text.match(pattern);
-        if (match) {
-          const itemName = match[1].trim(); // Extract the item name
-          // const price = parseFloat(match[2]); // Extract and convert the price to a number
-          let price = parseFloat(match[2].replace(',', '.'));
+      //   // Apply regex to extract item name and price
+      //   const match = line.text.match(pattern);
+      //   if (match) {
+      //     const itemName = match[1].trim(); // Extract the item name
+      //     // const price = parseFloat(match[2]); // Extract and convert the price to a number
+      //     let price = parseFloat(match[2].replace(',', '.'));
 
-          // Push the extracted item name and price into the grocery array
-          grocery.push({
-            itemName: itemName,
-            price: price,
-          });
-        }
-      });
+      //     // Push the extracted item name and price into the grocery array
+      //     grocery.push({
+      //       itemName: itemName,
+      //       price: price,
+      //     });
+      //   }
+      // });
 
       // Send the OCR result to Firestore (to 'receiptData' collection)
       await addDoc(collection(db, 'receiptData'), {
-        extractedText: grocery,
+        ...gptResponse,
         timestamp: new Date(),
         fileName: selectedImage.name,
       });
