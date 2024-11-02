@@ -1,8 +1,5 @@
 'use client';
 
-  // git config --global user.email "you@example.com"
-  // git config --global user.name "Your Name"
-
 // pages/BudgetBytePage.js
 import Head from 'next/head';
 import '../globals.css';
