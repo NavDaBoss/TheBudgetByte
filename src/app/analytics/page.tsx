@@ -162,7 +162,9 @@ const Analytics = () => {
   const [selectedYear, setSelectedYear] = useState('2024');
   const years = Object.keys(userData.yearlyOverview);
   const [selectedMonth, setSelectedMonth] = useState('January');
-  const monthsInSelectedYear = Object.keys(userData.yearlyOverview[selectedYear]);
+  const monthsInSelectedYear = Object.keys(
+    userData.yearlyOverview[selectedYear],
+  );
   const graphParams = createYearlyMoneySpentGraphParams(selectedYear);
   return (
     <div className="page">
@@ -189,7 +191,11 @@ const Analytics = () => {
         />
       </div>
       <div className="pie-container">
-        <Summary groups = {userData.yearlyOverview[selectedYear][selectedMonth].foodGroups} />
+        <Summary
+          groups={
+            userData.yearlyOverview[selectedYear][selectedMonth].foodGroups
+          }
+        />
       </div>
     </div>
   );

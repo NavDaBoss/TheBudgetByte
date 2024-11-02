@@ -1,5 +1,6 @@
 .section-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
@@ -39,10 +40,6 @@ input:focus {
   margin: 10px 0;
 }
 
-.receipt-title {
-  text-transform: uppercase;
-}
-
 .receipt-date {
   font-weight: bold;
   display: flex;
@@ -59,7 +56,6 @@ input:focus {
 }
 
 .receipt-head h1 {
-  text-transform: uppercase;
   margin-right: auto;
   font-weight: 700;
 }
@@ -83,7 +79,6 @@ input:focus {
 
 .receipt-table thead {
   text-align: left;
-  text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 

@@ -139,7 +139,6 @@ const FilterableReceipt = ({ groceries }) => {
         filterText={filterText}
         sortColumn={sortColumn}
       />
-      <Summary groups={SummaryData.foodGroups} />
     </div>
   );
 };
@@ -157,6 +156,7 @@ const Dashboard = () => {
     <div>
       <Navbar />
       <div className="section-container">
+        <Summary groups={SummaryData.foodGroups} />
         <Receipt groceries={GroceryData.groceries} />
       </div>
     </div>

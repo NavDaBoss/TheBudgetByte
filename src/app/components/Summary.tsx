@@ -75,7 +75,9 @@ const Summary = ({ groups }) => {
 
     const sorted = [...groups].sort((a, b) => {
       if (sortField == 'check') {
-        return sortOrder === 'asc' ? a.quantity - b.quantity : b.quantity - a.quantity;
+        return sortOrder === 'asc'
+          ? a.quantity - b.quantity
+          : b.quantity - a.quantity;
       }
       if (typeof a[sortField] === 'number') {
         return (a[sortField] - b[sortField]) * (sortOrder === 'asc' ? 1 : -1);
