@@ -125,8 +125,17 @@ input:focus {
   padding: 0.5rem 1.5rem;
 }
 
+.receipt-body tr {
+  background-color: var(--background);
+}
+
 .receipt-body tr:last-child {
   border-bottom: 2px dashed black;
+}
+
+.receipt-body tr:hover {
+  filter: brightness(0.9);
+  transition: filter 0.3s ease;
 }
 
 .price-column {
@@ -137,4 +146,9 @@ input:focus {
   display: flex;
   align-items: center;
   gap: 30px;
+}
+
+.edit-icon-wrapper {
+  position: relative;
+  top: -1px;
 }
