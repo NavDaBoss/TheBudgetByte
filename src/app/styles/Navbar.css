@@ -10,9 +10,7 @@
 
 .header-logo {
   margin: 10px;
-  text-transform: uppercase;
   font-weight: 700;
-  letter-spacing: 0.1rem;
 }
 
 .header-nav {
@@ -35,9 +33,7 @@
   border: none;
   outline: none;
   font-size: 1rem;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.2rem;
+  font-weight: 700;
   padding: 10px 20px;
   margin: 0 10px;
   background-color: var(--background);

@@ -8,6 +8,14 @@
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
 }
 
+.pie-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
+}
+
 .nav-bar {
   display: flex;
   flex-direction: column;
@@ -38,7 +46,7 @@
 
 .custom-dropdown {
   display: flex;
-  flex-direction: column; /* Stack dropdown options vertically */
+  flex-direction: column;
   background-color: white;
   width: 100%;
   margin-top: 5px;

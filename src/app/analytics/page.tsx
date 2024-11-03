@@ -3,12 +3,11 @@
 import React, { useState } from 'react';
 import './analytics.css';
 import Navbar from '../components/Navbar';
-import SummaryPie from '../components/SummaryPie';
+import Summary from '../components/Summary';
 import {
   AnalyticsLineGraph,
   CategoryLegend,
   GraphParams,
-  Category,
 } from '../components/YearlyGraph';
 import { userData, FoodTypes, FoodGroupInfo } from './user';
 
@@ -114,38 +113,38 @@ const createYearlyMoneySpentGraphParams = (selectedYear: string) => {
       {
         label: FoodTypes.Fruits,
         data: getCategoryData(FoodTypes.Fruits),
-        borderColor: 'rgba(255, 99, 132, 1)',
+        borderColor: 'rgba(255,182,193, 1)',
         hidden: !categoryLegend.Fruits,
       },
       {
         label: FoodTypes.Veggies,
         data: getCategoryData(FoodTypes.Veggies),
-        borderColor: 'rgba(54, 162, 235, 1)',
+        borderColor: 'rgba(143,188,143, 1)',
         hidden: !categoryLegend.Veggies,
       },
       {
         label: FoodTypes.Protein,
         data: getCategoryData(FoodTypes.Protein),
-        borderColor: 'rgba(75, 192, 192, 1)',
+        borderColor: 'rgba(147,112,219, 1)',
         hidden: !categoryLegend.Protein,
       },
       {
         label: FoodTypes.Grain,
         data: getCategoryData(FoodTypes.Grain),
-        borderColor: 'rgba(255, 206, 86, 1)',
+        borderColor: 'rgba(255,140,0, 1)',
         hidden: !categoryLegend.Grain,
       },
       {
         label: FoodTypes.Dairy,
         data: getCategoryData(FoodTypes.Dairy),
         fill: false,
-        borderColor: 'rgba(153, 102, 255, 1)',
+        borderColor: 'rgba(135,206,250, 1)',
         hidden: !categoryLegend.Dairy,
       },
       {
         label: 'Total',
         data: calculateTotalData(),
-        borderColor: 'rgba(0, 0, 0, 1)',
+        borderColor: 'rgba(112,128,144, 1)',
         hidden: !categoryLegend.Total,
       },
     ],
@@ -159,28 +158,14 @@ const createYearlyMoneySpentGraphParams = (selectedYear: string) => {
   return graphParams;
 };
 
-const createMonthlySpendingRatioPieData = (
-  selectedYear: string,
-  selectedMonth: string,
-) => {
-  const monthlyData = userData.yearlyOverview[selectedYear][selectedMonth];
-  const pieData = monthlyData.foodGroups.map((category) => ({
-    name: category,
-    value: category.totalCost / monthlyData.totalSpent,
-  }));
-  return pieData;
-};
-
 const Analytics = () => {
   const [selectedYear, setSelectedYear] = useState('2024');
-  const years = ['2024', '2023'];
+  const years = Object.keys(userData.yearlyOverview);
   const [selectedMonth, setSelectedMonth] = useState('January');
-  const monthsInSelectedYear = ['January', 'February'];
-  const graphParams = createYearlyMoneySpentGraphParams(selectedYear);
-  const pieData = createMonthlySpendingRatioPieData(
-    selectedYear,
-    selectedMonth,
+  const monthsInSelectedYear = Object.keys(
+    userData.yearlyOverview[selectedYear],
   );
+  const graphParams = createYearlyMoneySpentGraphParams(selectedYear);
   return (
     <div className="page">
       <div>
@@ -205,8 +190,12 @@ const Analytics = () => {
           drop_label="Selected Month:"
         />
       </div>
-      <div className="section-container">
-        <SummaryPie data={pieData} />
+      <div className="pie-container">
+        <Summary
+          groups={
+            userData.yearlyOverview[selectedYear][selectedMonth].foodGroups
+          }
+        />
       </div>
     </div>
   );

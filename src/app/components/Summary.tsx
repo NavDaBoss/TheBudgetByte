@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import SummaryPie from '../components/SummaryPie';
 
@@ -28,7 +28,7 @@ const SummaryHead = ({ sortColumn }) => {
         <th key="group" onClick={() => handleSortChange('type')}>
           Group
         </th>
-        <th key="price" onClick={() => handleSortChange('totalPrice')}>
+        <th key="price" onClick={() => handleSortChange('totalCost')}>
           Price
         </th>
       </tr>
@@ -43,13 +43,13 @@ const SummaryTable = ({ groups, sortColumn }) => {
     rows.push(
       <tr key={group.type}>
         <td className="checkbox-column">
-          {group.count > 0 ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+          {group.quantity > 0 ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
         </td>
         <td className="summary-group-column">
           {group.type}
-          <div className="group-count">x{group.count}</div>
+          <div className="group-quantity">x{group.quantity}</div>
         </td>
-        <td className="total-price-column">${group.totalPrice.toFixed(2)}</td>
+        <td className="total-price-column">${group.totalCost.toFixed(2)}</td>
       </tr>,
     );
   });
@@ -64,6 +64,9 @@ const SummaryTable = ({ groups, sortColumn }) => {
 
 const Summary = ({ groups }) => {
   const [tableData, setTableData] = useState(groups);
+  useEffect(() => {
+    setTableData(groups);
+  }, [groups]);
   const sortColumn = (sortField, sortOrder) => {
     if (sortOrder === 'none') {
       setTableData(groups);
@@ -72,7 +75,9 @@ const Summary = ({ groups }) => {
 
     const sorted = [...groups].sort((a, b) => {
       if (sortField == 'check') {
-        return sortOrder === 'asc' ? a.count - b.count : b.count - a.count;
+        return sortOrder === 'asc'
+          ? a.quantity - b.quantity
+          : b.quantity - a.quantity;
       }
       if (typeof a[sortField] === 'number') {
         return (a[sortField] - b[sortField]) * (sortOrder === 'asc' ? 1 : -1);
