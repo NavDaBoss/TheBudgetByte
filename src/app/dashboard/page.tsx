@@ -53,7 +53,9 @@ const ReceiptRow = ({ item }) => {
       <td className="quantity-column">{item.quantity}</td>
       <td className="item-name-column">
         {item.itemName}
-        <EditIcon />
+        <span className="edit-icon-wrapper">
+          <EditIcon />
+        </span>
       </td>
       <td className="group-column">{item.group}</td>
       <td className="price-column">${item.price.toFixed(2)}</td>
