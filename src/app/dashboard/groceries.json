@@ -162,11 +162,11 @@
       "totalPrice": 2.99
     },
     {
-      "itemName": "tofu",
-      "group": "protein",
-      "price": 2.0,
-      "quantity": 2,
-      "totalPrice": 4.0
+      "itemName": "passion fruit",
+      "group": "fruits",
+      "price": 3.2,
+      "quantity": 1,
+      "totalPrice": 3.2
     },
     {
       "itemName": "spinach",
