@@ -20,6 +20,671 @@
       "price": 1.99,
       "quantity": 3,
       "totalPrice": 5.97
+    },
+    {
+      "itemName": "chicken breast",
+      "group": "protein",
+      "price": 8.25,
+      "quantity": 1,
+      "totalPrice": 8.25
+    },
+    {
+      "itemName": "lettuce",
+      "group": "vegetables",
+      "price": 2.5,
+      "quantity": 1,
+      "totalPrice": 2.5
+    },
+    {
+      "itemName": "rice",
+      "group": "grains",
+      "price": 1.99,
+      "quantity": 5,
+      "totalPrice": 9.95
+    },
+    {
+      "itemName": "milk",
+      "group": "dairy",
+      "price": 3.89,
+      "quantity": 1,
+      "totalPrice": 3.89
+    },
+    {
+      "itemName": "orange",
+      "group": "fruits",
+      "price": 1.09,
+      "quantity": 4,
+      "totalPrice": 4.36
+    },
+    {
+      "itemName": "eggs",
+      "group": "protein",
+      "price": 2.5,
+      "quantity": 1,
+      "totalPrice": 2.5
+    },
+    {
+      "itemName": "broccoli",
+      "group": "vegetables",
+      "price": 1.79,
+      "quantity": 2,
+      "totalPrice": 3.58
+    },
+    {
+      "itemName": "bread",
+      "group": "grains",
+      "price": 2.29,
+      "quantity": 1,
+      "totalPrice": 2.29
+    },
+    {
+      "itemName": "yogurt",
+      "group": "dairy",
+      "price": 1.5,
+      "quantity": 4,
+      "totalPrice": 6.0
+    },
+    {
+      "itemName": "bananas",
+      "group": "fruits",
+      "price": 0.5,
+      "quantity": 6,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "steak",
+      "group": "protein",
+      "price": 9.99,
+      "quantity": 1,
+      "totalPrice": 9.99
+    },
+    {
+      "itemName": "carrots",
+      "group": "vegetables",
+      "price": 1.25,
+      "quantity": 3,
+      "totalPrice": 3.75
+    },
+    {
+      "itemName": "pasta",
+      "group": "grains",
+      "price": 1.8,
+      "quantity": 2,
+      "totalPrice": 3.6
+    },
+    {
+      "itemName": "cream",
+      "group": "dairy",
+      "price": 2.99,
+      "quantity": 1,
+      "totalPrice": 2.99
+    },
+    {
+      "itemName": "berries",
+      "group": "fruits",
+      "price": 3.0,
+      "quantity": 2,
+      "totalPrice": 6.0
+    },
+    {
+      "itemName": "salmon",
+      "group": "protein",
+      "price": 7.99,
+      "quantity": 1,
+      "totalPrice": 7.99
+    },
+    {
+      "itemName": "tomatoes",
+      "group": "vegetables",
+      "price": 2.25,
+      "quantity": 2,
+      "totalPrice": 4.5
+    },
+    {
+      "itemName": "cereal",
+      "group": "grains",
+      "price": 3.5,
+      "quantity": 1,
+      "totalPrice": 3.5
+    },
+    {
+      "itemName": "butter",
+      "group": "dairy",
+      "price": 2.5,
+      "quantity": 1,
+      "totalPrice": 2.5
+    },
+    {
+      "itemName": "grapes",
+      "group": "fruits",
+      "price": 2.99,
+      "quantity": 1,
+      "totalPrice": 2.99
+    },
+    {
+      "itemName": "tofu",
+      "group": "protein",
+      "price": 2.0,
+      "quantity": 2,
+      "totalPrice": 4.0
+    },
+    {
+      "itemName": "spinach",
+      "group": "vegetables",
+      "price": 1.5,
+      "quantity": 3,
+      "totalPrice": 4.5
+    },
+    {
+      "itemName": "quinoa",
+      "group": "grains",
+      "price": 4.0,
+      "quantity": 1,
+      "totalPrice": 4.0
+    },
+    {
+      "itemName": "ice cream",
+      "group": "dairy",
+      "price": 5.0,
+      "quantity": 1,
+      "totalPrice": 5.0
+    },
+    {
+      "itemName": "peaches",
+      "group": "fruits",
+      "price": 1.75,
+      "quantity": 3,
+      "totalPrice": 5.25
+    },
+    {
+      "itemName": "bacon",
+      "group": "protein",
+      "price": 4.5,
+      "quantity": 1,
+      "totalPrice": 4.5
+    },
+    {
+      "itemName": "cucumbers",
+      "group": "vegetables",
+      "price": 1.2,
+      "quantity": 4,
+      "totalPrice": 4.8
+    },
+    {
+      "itemName": "tortillas",
+      "group": "grains",
+      "price": 2.5,
+      "quantity": 1,
+      "totalPrice": 2.5
+    },
+    {
+      "itemName": "sour cream",
+      "group": "dairy",
+      "price": 1.99,
+      "quantity": 1,
+      "totalPrice": 1.99
+    },
+    {
+      "itemName": "mangoes",
+      "group": "fruits",
+      "price": 1.5,
+      "quantity": 2,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "ham",
+      "group": "protein",
+      "price": 3.0,
+      "quantity": 1,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "bell peppers",
+      "group": "vegetables",
+      "price": 1.0,
+      "quantity": 3,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "oats",
+      "group": "grains",
+      "price": 3.0,
+      "quantity": 1,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "whipping cream",
+      "group": "dairy",
+      "price": 3.25,
+      "quantity": 1,
+      "totalPrice": 3.25
+    },
+    {
+      "itemName": "kiwi",
+      "group": "fruits",
+      "price": 0.99,
+      "quantity": 6,
+      "totalPrice": 5.94
+    },
+    {
+      "itemName": "peanut butter",
+      "group": "protein",
+      "price": 2.5,
+      "quantity": 1,
+      "totalPrice": 2.5
+    },
+    {
+      "itemName": "zucchini",
+      "group": "vegetables",
+      "price": 1.5,
+      "quantity": 2,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "muffins",
+      "group": "grains",
+      "price": 3.0,
+      "quantity": 1,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "cottage cheese",
+      "group": "dairy",
+      "price": 2.5,
+      "quantity": 1,
+      "totalPrice": 2.5
+    },
+    {
+      "itemName": "plums",
+      "group": "fruits",
+      "price": 1.2,
+      "quantity": 3,
+      "totalPrice": 3.6
+    },
+    {
+      "itemName": "sausage",
+      "group": "protein",
+      "price": 4.5,
+      "quantity": 1,
+      "totalPrice": 4.5
+    },
+    {
+      "itemName": "cauliflower",
+      "group": "vegetables",
+      "price": 2.5,
+      "quantity": 1,
+      "totalPrice": 2.5
+    },
+    {
+      "itemName": "crackers",
+      "group": "grains",
+      "price": 2.0,
+      "quantity": 2,
+      "totalPrice": 4.0
+    },
+    {
+      "itemName": "kefir",
+      "group": "dairy",
+      "price": 3.0,
+      "quantity": 1,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "pineapple",
+      "group": "fruits",
+      "price": 2.5,
+      "quantity": 1,
+      "totalPrice": 2.5
+    },
+    {
+      "itemName": "lamb chops",
+      "group": "protein",
+      "price": 10.0,
+      "quantity": 1,
+      "totalPrice": 10.0
+    },
+    {
+      "itemName": "onions",
+      "group": "vegetables",
+      "price": 0.8,
+      "quantity": 3,
+      "totalPrice": 2.4
+    },
+    {
+      "itemName": "wheat flour",
+      "group": "grains",
+      "price": 1.5,
+      "quantity": 2,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "ricotta",
+      "group": "dairy",
+      "price": 2.8,
+      "quantity": 1,
+      "totalPrice": 2.8
+    },
+    {
+      "itemName": "papaya",
+      "group": "fruits",
+      "price": 3.0,
+      "quantity": 1,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "shrimp",
+      "group": "protein",
+      "price": 6.5,
+      "quantity": 1,
+      "totalPrice": 6.5
+    },
+    {
+      "itemName": "eggplant",
+      "group": "vegetables",
+      "price": 1.99,
+      "quantity": 1,
+      "totalPrice": 1.99
+    },
+    {
+      "itemName": "croissant",
+      "group": "grains",
+      "price": 2.5,
+      "quantity": 4,
+      "totalPrice": 10.0
+    },
+    {
+      "itemName": "half & half",
+      "group": "dairy",
+      "price": 1.5,
+      "quantity": 1,
+      "totalPrice": 1.5
+    },
+    {
+      "itemName": "cherries",
+      "group": "fruits",
+      "price": 4.0,
+      "quantity": 1,
+      "totalPrice": 4.0
+    },
+    {
+      "itemName": "beef stew",
+      "group": "protein",
+      "price": 12.5,
+      "quantity": 1,
+      "totalPrice": 12.5
+    },
+    {
+      "itemName": "potatoes",
+      "group": "vegetables",
+      "price": 0.99,
+      "quantity": 6,
+      "totalPrice": 5.94
+    },
+    {
+      "itemName": "couscous",
+      "group": "grains",
+      "price": 2.75,
+      "quantity": 1,
+      "totalPrice": 2.75
+    },
+    {
+      "itemName": "feta cheese",
+      "group": "dairy",
+      "price": 3.5,
+      "quantity": 1,
+      "totalPrice": 3.5
+    },
+    {
+      "itemName": "dragonfruit",
+      "group": "fruits",
+      "price": 5.0,
+      "quantity": 1,
+      "totalPrice": 5.0
+    },
+    {
+      "itemName": "turkey breast",
+      "group": "protein",
+      "price": 8.0,
+      "quantity": 1,
+      "totalPrice": 8.0
+    },
+    {
+      "itemName": "green beans",
+      "group": "vegetables",
+      "price": 1.75,
+      "quantity": 2,
+      "totalPrice": 3.5
+    },
+    {
+      "itemName": "cornmeal",
+      "group": "grains",
+      "price": 1.25,
+      "quantity": 2,
+      "totalPrice": 2.5
+    },
+    {
+      "itemName": "gouda cheese",
+      "group": "dairy",
+      "price": 3.5,
+      "quantity": 1,
+      "totalPrice": 3.5
+    },
+    {
+      "itemName": "watermelon",
+      "group": "fruits",
+      "price": 4.5,
+      "quantity": 1,
+      "totalPrice": 4.5
+    },
+    {
+      "itemName": "quail eggs",
+      "group": "protein",
+      "price": 3.99,
+      "quantity": 1,
+      "totalPrice": 3.99
+    },
+    {
+      "itemName": "celery",
+      "group": "vegetables",
+      "price": 1.0,
+      "quantity": 2,
+      "totalPrice": 2.0
+    },
+    {
+      "itemName": "tapioca flour",
+      "group": "grains",
+      "price": 2.2,
+      "quantity": 1,
+      "totalPrice": 2.2
+    },
+    {
+      "itemName": "buttermilk",
+      "group": "dairy",
+      "price": 2.0,
+      "quantity": 1,
+      "totalPrice": 2.0
+    },
+    {
+      "itemName": "strawberries",
+      "group": "fruits",
+      "price": 3.5,
+      "quantity": 1,
+      "totalPrice": 3.5
+    },
+    {
+      "itemName": "pork chops",
+      "group": "protein",
+      "price": 7.0,
+      "quantity": 1,
+      "totalPrice": 7.0
+    },
+    {
+      "itemName": "radishes",
+      "group": "vegetables",
+      "price": 1.0,
+      "quantity": 2,
+      "totalPrice": 2.0
+    },
+    {
+      "itemName": "baguette",
+      "group": "grains",
+      "price": 2.5,
+      "quantity": 1,
+      "totalPrice": 2.5
+    },
+    {
+      "itemName": "cheddar cheese",
+      "group": "dairy",
+      "price": 3.5,
+      "quantity": 1,
+      "totalPrice": 3.5
+    },
+    {
+      "itemName": "blackberries",
+      "group": "fruits",
+      "price": 3.0,
+      "quantity": 1,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "clams",
+      "group": "protein",
+      "price": 5.5,
+      "quantity": 1,
+      "totalPrice": 5.5
+    },
+    {
+      "itemName": "kale",
+      "group": "vegetables",
+      "price": 1.99,
+      "quantity": 1,
+      "totalPrice": 1.99
+    },
+    {
+      "itemName": "barley",
+      "group": "grains",
+      "price": 1.5,
+      "quantity": 2,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "mozzarella",
+      "group": "dairy",
+      "price": 4.0,
+      "quantity": 1,
+      "totalPrice": 4.0
+    },
+    {
+      "itemName": "oranges",
+      "group": "fruits",
+      "price": 1.0,
+      "quantity": 5,
+      "totalPrice": 5.0
+    },
+    {
+      "itemName": "duck breast",
+      "group": "protein",
+      "price": 12.0,
+      "quantity": 1,
+      "totalPrice": 12.0
+    },
+    {
+      "itemName": "mushrooms",
+      "group": "vegetables",
+      "price": 2.0,
+      "quantity": 1,
+      "totalPrice": 2.0
+    },
+    {
+      "itemName": "parmesan cheese",
+      "group": "dairy",
+      "price": 4.5,
+      "quantity": 1,
+      "totalPrice": 4.5
+    },
+    {
+      "itemName": "tofu",
+      "group": "protein",
+      "price": 2.5,
+      "quantity": 2,
+      "totalPrice": 5.0
+    },
+    {
+      "itemName": "sourdough bread",
+      "group": "grains",
+      "price": 3.0,
+      "quantity": 1,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "cream cheese",
+      "group": "dairy",
+      "price": 2.5,
+      "quantity": 1,
+      "totalPrice": 2.5
+    },
+    {
+      "itemName": "apricots",
+      "group": "fruits",
+      "price": 3.0,
+      "quantity": 1,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "blueberries",
+      "group": "fruits",
+      "price": 4.0,
+      "quantity": 1,
+      "totalPrice": 4.0
+    },
+    {
+      "itemName": "chicken thighs",
+      "group": "protein",
+      "price": 6.0,
+      "quantity": 1,
+      "totalPrice": 6.0
+    },
+    {
+      "itemName": "pita bread",
+      "group": "grains",
+      "price": 1.75,
+      "quantity": 1,
+      "totalPrice": 1.75
+    },
+    {
+      "itemName": "asparagus",
+      "group": "vegetables",
+      "price": 3.5,
+      "quantity": 1,
+      "totalPrice": 3.5
+    },
+    {
+      "itemName": "rice cakes",
+      "group": "grains",
+      "price": 2.0,
+      "quantity": 1,
+      "totalPrice": 2.0
+    },
+    {
+      "itemName": "brie cheese",
+      "group": "dairy",
+      "price": 4.0,
+      "quantity": 1,
+      "totalPrice": 4.0
+    },
+    {
+      "itemName": "buckwheat flour",
+      "group": "grains",
+      "price": 3.0,
+      "quantity": 1,
+      "totalPrice": 3.0
+    },
+    {
+      "itemName": "coconut milk",
+      "group": "dairy",
+      "price": 2.5,
+      "quantity": 1,
+      "totalPrice": 2.5
     }
   ]
 }
