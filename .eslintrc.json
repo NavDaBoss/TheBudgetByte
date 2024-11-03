@@ -1,5 +1,12 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript", "google", "prettier"],
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:testing-library/react",
+    "plugin:jest-dom/recommended",
+    "next/typescript",
+    "google",
+    "prettier"
+  ],
   "parser": "@typescript-eslint/parser",
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
