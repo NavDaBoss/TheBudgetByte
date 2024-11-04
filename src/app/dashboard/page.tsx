@@ -5,6 +5,9 @@ import React, { useState } from 'react';
 import './dashboard.css';
 
 import EditIcon from '@mui/icons-material/EditOutlined';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import SearchIcon from '@mui/icons-material/Search';
 
 import Navbar from '../components/Navbar';
 import Summary from '../components/Summary';
@@ -63,10 +66,20 @@ const ReceiptRow = ({ item }) => {
   );
 };
 
-const ReceiptTable = ({ groceries, filterText, sortColumn }) => {
+const ReceiptTable = ({
+  groceries,
+  filterText,
+  sortColumn,
+  page,
+  itemsPerPage,
+}) => {
+  const startIndex = page * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedGroceries = groceries.slice(startIndex, endIndex);
+
   const rows = [];
 
-  groceries.map((item) => {
+  paginatedGroceries.forEach((item) => {
     if (item.itemName.toLowerCase().indexOf(filterText.toLowerCase()) === -1) {
       return;
     }
@@ -85,7 +98,6 @@ const ReceiptTable = ({ groceries, filterText, sortColumn }) => {
         {/* Group */}
         <col style={{ width: '20%' }} />
       </colgroup>
-
       <ReceiptHead sortColumn={sortColumn} />
       <tbody className="receipt-body">{rows}</tbody>
     </table>
@@ -94,19 +106,23 @@ const ReceiptTable = ({ groceries, filterText, sortColumn }) => {
 
 const SearchBar = ({ filterText, onFilterTextChange }) => {
   return (
-    <input
-      className="search-bar"
-      type="text"
-      value={filterText}
-      placeholder="Search..."
-      onChange={(e) => onFilterTextChange(e.target.value)}
-    />
+    <div className="search-bar-container">
+      <input
+        className="search-bar"
+        type="text"
+        value={filterText}
+        placeholder="Search..."
+        onChange={(e) => onFilterTextChange(e.target.value)}
+      />
+    </div>
   );
 };
 
 const FilterableReceipt = ({ groceries }) => {
   const [tableData, setTableData] = useState(groceries);
   const [filterText, setFilterText] = useState('');
+  const [page, setPage] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const sortColumn = (sortField, sortOrder) => {
     if (sortOrder === 'none') {
@@ -132,17 +148,65 @@ const FilterableReceipt = ({ groceries }) => {
     }
   };
 
+  const totalPages = Math.ceil(tableData.length / itemsPerPage);
+
+  const handleNextPage = () => {
+    if (page < totalPages - 1) {
+      setPage(page + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (page > 0) {
+      setPage(page - 1);
+    }
+  };
+
+  const handleItemsPerPageChange = (event) => {
+    setItemsPerPage(Number(event.target.value));
+    setPage(0);
+  };
+
+  const startItem = page * itemsPerPage + 1;
+  const endItem = Math.min(startItem + itemsPerPage - 1, tableData.length);
+
   return (
     <div>
       <div className="receipt-head">
         <h1>Receipt</h1>
+        <div className="rows-per-page">
+          <label htmlFor="rowsPerPage">Rows per page:</label>
+          <select
+            id="rowsPerPage"
+            value={itemsPerPage}
+            onChange={handleItemsPerPageChange}
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+          </select>
+        </div>
         <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
       </div>
       <ReceiptTable
         groceries={tableData}
         filterText={filterText}
         sortColumn={sortColumn}
+        page={page}
+        itemsPerPage={itemsPerPage}
       />
+      <div className="pagination-controls">
+        <button onClick={handlePreviousPage} disabled={page === 0}>
+          <KeyboardArrowLeftIcon fontSize="large" />
+        </button>
+        <span>
+          {startItem}-{endItem} of {tableData.length} items
+        </span>
+        <button onClick={handleNextPage} disabled={page === totalPages - 1}>
+          <KeyboardArrowRightIcon fontSize="large" />
+        </button>
+      </div>
     </div>
   );
 };

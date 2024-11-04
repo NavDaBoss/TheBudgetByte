@@ -53,6 +53,7 @@ input:focus {
   justify-content: center;
   padding: 10px 0;
   position: relative;
+  gap: 20px;
 }
 
 .receipt-head h1 {
@@ -60,8 +61,14 @@ input:focus {
   font-weight: 700;
 }
 
-.search-bar {
-  margin-right: 20px;
+.rows-per-page label {
+  font-weight: 700;
+}
+
+.rows-per-page select {
+  margin-left: 0.5rem;
+  padding: 0.3rem;
+  font-weight: 700;
 }
 
 .receipt-table {
@@ -151,4 +158,30 @@ input:focus {
 .edit-icon-wrapper {
   position: relative;
   top: -1px;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.pagination-controls button {
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.pagination-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination-controls span {
+  font-weight: 700;
 }
