@@ -32,4 +32,4 @@ jobs:
           NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
         run: echo "Setting up environment variables"
       - name: Run tests
-        run: npm test
+        run: npx jest
