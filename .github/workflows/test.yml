@@ -24,12 +24,12 @@ jobs:
 
       - name: Build with Firebase API Keys
         env:
-          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.AIzaSyAg__3UrL0_d2NeoVDce0CxlJOaQYkbTIk }}
-          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.budgetbyte-d5bf8.firebaseapp.com }}
-          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.budgetbyte-d5bf8 }}
-          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.budgetbyte-d5bf8.appspot.com }}
-          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.386914039894 }}
-          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.1:386914039894:web:312390060d4abd98e3e3f7 }}
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
         run: npm run build
       - name: Run tests
         run: npm test
