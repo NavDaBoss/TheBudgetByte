@@ -6,6 +6,7 @@
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
 }
 
+/* Search Bar */
 input {
   padding: 10px;
   border: 2px solid black;
@@ -27,31 +28,18 @@ input:focus {
   outline: none;
 }
 
-.nav-bar {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 0;
-}
-
-.receipt {
+/* Receipt */
+.receipt-container {
   width: 60%;
   margin: 10px 0;
 }
 
-.receipt-date {
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  padding: 1rem 0;
-}
-
+/* Receipt Header */
 .receipt-head {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 0;
+  padding: 1rem 0;
   position: relative;
   gap: 20px;
 }
@@ -71,9 +59,33 @@ input:focus {
   font-weight: 700;
 }
 
+/* Receipt Table */
 .receipt-table {
   width: 100%;
   border-collapse: collapse;
+}
+
+.receipt-table th.quantity-column {
+  width: 15%;
+  text-align: right;
+}
+
+.receipt-table th.item-name-column {
+  width: 40%;
+}
+
+.receipt-table th.group-column {
+  width: 30%;
+}
+
+.receipt-table th.price-column {
+  width: 20%;
+  text-align: right;
+}
+
+.receipt-table td.quantity-column,
+.receipt-table td.price-column {
+  text-align: right;
 }
 
 .receipt-table tr:first-child td {
@@ -89,35 +101,9 @@ input:focus {
   letter-spacing: 0.5px;
 }
 
-.receipt-table-head th {
-  padding: 1rem 1.5rem;
-}
-
 .receipt-table th {
-  position: relative;
-  padding-right: 20px;
-}
-
-.receipt-table th::after {
-  content: '';
-  display: inline-block;
-  margin-left: 20px;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-top: 10px solid black;
-}
-
-.receipt-table th:hover::after {
-  border-top: 10px solid red;
-}
-
-.receipt-table thead th {
-  border-top: 2px dashed black;
+  padding: 1rem;
   border-bottom: 2px dashed black;
-}
-
-.receipt-table th:last-child {
-  text-align: right;
 }
 
 .receipt-table td:last-child {
@@ -132,10 +118,6 @@ input:focus {
   padding: 0.5rem 1.5rem;
 }
 
-.receipt-body tr {
-  background-color: var(--background);
-}
-
 .receipt-body tr:last-child {
   border-bottom: 2px dashed black;
 }
@@ -145,21 +127,24 @@ input:focus {
   transition: filter 0.3s ease;
 }
 
-.price-column {
-  text-align: right;
-}
-
-.item-name-column {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-}
-
 .edit-icon-wrapper {
   position: relative;
   top: -1px;
 }
 
+.sort-arrow {
+  display: inline-block;
+  margin-left: 20px;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid black;
+}
+
+.receipt-table th:hover .sort-arrow {
+  border-top: 10px solid red;
+}
+
+/* Pagination */
 .pagination-controls {
   display: flex;
   justify-content: center;
@@ -185,3 +170,4 @@ input:focus {
 .pagination-controls span {
   font-weight: 700;
 }
+

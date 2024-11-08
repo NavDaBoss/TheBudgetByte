@@ -4,10 +4,8 @@ import React, { useState } from 'react';
 
 import './dashboard.css';
 
-import EditIcon from '@mui/icons-material/EditOutlined';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import SearchIcon from '@mui/icons-material/Search';
 
 import Navbar from '../components/Navbar';
 import Summary from '../components/Summary';
@@ -31,19 +29,39 @@ const ReceiptHead = ({ sortColumn }) => {
   };
 
   return (
-    <thead className="receipt-table-head">
+    <thead>
       <tr>
-        <th key="quantity" onClick={() => handleSortChange('quantity')}>
+        <th
+          key="quantity"
+          className="quantity-column"
+          onClick={() => handleSortChange('quantity')}
+        >
           QTY
+          <span className="sort-arrow"></span>
         </th>
-        <th key="itemName" onClick={() => handleSortChange('itemName')}>
+        <th
+          key="itemName"
+          className="item-name-column"
+          onClick={() => handleSortChange('itemName')}
+        >
           ITEM
+          <span className="sort-arrow"></span>
         </th>
-        <th key="group" onClick={() => handleSortChange('group')}>
+        <th
+          key="group"
+          className="group-column"
+          onClick={() => handleSortChange('group')}
+        >
           GROUP
+          <span className="sort-arrow"></span>
         </th>
-        <th key="price" onClick={() => handleSortChange('price')}>
+        <th
+          key="price"
+          className="price-column"
+          onClick={() => handleSortChange('price')}
+        >
           PRICE
+          <span className="sort-arrow"></span>
         </th>
       </tr>
     </thead>
@@ -54,12 +72,7 @@ const ReceiptRow = ({ item }) => {
   return (
     <tr>
       <td className="quantity-column">{item.quantity}</td>
-      <td className="item-name-column">
-        {item.itemName}
-        <span className="edit-icon-wrapper">
-          <EditIcon />
-        </span>
-      </td>
+      <td className="item-name-column">{item.itemName}</td>
       <td className="group-column">{item.group}</td>
       <td className="price-column">${item.price.toFixed(2)}</td>
     </tr>
@@ -88,16 +101,6 @@ const ReceiptTable = ({
 
   return (
     <table className="receipt-table">
-      <colgroup>
-        {/* Quantity */}
-        <col style={{ width: '15%' }} />
-        {/* Symbol */}
-        <col style={{ width: '40%' }} />
-        {/* Change */}
-        <col style={{ width: '25%' }} />
-        {/* Group */}
-        <col style={{ width: '20%' }} />
-      </colgroup>
       <ReceiptHead sortColumn={sortColumn} />
       <tbody className="receipt-body">{rows}</tbody>
     </table>
@@ -118,7 +121,7 @@ const SearchBar = ({ filterText, onFilterTextChange }) => {
   );
 };
 
-const FilterableReceipt = ({ groceries }) => {
+const Receipt = ({ groceries }) => {
   const [tableData, setTableData] = useState(groceries);
   const [filterText, setFilterText] = useState('');
   const [page, setPage] = useState(0);
@@ -174,19 +177,6 @@ const FilterableReceipt = ({ groceries }) => {
     <div>
       <div className="receipt-head">
         <h1>Receipt</h1>
-        <div className="rows-per-page">
-          <label htmlFor="rowsPerPage">Rows per page:</label>
-          <select
-            id="rowsPerPage"
-            value={itemsPerPage}
-            onChange={handleItemsPerPageChange}
-          >
-            <option value={5}>5</option>
-            <option value={10}>10</option>
-            <option value={20}>20</option>
-            <option value={50}>50</option>
-          </select>
-        </div>
         <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
       </div>
       <ReceiptTable
@@ -197,6 +187,18 @@ const FilterableReceipt = ({ groceries }) => {
         itemsPerPage={itemsPerPage}
       />
       <div className="pagination-controls">
+        <div className="rows-per-page">
+          <label htmlFor="rowsPerPage">Rows per page:</label>
+          <select
+            id="rowsPerPage"
+            value={itemsPerPage}
+            onChange={handleItemsPerPageChange}
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+          </select>
+        </div>
         <button onClick={handlePreviousPage} disabled={page === 0}>
           <KeyboardArrowLeftIcon fontSize="large" />
         </button>
@@ -211,21 +213,15 @@ const FilterableReceipt = ({ groceries }) => {
   );
 };
 
-const Receipt = ({ groceries }) => {
-  return (
-    <div className="receipt">
-      <FilterableReceipt groceries={groceries} />
-    </div>
-  );
-};
-
 const Dashboard = () => {
   return (
     <div>
       <Navbar />
       <div className="section-container">
         <Summary groups={SummaryData.foodGroups} />
-        <Receipt groceries={GroceryData.groceries} />
+        <div className="receipt-container">
+          <Receipt groceries={GroceryData.groceries} />
+        </div>
       </div>
       <OcrUploadButton />
     </div>
