@@ -1,0 +1,131 @@
+.main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+}
+
+.column-container {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    max-width: 50rem;
+    padding-bottom: 10px;
+    height: 65vh;
+
+}
+
+
+.column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin: 0 10px;
+    width: 50%;
+    background-color: #f0f0f0; 
+    border-radius: 10px; 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+.profile-pic-container,
+.user-info-container{
+    margin-bottom: 10px;
+    margin-top: 45px;
+}
+
+
+.summary-pie-container {
+    display: grid;
+    place-items:  center;
+    width: 80%;
+    
+}
+
+
+
+.edit-name-btn,
+.upload-image-btn {
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    background-color: #4e8f03;
+    height: 50px;
+    width: 260px;
+    border-radius: 6px;
+    border: none;
+    font-size: 25px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    padding: 10px 15px; 
+}
+
+
+.upload-icon {
+    margin-right: 30px;        
+}
+.edit-icon {
+    margin-right: 30px;
+    margin-left: -27px;
+}
+
+.edit-name-btn {
+    justify-content: center;     
+}
+
+.upload-image-btn {
+    justify-content: center;    
+}
+
+
+h1 {
+    margin-bottom: 20px;
+    white-space: nowrap;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 6px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  
+  .modal-content input {
+    border: none;
+    outline: none;
+    padding-left: 10px;
+  }
+  
+  .modal-content h2 {
+    margin-bottom: 15px;
+  }
+  
+  .modal-content button {
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+    background-color: #4e8f03;
+    color: #ffffff;
+    border-radius: 6px;
+  }
+  
+.error-message {
+    color: #ff0000;
+    margin-bottom: 5px;
+ }

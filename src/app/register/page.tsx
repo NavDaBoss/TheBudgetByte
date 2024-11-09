@@ -128,7 +128,7 @@ export default function Register() {
       <button onClick={register} className="register">
         Register
       </button>
-      {errorMessage && <p>{errorMessage}</p>}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       <div className="title-line"></div>
       <div className="login-container">
         <p>Already have an account?</p>
