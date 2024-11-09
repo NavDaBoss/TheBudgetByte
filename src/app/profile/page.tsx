@@ -18,7 +18,6 @@ import SummaryPie from '../components/SummaryPie';
 import Image from 'next/image';
 import { mock } from 'node:test';
 
-
 export default function Profile() {
   const router = useRouter();
   const currentUser = auth.currentUser;
@@ -46,15 +45,15 @@ export default function Profile() {
     { name: 'Grains', value: 25 },
     { name: 'Proteins', value: 15 },
     { name: 'Dairy', value: 10 },
-  ]
+  ];
 
   const handleNameChange = async (event) => {
     setNewName(event.target.value); // Update the new name as user types
   };
 
   const handleClearNane = async () => {
-      setNewName('')
-  }
+    setNewName('');
+  };
 
   // Handle image file selection
   const handleProfilePicChange = (event) => {
@@ -105,7 +104,7 @@ export default function Profile() {
   const handleUpdateName = async () => {
     if (newName && currentUser !== null) {
       try {
-        if (newName.length > 20){
+        if (newName.length > 20) {
           setErrorMessage('Display Name cannot exceed 20 characters');
           throw new Error('Display Name cannot exceed 20 characters');
         }
@@ -125,56 +124,62 @@ export default function Profile() {
   return (
     <div className="main">
       <Navbar />
-      <h1>
-        Welcome, {currentUser ? currentUser.displayName : 'User'}!
-      </h1>
+      <h1>Welcome, {currentUser ? currentUser.displayName : 'User'}!</h1>
       <div className="column-container">
         <div className="column">
           {/* Display profile picture */}
           <div className="profile-pic-container">
             <Image
-              src={currentUser?.photoURL || '/assets/display_name_icon.svg' }
+              src={currentUser?.photoURL || '/assets/display_name_icon.svg'}
               alt="Profile"
               width={150}
               height={150}
               style={{ borderRadius: '50%' }}
-              placeholder="blur" 
-              blurDataURL="/assets/display_name_icon.svg" 
-            /> 
+              placeholder="blur"
+              blurDataURL="/assets/display_name_icon.svg"
+            />
           </div>
           <button onClick={handleEditProliePic} className="upload-image-btn">
             <Image
-                src="/assets/upload_icon.svg"
-                alt="Upload Icon"
-                width={20}
-                height={22.5}
-                className="upload-icon"
+              src="/assets/upload_icon.svg"
+              alt="Upload Icon"
+              width={20}
+              height={22.5}
+              className="upload-icon"
             />
             Upload Image
           </button>
           <div className="user-info-container">
-            {currentUser ? <h4>Email: {currentUser.email || 'N/A'}</h4> : <h4>N/A</h4>}
-            {currentUser ? <h4>Display Name: {currentUser.displayName || 'N/A'}</h4> : <h4>N/A</h4>}
+            {currentUser ? (
+              <h4>Email: {currentUser.email || 'N/A'}</h4>
+            ) : (
+              <h4>N/A</h4>
+            )}
+            {currentUser ? (
+              <h4>Display Name: {currentUser.displayName || 'N/A'}</h4>
+            ) : (
+              <h4>N/A</h4>
+            )}
           </div>
-       
+
           <button onClick={handleEditName} className="edit-name-btn">
             <Image
-                src="/assets/edit_icon.svg"
-                alt="Edit Icon"
-                width={20}
-                height={22.5}
-                className="edit-icon"
+              src="/assets/edit_icon.svg"
+              alt="Edit Icon"
+              width={20}
+              height={22.5}
+              className="edit-icon"
             />
             Edit Name
           </button>
-      
+
           {/* Pop-up for editing profile name */}
           {isEditingName && (
             <div className="modal-overlay">
               <div className="modal-content">
                 <h3>Edit Profile Name</h3>
                 <input
-                  id = "profileNameInput"
+                  id="profileNameInput"
                   type="text"
                   value={newName}
                   onChange={handleNameChange}
@@ -183,14 +188,15 @@ export default function Profile() {
                 <button onClick={handleUpdateName}>Save</button>
                 <button onClick={handleClearNane}>Clear</button>
                 <button onClick={() => setIsEditingName(false)}>Cancel</button>
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
+                {errorMessage && (
+                  <p className="error-message">{errorMessage}</p>
+                )}
               </div>
             </div>
           )}
           {isEditingPic && (
             <div className="modal-overlay">
               <div className="modal-content">
-              
                 <h2>Edit Profile Pic</h2>
                 <input
                   type="file"
@@ -204,12 +210,11 @@ export default function Profile() {
           )}
         </div>
         <div className="column">
-            <h1>Lifetime Stats</h1>
-            <h4>Number of Receipts Scanned: 10</h4>
-            <div className="summary-pie-container">
-              <SummaryPie data={mockPieData}/>
-            </div>
-           
+          <h1>Lifetime Stats</h1>
+          <h4>Number of Receipts Scanned: 10</h4>
+          <div className="summary-pie-container">
+            <SummaryPie data={mockPieData} />
+          </div>
         </div>
       </div>
     </div>
