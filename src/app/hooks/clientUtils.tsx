@@ -8,6 +8,16 @@ export const useProfileRedirect = () => {
   return () => router.push('/profile');
 };
 
+export const useDashBoardRedirect = () => {
+  const router = useRouter();
+  return () => router.push('/dashboard');
+};
+
+export const useAnalyticsRedirect = () => {
+  const router = useRouter();
+  return () => router.push('/analytics');
+};
+
 export const useLogout = () => {
   const router = useRouter();
   return async () => {

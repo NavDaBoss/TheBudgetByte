@@ -31,6 +31,12 @@ export default function Register() {
         setErrorMessage('Password must be at least 6 characters long.');
         throw new Error('Password must be at least 6 characters long.');
       }
+      if (displayName.length > 20) {
+        setErrorMessage('The Display Name cannot exceed 20 characters.');
+        throw new Error('The Display Name cannot exceed 20 characters.');
+      }
+
+      setErrorMessage('');
       const result = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -43,7 +49,9 @@ export default function Register() {
       await saveUserToFirestore(result.user); // Save user to Firestore
       router.push('/login'); // Redirect to login page
     } catch (error) {
-      if (password === confirmPassword && password.length >= 6) {
+      if (displayName.length > 20) {
+        setErrorMessage('The Display Name cannot exceed 20 characters.');
+      } else if (password === confirmPassword && password.length >= 6) {
         setErrorMessage('Email is not valid or already in use.');
       }
       console.error(error);
