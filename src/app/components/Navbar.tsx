@@ -1,9 +1,16 @@
-import { useProfileRedirect, useLogout } from '../hooks/clientUtils';
+import {
+  useProfileRedirect,
+  useDashBoardRedirect,
+  useAnalyticsRedirect,
+  useLogout,
+} from '../hooks/clientUtils';
 
 import '../styles/Navbar.css';
 
 const Navbar = () => {
   const profile = useProfileRedirect();
+  const dashboard = useDashBoardRedirect();
+  const analytics = useAnalyticsRedirect();
   const logout = useLogout();
 
   return (
@@ -14,6 +21,16 @@ const Navbar = () => {
           <li className="header-nav-item">
             <button className="header-nav-item-link" onClick={profile}>
               Profile
+            </button>
+          </li>
+          <li className="header-nav-item">
+            <button className="header-nav-item-link" onClick={dashboard}>
+              Dashboard
+            </button>
+          </li>
+          <li className="header-nav-item">
+            <button className="header-nav-item-link" onClick={analytics}>
+              Analytics
             </button>
           </li>
           <li className="header-nav-item">

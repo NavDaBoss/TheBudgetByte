@@ -37,6 +37,7 @@ export default function Login() {
 
   const login = async () => {
     try {
+      setErrorMessage('');
       await signInWithEmailAndPassword(auth, email, password);
       router.push('/dashboard');
     } catch (error) {
