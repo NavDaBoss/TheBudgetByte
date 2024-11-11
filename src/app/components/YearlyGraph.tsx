@@ -72,6 +72,7 @@ export const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({
   };
 
   const options = {
+    responsive: true,
     plugins: {
       legend: {
         display: false, // Hide the default legend
@@ -103,27 +104,25 @@ export const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({
   return (
     <Card>
       <CardContent>
-        <Typography variant="h5" component="div">
+        <Typography variant="h5" component="div" className="responsive-heading">
           Monthly Spending Overview ({selectedYear})
         </Typography>
 
-        {/* For every category within the custom legend */}
+        {/* Render custom checkable legend */}
         <div className="legend-container">
-          {Object.keys(params.categoryLegend).map((category) => {
-            return (
-              <FormControlLabel
-                key={category}
-                control={
-                  <Checkbox
-                    checked={params.categoryLegend[category]}
-                    onChange={() => handleCheckboxChange(category)}
-                    style={{ color: getBorderColor(category) }} // Use the logged border color here
-                  />
-                }
-                label={category}
-              />
-            );
-          })}
+          {Object.keys(params.categoryLegend).map((category) => (
+            <FormControlLabel
+              key={category}
+              control={
+                <Checkbox
+                  checked={params.categoryLegend[category]}
+                  onChange={() => handleCheckboxChange(category)}
+                  style={{ color: getBorderColor(category) }}
+                />
+              }
+              label={category}
+            />
+          ))}
         </div>
         <Line data={params.graphData} options={options} />
       </CardContent>
