@@ -11,7 +11,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import './register.css';
 import Image from 'next/image';
-import Navbar from '../components/Navbar';
 
 export default function Register() {
   const [email, setEmail] = useState('');
