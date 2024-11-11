@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './analytics.css';
 import Navbar from '../components/Navbar';
 import Summary from '../components/Summary';
@@ -10,6 +10,8 @@ import {
   GraphParams,
 } from '../components/YearlyGraph';
 import { userData, FoodTypes, FoodGroupInfo } from './user';
+import { useRouter } from 'next/navigation';
+import { auth } from '../firebase/firebaseConfig';
 
 interface DropDownProps {
   selectedValue: string; // Current selected value
@@ -166,6 +168,16 @@ const Analytics = () => {
     userData.yearlyOverview[selectedYear],
   );
   const graphParams = createYearlyMoneySpentGraphParams(selectedYear);
+  const router = useRouter();
+  const currentUser = auth.currentUser;
+
+  useEffect(() => {
+    if (!currentUser) {
+      router.push('/login');
+    }
+  }),
+    [currentUser, router];
+
   return (
     <div className="page">
       <div>

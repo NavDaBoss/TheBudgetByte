@@ -3,6 +3,11 @@
 import { useRouter } from 'next/navigation';
 import { auth, signOut } from '../firebase/firebaseConfig';
 
+export const useHomeRedirect = () => {
+  const router = useRouter();
+  return () => router.push('/');
+};
+
 export const useProfileRedirect = () => {
   const router = useRouter();
   return () => router.push('/profile');
