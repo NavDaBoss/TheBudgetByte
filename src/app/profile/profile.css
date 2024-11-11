@@ -42,7 +42,7 @@
   display: flex;
   align-items: center;
   color: #ffffff;
-  background-color: #4e8f03;
+  background-color: #15be53;
   height: 50px;
   width: 260px;
   border-radius: 6px;
@@ -111,7 +111,7 @@ h1 {
   padding: 10px 15px;
   margin: 5px;
   cursor: pointer;
-  background-color: #4e8f03;
+  background-color: #15be53;
   color: #ffffff;
   border-radius: 6px;
 }

@@ -5,6 +5,11 @@
   justify-content: center;
 }
 
+.header-logo {
+  margin: 10px;
+  font-weight: 700;
+}
+
 .title-line {
   content: '';
   width: 90%;
@@ -79,7 +84,7 @@ h2 {
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  background-color: #4e8f03;
+  background-color: #15be53;
   height: 50px;
   width: 236.562px;
   border-radius: 6px;
@@ -158,12 +163,12 @@ h2 {
   padding: 10px 15px;
   margin: 5px;
   cursor: pointer;
-  background-color: #4e8f03;
+  background-color: #15be53;
   color: #ffffff;
   border-radius: 6px;
 }
 
 .success-message {
-  color: #4e8f03;
+  color: #15be53;
   margin-bottom: 5px;
 }

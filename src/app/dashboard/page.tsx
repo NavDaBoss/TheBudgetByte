@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './dashboard.css';
 
@@ -15,6 +15,8 @@ import GroceryData from './groceries.json';
 import SummaryData from './food_summary.json';
 
 import OcrUploadButton from '../components/OcrUploadButton';
+import { useRouter } from 'next/navigation';
+import { auth } from '../firebase/firebaseConfig';
 
 const ReceiptHead = ({ sortColumn }) => {
   const [sortField, setSortField] = useState('');
@@ -220,6 +222,16 @@ const Receipt = ({ groceries }) => {
 };
 
 const Dashboard = () => {
+  const router = useRouter();
+  const currentUser = auth.currentUser;
+
+  useEffect(() => {
+    if (!currentUser) {
+      router.push('/login');
+    }
+  }),
+    [currentUser, router];
+
   return (
     <div>
       <Navbar />

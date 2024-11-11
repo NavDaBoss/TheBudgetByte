@@ -16,17 +16,30 @@ import './profile.css';
 import Navbar from '../components/Navbar';
 import SummaryPie from '../components/SummaryPie';
 import Image from 'next/image';
-import { mock } from 'node:test';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 export default function Profile() {
   const router = useRouter();
   const currentUser = auth.currentUser;
+  const [receiptCount, setReceiptCount] = useState<number>(0);
 
   useEffect(() => {
-    if (!auth.currentUser) {
+    if (!currentUser) {
       router.push('/login');
+    } else {
+      const fetchReceiptCount = async () => {
+        try {
+          const receiptsRef = collection(db, 'receiptData');
+          const q = query(receiptsRef, where('userID', '==', currentUser.uid));
+          const querySnapshot = await getDocs(q);
+          setReceiptCount(querySnapshot.size);
+        } catch (error) {
+          console.error('Error fetching receipt count:', error);
+        }
+      };
+      fetchReceiptCount();
     }
-  }, [auth.currentUser, router]);
+  }, [currentUser, router]);
 
   const logout = async () => {
     await signOut(auth);
@@ -47,11 +60,11 @@ export default function Profile() {
     { name: 'Dairy', value: 10 },
   ];
 
-  const handleNameChange = async (event) => {
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewName(event.target.value); // Update the new name as user types
   };
 
-  const handleClearNane = async () => {
+  const handleClearNane = () => {
     setNewName('');
   };
 
@@ -67,9 +80,6 @@ export default function Profile() {
 
   const handleEditProliePic = () => {
     setIsEditingPic(true); // Show the profile pic pop-up
-  };
-  const handleHomePage = async () => {
-    router.push('/');
   };
   // Handle profile update
   const handleUpdateProfile = async () => {
@@ -211,7 +221,7 @@ export default function Profile() {
         </div>
         <div className="column">
           <h1>Lifetime Stats</h1>
-          <h4>Number of Receipts Scanned: 10</h4>
+          <h4>Number of Receipts Scanned: {receiptCount}</h4>
           <div className="summary-pie-container">
             <SummaryPie data={mockPieData} />
           </div>

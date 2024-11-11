@@ -38,6 +38,7 @@
   margin: 0 10px;
   background-color: var(--background);
   color: var(--foreground);
+  cursor: pointer;
 }
 
 .header-nav-list button:hover {

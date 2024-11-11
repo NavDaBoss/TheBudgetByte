@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -24,6 +24,12 @@ export default function Login() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const router = useRouter();
+
+  useEffect(() => {
+    if (auth.currentUser) {
+      router.push('/dashboard');
+    }
+  }, [router, auth.currentUser]);
 
   const googleSignIn = async () => {
     try {
@@ -62,7 +68,13 @@ export default function Login() {
 
   return (
     <div className="main">
-      <Navbar />
+      <h1
+        className="header-logo"
+        onClick={() => router.push('/')}
+        style={{ cursor: 'pointer' }}
+      >
+        Budget Byte
+      </h1>
       <h1>Login</h1>
       <div className="title-line"></div>
       <div className="input-container">

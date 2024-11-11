@@ -60,7 +60,13 @@ export default function Register() {
 
   return (
     <div className="main">
-      <Navbar />
+      <h1
+        className="header-logo"
+        onClick={() => router.push('/')}
+        style={{ cursor: 'pointer' }}
+      >
+        Budget Byte
+      </h1>
       <h1>Register</h1>
       <div className="title-line"></div>
       <div className="input-container">
