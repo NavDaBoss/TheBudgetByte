@@ -129,7 +129,9 @@ export default function Profile() {
   return (
     <div className="main">
       <Navbar />
-      <h1 className="welcome-header">Welcome, {currentUser ? currentUser.displayName : 'User'}!</h1>
+      <h1 className="welcome-header">
+        Welcome, {currentUser ? currentUser.displayName : 'User'}!
+      </h1>
       <div className="column-container">
         <div className="column">
           {/* Display profile picture */}

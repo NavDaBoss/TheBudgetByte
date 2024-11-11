@@ -8,8 +8,7 @@ const SummaryPie = ({ data }) => {
       series={[
         {
           data: data,
-          arcLabel: (item) =>
-            item.value ? `${item.name}` : '',
+          arcLabel: (item) => (item.value ? `${item.name}` : ''),
           highlightScope: { fade: 'global', highlight: 'item' },
           faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
         },
