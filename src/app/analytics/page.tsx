@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './analytics.css';
 import Navbar from '../components/Navbar';
 import Summary from '../components/Summary';
@@ -10,6 +10,8 @@ import {
   GraphParams,
 } from '../components/YearlyGraph';
 import { userData, FoodTypes, FoodGroupInfo } from './user';
+import { useRouter } from 'next/navigation';
+import { auth } from '../firebase/firebaseConfig';
 
 interface DropDownProps {
   selectedValue: string; // Current selected value
@@ -166,36 +168,56 @@ const Analytics = () => {
     userData.yearlyOverview[selectedYear],
   );
   const graphParams = createYearlyMoneySpentGraphParams(selectedYear);
+  const router = useRouter();
+  const currentUser = auth.currentUser;
+
+  useEffect(() => {
+    if (!currentUser) {
+      router.push('/login');
+    }
+  }),
+    [currentUser, router];
+
   return (
     <div className="page">
       <div>
         <Navbar />
       </div>
-      <div className="section-container">
-        <DropDown
-          selectedValue={selectedYear}
-          setSelectedValue={setSelectedYear}
-          values={years}
-          drop_label="Selected Year:"
-        />
-      </div>
-      <div className="graph-container">
-        <AnalyticsLineGraph selectedYear={selectedYear} params={graphParams} />
-      </div>
-      <div className="section-container">
-        <DropDown
-          selectedValue={selectedMonth}
-          setSelectedValue={setSelectedMonth}
-          values={monthsInSelectedYear}
-          drop_label="Selected Month:"
-        />
-      </div>
-      <div className="pie-container">
-        <Summary
-          groups={
-            userData.yearlyOverview[selectedYear][selectedMonth].foodGroups
-          }
-        />
+      <div className="split-container">
+        <div className="year-container">
+          <div className="section-container">
+            <DropDown
+              selectedValue={selectedYear}
+              setSelectedValue={setSelectedYear}
+              values={years}
+              drop_label="Selected Year:"
+            />
+            <div className="graph-container">
+              <AnalyticsLineGraph
+                selectedYear={selectedYear}
+                params={graphParams}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="month-container">
+          <div className="section-container">
+            <DropDown
+              selectedValue={selectedMonth}
+              setSelectedValue={setSelectedMonth}
+              values={monthsInSelectedYear}
+              drop_label="Selected Month:"
+            />
+            <div className="summary-container">
+              <Summary
+                groups={
+                  userData.yearlyOverview[selectedYear][selectedMonth]
+                    .foodGroups
+                }
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

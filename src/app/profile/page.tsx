@@ -14,10 +14,33 @@ import {
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import './profile.css';
 import Navbar from '../components/Navbar';
+import SummaryPie from '../components/SummaryPie';
+import Image from 'next/image';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 export default function Profile() {
   const router = useRouter();
   const currentUser = auth.currentUser;
+  const [receiptCount, setReceiptCount] = useState<number>(0);
+
+  useEffect(() => {
+    if (!currentUser) {
+      router.push('/login');
+    } else {
+      const fetchReceiptCount = async () => {
+        try {
+          const receiptsRef = collection(db, 'receiptData');
+          const q = query(receiptsRef, where('userID', '==', currentUser.uid));
+          const querySnapshot = await getDocs(q);
+          setReceiptCount(querySnapshot.size);
+        } catch (error) {
+          console.error('Error fetching receipt count:', error);
+        }
+      };
+      fetchReceiptCount();
+    }
+  }, [currentUser, router]);
+
   const logout = async () => {
     await signOut(auth);
     router.push('/login'); // Redirect to login
@@ -27,9 +50,22 @@ export default function Profile() {
   const [isEditingPic, setIsEditingPic] = useState(false);
   const [newName, setNewName] = useState(''); // State for the new name
   const [newProfilePic, setNewProfilePic] = useState(null); // State for profile picture
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleNameChange = async (event) => {
+  const mockPieData = [
+    { name: 'Fruits', value: 30 },
+    { name: 'Veggies', value: 20 },
+    { name: 'Grains', value: 25 },
+    { name: 'Proteins', value: 15 },
+    { name: 'Dairy', value: 10 },
+  ];
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewName(event.target.value); // Update the new name as user types
+  };
+
+  const handleClearNane = () => {
+    setNewName('');
   };
 
   // Handle image file selection
@@ -44,9 +80,6 @@ export default function Profile() {
 
   const handleEditProliePic = () => {
     setIsEditingPic(true); // Show the profile pic pop-up
-  };
-  const handleHomePage = async () => {
-    router.push('/');
   };
   // Handle profile update
   const handleUpdateProfile = async () => {
@@ -81,6 +114,11 @@ export default function Profile() {
   const handleUpdateName = async () => {
     if (newName && currentUser !== null) {
       try {
+        if (newName.length > 20) {
+          setErrorMessage('Display Name cannot exceed 20 characters');
+          throw new Error('Display Name cannot exceed 20 characters');
+        }
+        setErrorMessage('');
         await updateProfile(currentUser, {
           displayName: newName, // Set the new displayName here
         });
@@ -94,61 +132,101 @@ export default function Profile() {
   };
 
   return (
-    <div>
+    <div className="main">
       <Navbar />
-      <h1>Profile</h1>
-      {currentUser ? (
-        <p>Hey {currentUser.displayName || 'User'}</p>
-      ) : (
-        <p>"User"</p>
-      )}
-      {currentUser ? <p>Email: {currentUser.email || 'N/A'}</p> : <p>"N/A"</p>}
-      {/* Display profile picture */}
-      <div>
-        {currentUser?.photoURL ? (
-          <img
-            src={currentUser.photoURL}
-            alt="Profile"
-            style={{ width: '100px', height: '100px', borderRadius: '50%' }}
-          />
-        ) : (
-          <p>No Profile Picture</p>
-        )}
-      </div>
+      <h1>Welcome, {currentUser ? currentUser.displayName : 'User'}!</h1>
+      <div className="column-container">
+        <div className="column">
+          {/* Display profile picture */}
+          <div className="profile-pic-container">
+            <Image
+              src={currentUser?.photoURL || '/assets/display_name_icon.svg'}
+              alt="Profile"
+              width={150}
+              height={150}
+              style={{ borderRadius: '50%' }}
+              placeholder="blur"
+              blurDataURL="/assets/display_name_icon.svg"
+            />
+          </div>
+          <button onClick={handleEditProliePic} className="upload-image-btn">
+            <Image
+              src="/assets/upload_icon.svg"
+              alt="Upload Icon"
+              width={20}
+              height={22.5}
+              className="upload-icon"
+            />
+            Upload Image
+          </button>
+          <div className="user-info-container">
+            {currentUser ? (
+              <h4>Email: {currentUser.email || 'N/A'}</h4>
+            ) : (
+              <h4>N/A</h4>
+            )}
+            {currentUser ? (
+              <h4>Display Name: {currentUser.displayName || 'N/A'}</h4>
+            ) : (
+              <h4>N/A</h4>
+            )}
+          </div>
 
-      <button onClick={handleEditName}>Edit Name</button>
-      <button onClick={handleEditProliePic}>Upload Image</button>
-      <button onClick={handleHomePage}>Return to Home Page</button>
-      <div>
-        <button onClick={logout}>Logout</button>
-      </div>
+          <button onClick={handleEditName} className="edit-name-btn">
+            <Image
+              src="/assets/edit_icon.svg"
+              alt="Edit Icon"
+              width={20}
+              height={22.5}
+              className="edit-icon"
+            />
+            Edit Name
+          </button>
 
-      {/* Pop-up for editing profile name */}
-      {isEditingName && (
-        <div className="popup">
-          <h3>Edit Profile Name</h3>
-          <input
-            type="text"
-            value={newName}
-            onChange={handleNameChange}
-            placeholder="New name"
-          />
-          <button onClick={handleUpdateName}>Save</button>
-          <button onClick={() => setIsEditingName(false)}>Cancel</button>
+          {/* Pop-up for editing profile name */}
+          {isEditingName && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <h3>Edit Profile Name</h3>
+                <input
+                  id="profileNameInput"
+                  type="text"
+                  value={newName}
+                  onChange={handleNameChange}
+                  placeholder="New name"
+                />
+                <button onClick={handleUpdateName}>Save</button>
+                <button onClick={handleClearNane}>Clear</button>
+                <button onClick={() => setIsEditingName(false)}>Cancel</button>
+                {errorMessage && (
+                  <p className="error-message">{errorMessage}</p>
+                )}
+              </div>
+            </div>
+          )}
+          {isEditingPic && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <h2>Edit Profile Pic</h2>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleProfilePicChange}
+                />
+                <button onClick={handleUpdateProfile}>Save</button>
+                <button onClick={() => setIsEditingPic(false)}>Cancel</button>
+              </div>
+            </div>
+          )}
         </div>
-      )}
-      {isEditingPic && (
-        <div className="popup">
-          <h3>Edit Profile Pic</h3>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleProfilePicChange}
-          />
-          <button onClick={handleUpdateProfile}>Save</button>
-          <button onClick={() => setIsEditingPic(false)}>Cancel</button>
+        <div className="column">
+          <h1>Lifetime Stats</h1>
+          <h4>Number of Receipts Scanned: {receiptCount}</h4>
+          <div className="summary-pie-container">
+            <SummaryPie data={mockPieData} />
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

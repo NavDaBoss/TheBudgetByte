@@ -3,8 +3,8 @@
 import '../styles/OcrUploadButton.css';
 import React, { useState } from 'react';
 import Tesseract from 'tesseract.js';
-import { db } from '../firebase/firebaseConfig'; // Import Firestore config
-import { collection, addDoc } from 'firebase/firestore'; // Import Firestore methods
+import { db, auth } from '../firebase/firebaseConfig'; // Import Firestore config
+import { collection, addDoc, updateDoc } from 'firebase/firestore'; // Import Firestore methods
 
 // MUI
 import Button from '@mui/material/Button';
@@ -41,6 +41,8 @@ export default function OcrUploadButton() {
   const [gptPrompt, setPrompt] = useState('');
   const [gptResponse, setResponse] = useState(null);
   const [gptError, setError] = useState('');
+
+  const currentUser = auth.currentUser;
 
   // SENDS REQUEST TO API AND RECEIVES RESPONSE
   const openaiTextExtraction = async (promptText) => {
@@ -146,11 +148,14 @@ export default function OcrUploadButton() {
       const apiResponse = await openaiTextExtraction(result.data.text);
 
       if (apiResponse) {
-        await addDoc(collection(db, 'receiptData'), {
+        const docRef = await addDoc(collection(db, 'receiptData'), {
           ...apiResponse,
-          timestamp: new Date(),
+          submittedTimestamp: new Date(),
           fileName: selectedImage.name,
+          userID: currentUser.uid,
         });
+
+        await updateDoc(docRef, { receiptID: docRef.id });
         console.log('OCR result saved to Firestore');
       }
     } catch (error) {

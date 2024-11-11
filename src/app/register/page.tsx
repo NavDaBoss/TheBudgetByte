@@ -31,6 +31,12 @@ export default function Register() {
         setErrorMessage('Password must be at least 6 characters long.');
         throw new Error('Password must be at least 6 characters long.');
       }
+      if (displayName.length > 20) {
+        setErrorMessage('The Display Name cannot exceed 20 characters.');
+        throw new Error('The Display Name cannot exceed 20 characters.');
+      }
+
+      setErrorMessage('');
       const result = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -43,7 +49,9 @@ export default function Register() {
       await saveUserToFirestore(result.user); // Save user to Firestore
       router.push('/login'); // Redirect to login page
     } catch (error) {
-      if (password === confirmPassword && password.length >= 6) {
+      if (displayName.length > 20) {
+        setErrorMessage('The Display Name cannot exceed 20 characters.');
+      } else if (password === confirmPassword && password.length >= 6) {
         setErrorMessage('Email is not valid or already in use.');
       }
       console.error(error);
@@ -52,7 +60,13 @@ export default function Register() {
 
   return (
     <div className="main">
-      <Navbar />
+      <h1
+        className="header-logo"
+        onClick={() => router.push('/')}
+        style={{ cursor: 'pointer' }}
+      >
+        Budget Byte
+      </h1>
       <h1>Register</h1>
       <div className="title-line"></div>
       <div className="input-container">
@@ -128,7 +142,7 @@ export default function Register() {
       <button onClick={register} className="register">
         Register
       </button>
-      {errorMessage && <p>{errorMessage}</p>}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       <div className="title-line"></div>
       <div className="login-container">
         <p>Already have an account?</p>
