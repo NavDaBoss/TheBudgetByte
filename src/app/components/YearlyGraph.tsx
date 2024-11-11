@@ -107,7 +107,7 @@ export const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({
         <Typography variant="h5" component="div" className="responsive-heading">
           Monthly Spending Overview ({selectedYear})
         </Typography>
-  
+
         {/* Render custom checkable legend */}
         <div className="legend-container">
           {Object.keys(params.categoryLegend).map((category) => (
@@ -127,5 +127,5 @@ export const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({
         <Line data={params.graphData} options={options} />
       </CardContent>
     </Card>
-  );  
+  );
 };

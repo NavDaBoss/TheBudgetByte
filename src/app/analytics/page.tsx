@@ -172,36 +172,40 @@ const Analytics = () => {
         <Navbar />
       </div>
       <div className="split-container">
-      <div className="year-container">
-      <div className="section-container">
-        <DropDown
-          selectedValue={selectedYear}
-          setSelectedValue={setSelectedYear}
-          values={years}
-          drop_label="Selected Year:"
-        />
-      <div className="graph-container">
-        <AnalyticsLineGraph selectedYear={selectedYear} params={graphParams} />
-      </div>
-      </div>
-      </div>
-      <div className="month-container">
-      <div className="section-container">
-        <DropDown
-          selectedValue={selectedMonth}
-          setSelectedValue={setSelectedMonth}
-          values={monthsInSelectedYear}
-          drop_label="Selected Month:"
-        />
-      <div className="summary-container">
-        <Summary
-          groups={
-            userData.yearlyOverview[selectedYear][selectedMonth].foodGroups
-          }
-        />
-      </div>
-      </div>
-      </div>
+        <div className="year-container">
+          <div className="section-container">
+            <DropDown
+              selectedValue={selectedYear}
+              setSelectedValue={setSelectedYear}
+              values={years}
+              drop_label="Selected Year:"
+            />
+            <div className="graph-container">
+              <AnalyticsLineGraph
+                selectedYear={selectedYear}
+                params={graphParams}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="month-container">
+          <div className="section-container">
+            <DropDown
+              selectedValue={selectedMonth}
+              setSelectedValue={setSelectedMonth}
+              values={monthsInSelectedYear}
+              drop_label="Selected Month:"
+            />
+            <div className="summary-container">
+              <Summary
+                groups={
+                  userData.yearlyOverview[selectedYear][selectedMonth]
+                    .foodGroups
+                }
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
