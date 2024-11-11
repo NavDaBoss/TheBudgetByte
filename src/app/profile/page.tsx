@@ -41,11 +41,6 @@ export default function Profile() {
     }
   }, [currentUser, router]);
 
-  const logout = async () => {
-    await signOut(auth);
-    router.push('/login'); // Redirect to login
-  };
-
   const [isEditingName, setIsEditingName] = useState(false); // Control the pop-up state
   const [isEditingPic, setIsEditingPic] = useState(false);
   const [newName, setNewName] = useState(''); // State for the new name
@@ -134,7 +129,7 @@ export default function Profile() {
   return (
     <div className="main">
       <Navbar />
-      <h1>Welcome, {currentUser ? currentUser.displayName : 'User'}!</h1>
+      <h1 className="welcome-header">Welcome, {currentUser ? currentUser.displayName : 'User'}!</h1>
       <div className="column-container">
         <div className="column">
           {/* Display profile picture */}
@@ -220,7 +215,7 @@ export default function Profile() {
           )}
         </div>
         <div className="column">
-          <h1>Lifetime Stats</h1>
+          <h1 className="lifetime-stats-header">Lifetime Stats</h1>
           <h4>Number of Receipts Scanned: {receiptCount}</h4>
           <div className="summary-pie-container">
             <SummaryPie data={mockPieData} />

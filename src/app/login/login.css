@@ -25,17 +25,6 @@
   text-align: center;
 }
 
-h1 {
-  font-weight: 400;
-  text-transform: uppercase;
-  padding-top: 3.125rem;
-}
-
-h2 {
-  font-weight: 400;
-  text-transform: uppercase;
-}
-
 .input-container {
   display: flex;
   align-items: center;

@@ -69,9 +69,14 @@
   justify-content: center;
 }
 
-h1 {
+.welcome-header {
   margin-bottom: 20px;
-  white-space: nowrap;
+}
+
+.lifetime-stats-header {
+  margin-top: 45px;
+  margin-bottom: 10px;
+
 }
 
 .modal-overlay {
