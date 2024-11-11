@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import {
   auth,
   db,
-  signOut,
   updateProfile,
   doc,
   setDoc,
