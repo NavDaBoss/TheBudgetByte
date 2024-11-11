@@ -73,7 +73,7 @@
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  background-color: #15be53;
+  background-color: var(--green);
   height: 50px;
   width: 236.562px;
   border-radius: 6px;
@@ -152,12 +152,12 @@
   padding: 10px 15px;
   margin: 5px;
   cursor: pointer;
-  background-color: #15be53;
+  background-color: var(--green);
   color: #ffffff;
   border-radius: 6px;
 }
 
 .success-message {
-  color: #15be53;
+  color: var(--green);
   margin-bottom: 5px;
 }

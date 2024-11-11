@@ -42,7 +42,7 @@
   display: flex;
   align-items: center;
   color: #ffffff;
-  background-color: #15be53;
+  background-color: var(--green);
   height: 50px;
   width: 260px;
   border-radius: 6px;
@@ -70,6 +70,7 @@
 }
 
 .welcome-header {
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
@@ -115,7 +116,7 @@
   padding: 10px 15px;
   margin: 5px;
   cursor: pointer;
-  background-color: #15be53;
+  background-color: var(--green);
   color: #ffffff;
   border-radius: 6px;
 }

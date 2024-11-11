@@ -61,7 +61,7 @@
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  background-color: #15be53;
+  background-color: var(--green);
   height: 50px;
   width: 236.562px;
   border-radius: 6px;
