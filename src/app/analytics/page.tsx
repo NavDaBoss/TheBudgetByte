@@ -171,6 +171,8 @@ const Analytics = () => {
       <div>
         <Navbar />
       </div>
+      <div className="split-container">
+      <div className="year-container">
       <div className="section-container">
         <DropDown
           selectedValue={selectedYear}
@@ -178,10 +180,12 @@ const Analytics = () => {
           values={years}
           drop_label="Selected Year:"
         />
-      </div>
       <div className="graph-container">
         <AnalyticsLineGraph selectedYear={selectedYear} params={graphParams} />
       </div>
+      </div>
+      </div>
+      <div className="month-container">
       <div className="section-container">
         <DropDown
           selectedValue={selectedMonth}
@@ -189,13 +193,15 @@ const Analytics = () => {
           values={monthsInSelectedYear}
           drop_label="Selected Month:"
         />
-      </div>
-      <div className="pie-container">
+      <div className="summary-container">
         <Summary
           groups={
             userData.yearlyOverview[selectedYear][selectedMonth].foodGroups
           }
         />
+      </div>
+      </div>
+      </div>
       </div>
     </div>
   );

@@ -8,11 +8,42 @@
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
 }
 
-.pie-container {
+.split-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.year-container{
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  max-width:67%;
+}
+
+.month-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  max-width: 43%;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.summary-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
 }
 
@@ -68,4 +99,19 @@
   border-right: 7px solid transparent;
   border-top: 10px solid black;
   align-self: center;
+}
+
+@media (max-width: 768px) {
+  .split-container {
+    flex-direction: column;
+    max-width: 100%;
+  }
+  .month-container{
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+  .year-container {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
 }

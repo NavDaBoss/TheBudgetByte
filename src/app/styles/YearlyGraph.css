@@ -13,7 +13,51 @@
   flex-direction: column;
   justify-content: center;
   align-items: left;
-  width: 75%;
+  width: 100%;
   margin: 0 auto;
-  padding-bottom: 20px;
+  padding-top:30px;
+}
+
+.legend-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  max-width: 100%;
+  margin-bottom: 8px;
+  justify-content: center;
+}
+
+.responsive-heading {
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  
+  .legend-container {
+    max-width: 100%; /* Full width on small screens */
+    justify-content: center;
+    margin-top: 16px;
+    gap: 0px;
+  }
+
+  /* Reduce checkbox size */
+  .legend-container .MuiFormControlLabel-root {
+    padding: 0px;
+    flex-basis: 25%; /* Stacks two checkbox per row */
+  }
+
+  .legend-container .MuiCheckbox-root {
+    padding: 0px;
+    transform: scale(0.5); /* Scale down checkboxes */
+  }
+
+  .responsive-heading {
+    font-size: 1rem; /* Smaller font size for mobile */
+    padding: 0px;
+  }
+
+  .css-rizt0-MuiTypography-root {
+    font-size: .75rem !important; /* Smaller font size for mobile */
+  }
 }
