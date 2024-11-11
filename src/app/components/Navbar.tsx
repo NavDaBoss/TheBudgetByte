@@ -27,17 +27,26 @@ const Navbar = () => {
       <nav className="header-nav">
         <ul className="header-nav-list">
           <li className="header-nav-item">
-            <button  className={`header-nav-item-link ${isActive('/profile') ? 'active' : ''}`} onClick={profile}>
+            <button
+              className={`header-nav-item-link ${isActive('/profile') ? 'active' : ''}`}
+              onClick={profile}
+            >
               Profile
             </button>
           </li>
           <li className="header-nav-item">
-            <button className={`header-nav-item-link ${isActive('/dashboard') ? 'active' : ''}`} onClick={dashboard}>
+            <button
+              className={`header-nav-item-link ${isActive('/dashboard') ? 'active' : ''}`}
+              onClick={dashboard}
+            >
               Dashboard
             </button>
           </li>
           <li className="header-nav-item">
-            <button className={`header-nav-item-link ${isActive('/analytics') ? 'active' : ''}`} onClick={analytics}>
+            <button
+              className={`header-nav-item-link ${isActive('/analytics') ? 'active' : ''}`}
+              onClick={analytics}
+            >
               Analytics
             </button>
           </li>
