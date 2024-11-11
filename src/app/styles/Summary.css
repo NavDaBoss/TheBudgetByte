@@ -5,30 +5,22 @@
   margin: 20px 0;
 }
 
+.pie-chart-container {
+  width: 30%;
+}
+
 .summary-table-container {
-  width: 450px;
-  margin-right: 50px;
+  width: 512px;
 }
 
 .summary-table {
   width: 100%;
   margin: 20px 0;
-  text-transform: uppercase;
+  border-collapse: collapse;
 }
 
-.summary-table th {
-  position: relative;
-  padding: 0 1rem;
-  padding-bottom: 0.5rem;
-  text-align: left;
-}
-
-.price {
-  text-align: right;
-}
-
-.summary-table th::after {
-  content: '';
+/* Sort Arrow */
+.sort-arrow {
   display: inline-block;
   margin-left: 20px;
   border-left: 7px solid transparent;
@@ -36,27 +28,70 @@
   border-top: 10px solid black;
 }
 
-.summary-table th:hover::after {
+.summary-table th:hover .sort-arrow {
   border-top: 10px solid red;
+}
+
+.summary-table td,
+.summary-table th {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Table Header */
+.summary-table th {
+  padding: 1rem;
+  text-transform: uppercase;
+  border-bottom: 2px dashed black;
+}
+
+.summary-table th.select-column {
+  width: 55px;
+}
+
+.summary-table th.group-column {
+  width: 25%;
+  text-align: left;
+}
+
+.summary-table th.quantity-column {
+  /* width: 10%; */
+  text-align: right;
+}
+
+.summary-table th.price-column {
+  /* width: 25%; */
+  text-align: right;
+}
+
+.summary-table th.price-percent-column {
+  /* width: 10%; */
+  width: 40%;
+  text-align: right;
 }
 
 .summary-table td {
   padding: 0.5rem 1rem;
-  vertical-align: middle;
 }
 
-.summary-table th:last-child {
+.summary-table tr:first-child td {
+  padding-top: 1.5rem;
+}
+
+.summary-table td.select-column {
+  width: 5%;
+  text-align: center;
+}
+
+.summary-table td.group-column {
+  text-transform: uppercase;
+}
+
+.summary-table td.quantity-column,
+.summary-table td.price-column,
+.summary-table td.price-percent-column {
   text-align: right;
-}
-
-.summary-group-column {
-  position: relative;
-}
-
-.group-quantity {
-  float: right;
-  text-transform: initial;
-  font-weight: 700;
 }
 
 .total-price-column {
