@@ -1,6 +1,7 @@
 :root {
   --background: #eef2f3;
   --foreground: #171717;
+  --green: #15be53;
   --gutterWidth: 16px;
   --windowWidth: 100vw;
   --layoutWidth: calc(var(--windowWidth) - var(--gutterWidth) * 2);
