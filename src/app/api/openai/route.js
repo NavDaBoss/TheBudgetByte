@@ -6,7 +6,7 @@ import { zodResponseFormat } from 'openai/helpers/zod';
 const openai = new OpenAI();
 
 // Define the schema for a single grocery item
-const groceryItemSchema = z.object({
+export const groceryItemSchema = z.object({
   itemName: z.string(),
   itemPrice: z.number(),
   quantity: z.number().int(),
@@ -14,7 +14,7 @@ const groceryItemSchema = z.object({
   totalPrice: z.number(),
 });
 
-const groceryReceiptExtraction = z.object({
+export const groceryReceiptExtraction = z.object({
   groceryStore: z.string(),
   receiptDate: z.string(),
   groceries: z.array(groceryItemSchema),
