@@ -4,7 +4,6 @@ import {
 } from '../api/openai/route';
 import { z } from 'zod';
 import { auth, db } from '../firebase/firebaseConfig';
-import { useRouter } from 'next/navigation';
 import {
   collection,
   getDocs,
@@ -12,8 +11,10 @@ import {
   where,
   updateDoc,
   addDoc,
+  doc,
 } from 'firebase/firestore';
 import {
+  FoodTypes,
   MonthlyData,
   YearlyOverview,
   YearlyOverviewData,
@@ -53,6 +54,7 @@ const createOrGetYearlyOverview = async () => {
 
       await updateDoc(docRef, { yearlyOverviewId: docRef.id });
       console.log('returning a newly created yearlyoverview');
+      // Return the new yearly overview
       return {
         yearlyOverviewId: docRef.id,
         userID: currentUser.uid,
@@ -145,6 +147,38 @@ const createOrGetMonthData = (
   }
 };
 
+// Update the user's food group data for the month, creates a new food group entry if it doesn't exist
+const updateFoodGroups = (
+  monthOverview: MonthlyData,
+  foodGroupsTotalCost: Record<FoodTypes, number>,
+  foodGroupsTotalQuantity: Record<FoodTypes, number>,
+) => {
+  // No need to update when there is no spending.
+  if (monthOverview.totalSpent === 0) {
+    return;
+  }
+  for (const foodType of Object.values(FoodTypes)) {
+    const existingGroup = monthOverview.foodGroups.find(
+      (group) => group.type === foodType,
+    );
+    if (existingGroup) {
+      existingGroup.totalCost += foodGroupsTotalCost[foodType];
+      existingGroup.quantity += foodGroupsTotalQuantity[foodType];
+      existingGroup.pricePercentage =
+        (existingGroup.totalCost / monthOverview.totalSpent) * 100;
+    } else {
+      // Add new entry if the foodGroup doesn't exist
+      monthOverview.foodGroups.push({
+        type: foodType,
+        totalCost: foodGroupsTotalCost[foodType],
+        quantity: foodGroupsTotalQuantity[foodType],
+        pricePercentage:
+          (foodGroupsTotalCost[foodType] / monthOverview.totalSpent) * 100,
+      });
+    }
+  }
+};
+
 // Updates the user's yearly overview with the cost and quantity of groceries from the parsed receipts.
 export const updateUsersYearlyOverview = async (
   groceries: GroceryItem[],
@@ -152,32 +186,31 @@ export const updateUsersYearlyOverview = async (
 ) => {
   const year = getYearFromReceiptDate(receiptDate);
   const month = getMonthFromReceiptDate(receiptDate);
-  console.log(year);
-  console.log(month);
   const overview = await createOrGetYearlyOverview();
-  console.log('overview is: ');
-  console.log(overview);
   if (!overview || !year || !month) {
     return;
   }
   const yearOverview = createOrGetYearData(overview, year);
   const monthOverview = createOrGetMonthData(yearOverview, month);
-  let foodGroupsTotalCost = {
-    Vegetables: 0,
-    Fruits: 0,
-    Grains: 0,
-    Protein: 0,
-    Dairy: 0,
+  let foodGroupsTotalCost: Record<FoodTypes, number> = {
+    [FoodTypes.Vegetables]: 0,
+    [FoodTypes.Fruits]: 0,
+    [FoodTypes.Grains]: 0,
+    [FoodTypes.Protein]: 0,
+    [FoodTypes.Dairy]: 0,
   };
-  let foodGroupsTotalQuantity = {
-    Vegetables: 0,
-    Fruits: 0,
-    Grains: 0,
-    Protein: 0,
-    Dairy: 0,
+  let foodGroupsTotalQuantity: Record<FoodTypes, number> = {
+    [FoodTypes.Vegetables]: 0,
+    [FoodTypes.Fruits]: 0,
+    [FoodTypes.Grains]: 0,
+    [FoodTypes.Protein]: 0,
+    [FoodTypes.Dairy]: 0,
   };
   for (const grocery of groceries) {
-    if (grocery.foodGroup === '') {
+    if (
+      grocery.foodGroup === '' ||
+      !Object.values(FoodTypes).includes(grocery.foodGroup as FoodTypes)
+    ) {
       continue;
     }
     // Type assertion: Ensure foodGroup is a key in foodGroupsTotalCost.
@@ -198,7 +231,21 @@ export const updateUsersYearlyOverview = async (
     (sum, cost) => sum + cost,
     0,
   );
-  console.log('total quantity + spent:');
-  console.log(totalQuantity);
-  console.log(totalSpent);
+  console.log('total spent' + totalSpent);
+  console.log('total quantitity' + totalQuantity);
+  // Update month overview and food groups with new totals
+  monthOverview.totalSpent += totalSpent;
+  monthOverview.totalQuantity += totalQuantity;
+  updateFoodGroups(monthOverview, foodGroupsTotalCost, foodGroupsTotalQuantity);
+  console.log(yearOverview);
+  // Update firestore with the new yearlyoverview changes
+  try {
+    const overviewRef = doc(db, 'yearlyOverview', overview.yearlyOverviewId); // Get the correct doc reference
+    await updateDoc(overviewRef, {
+      [`yearlyOverviewData.${year}.${month}`]: monthOverview, // Use dot notation to update the specific month
+    });
+    console.log('Yearly overview updated successfully.');
+  } catch (error) {
+    console.error('Error updating yearly overview in Firebase:', error);
+  }
 };
