@@ -21,11 +21,10 @@ const SummaryHead = ({ sortColumn }) => {
   return (
     <thead>
       <tr>
-        <th key="select" className="select-column"></th>
         <th
           key="group"
           className="group-column"
-          onClick={() => handleSortChange('type')}
+          onClick={() => handleSortChange('foodGroup')}
         >
           Group
           <span className="sort-arrow"></span>
@@ -58,19 +57,16 @@ const SummaryHead = ({ sortColumn }) => {
   );
 };
 
-const SummaryTable = ({ groups, sortColumn }) => {
+const SummaryTable = ({ foodGroups, sortColumn }) => {
   const rows = [];
 
-  groups.map((group) => {
+  foodGroups.map((foodGroup) => {
     rows.push(
-      <tr key={group.type}>
-        <td className="select-column">
-          <input type="checkbox" />
-        </td>
-        <td className="group-column">{group.type}</td>
-        <td className="quantity-column">{group.quantity}</td>
-        <td className="price-column">${group.totalCost.toFixed(2)}</td>
-        <td className="price-percent-column">{group.pricePercentage}%</td>
+      <tr key={foodGroups.foodGroup}>
+        <td className="group-column">{foodGroup.foodGroup}</td>
+        <td className="quantity-column">{foodGroup.quantity}</td>
+        <td className="price-column">${foodGroup.totalCost.toFixed(2)}</td>
+        <td className="price-percent-column">{foodGroup.pricePercentage}%</td>
       </tr>,
     );
   });
@@ -83,33 +79,31 @@ const SummaryTable = ({ groups, sortColumn }) => {
   );
 };
 
-const Summary = ({ groups }) => {
-  const [tableData, setTableData] = useState(groups);
+const Summary = ({ foodGroups }) => {
+  const [tableData, setTableData] = useState(foodGroups);
 
   useEffect(() => {
-    setTableData(groups);
-  }, [groups]);
+    setTableData(foodGroups);
+  }, [foodGroups]);
 
-  // const pieData = tableData.map((group) => ({
-  //   name: group.type.toUpperCase(),
-  //   value: group.pricePercentage,
-  // }));
   const pieData = useMemo(
     () =>
-      groups.map((group) => ({
-        name: group.type.toUpperCase(),
-        value: group.pricePercentage,
-      })),
-    [groups],
+      foodGroups
+        .map((foodGroup) => ({
+          label: foodGroup.quantity != 0 ? foodGroup.foodGroup : '',
+          value: foodGroup.pricePercentage,
+        }))
+        .filter((item) => item.label !== ''),
+    [foodGroups],
   );
 
   const sortColumn = (sortField, sortOrder) => {
     if (sortOrder === 'none') {
-      setTableData(groups);
+      setTableData(foodGroups);
       return;
     }
 
-    const sorted = [...groups].sort((a, b) => {
+    const sorted = [...foodGroups].sort((a, b) => {
       if (typeof a[sortField] === 'number') {
         return (a[sortField] - b[sortField]) * (sortOrder === 'asc' ? 1 : -1);
       }
@@ -129,7 +123,7 @@ const Summary = ({ groups }) => {
     <div className="summary-container">
       <div className="summary-table-container">
         <h1>Summary</h1>
-        <SummaryTable groups={tableData} sortColumn={sortColumn} />
+        <SummaryTable foodGroups={tableData} sortColumn={sortColumn} />
       </div>
       <div className="pie-chart-container">
         <SummaryPie data={pieData} />

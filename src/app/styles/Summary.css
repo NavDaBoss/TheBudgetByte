@@ -46,10 +46,6 @@
   border-bottom: 2px dashed black;
 }
 
-.summary-table th.select-column {
-  width: 55px;
-}
-
 .summary-table th.group-column {
   width: 25%;
   text-align: left;

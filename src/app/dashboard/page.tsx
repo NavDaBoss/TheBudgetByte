@@ -69,7 +69,7 @@ const Dashboard = () => {
     <div>
       <Navbar />
       <div className="section-container">
-        <Summary groups={SummaryData.foodGroups} />
+        <Summary foodGroups={SummaryData.foodGroups} />
         <div className="receipt-container">
           <Receipt groceries={groceries} />
         </div>
