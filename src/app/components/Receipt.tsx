@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import '../styles/Receipt.css';
 
@@ -64,8 +64,8 @@ const ReceiptRow = ({ item }) => {
     <tr>
       <td className="quantity-column">{item.quantity}</td>
       <td className="item-name-column">{item.itemName}</td>
-      <td className="group-column">{item.group}</td>
-      <td className="price-column">${item.price.toFixed(2)}</td>
+      <td className="group-column">{item.foodGroup}</td>
+      <td className="price-column">${item.itemPrice.toFixed(2)}</td>
     </tr>
   );
 };
@@ -117,6 +117,10 @@ const Receipt = ({ groceries }) => {
   const [filterText, setFilterText] = useState('');
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  useEffect(() => {
+    setTableData(groceries);
+  }, [groceries]);
 
   const sortColumn = (sortField, sortOrder) => {
     if (sortOrder === 'none') {
