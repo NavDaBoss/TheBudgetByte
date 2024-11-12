@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation';
 import {
   auth,
   db,
-  signOut,
   updateProfile,
   doc,
   setDoc,
   storage,
+  signInWithEmailAndPassword,
 } from '../firebase/firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import './profile.css';
@@ -17,6 +17,7 @@ import Navbar from '../components/Navbar';
 import SummaryPie from '../components/SummaryPie';
 import Image from 'next/image';
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import { updatePassword } from '@firebase/auth';
 
 export default function Profile() {
   const router = useRouter();
@@ -41,16 +42,16 @@ export default function Profile() {
     }
   }, [currentUser, router]);
 
-  const logout = async () => {
-    await signOut(auth);
-    router.push('/login'); // Redirect to login
-  };
-
   const [isEditingName, setIsEditingName] = useState(false); // Control the pop-up state
   const [isEditingPic, setIsEditingPic] = useState(false);
+  const [isResettingPassword, setIsResettingPassword] = useState(false);
   const [newName, setNewName] = useState(''); // State for the new name
-  const [newProfilePic, setNewProfilePic] = useState(null); // State for profile picture
+  const [newProfilePic, setNewProfilePic] = useState<File | null>(null); // State for profile picture
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const mockPieData = [
     { name: 'Fruits', value: 30 },
@@ -61,25 +62,49 @@ export default function Profile() {
   ];
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewName(event.target.value); // Update the new name as user types
+    setNewName(event.target.value);
   };
 
   const handleClearNane = () => {
     setNewName('');
   };
 
-  // Handle image file selection
-  const handleProfilePicChange = (event) => {
-    if (event.target.files[0]) {
+  const handleProfilePicChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (event.target.files && event.target.files[0]) {
       setNewProfilePic(event.target.files[0]);
     }
   };
+
+  const handleCurrentPasswordChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setCurrentPassword(event.target.value);
+  };
+
+  const handleNewPasswordChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setNewPassword(event.target.value);
+  };
+
+  const handleConfirmPasswordChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setConfirmPassword(event.target.value);
+  };
+
   const handleEditName = () => {
-    setIsEditingName(true); // Show the pop-up
+    setIsEditingName(true);
+  };
+
+  const handlePasswordReset = () => {
+    setIsResettingPassword(true);
   };
 
   const handleEditProliePic = () => {
-    setIsEditingPic(true); // Show the profile pic pop-up
+    setIsEditingPic(true);
   };
   // Handle profile update
   const handleUpdateProfile = async () => {
@@ -131,12 +156,56 @@ export default function Profile() {
     }
   };
 
+  const handleResetPassword = async () => {
+    // Check if new password and confirm password match
+    if (newPassword !== confirmPassword) {
+      setErrorMessage('New password and confirmation do not match.');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setErrorMessage('Password must be at least 6 characters long.');
+      return;
+    }
+
+    try {
+      setCurrentPassword('');
+      setConfirmPassword('');
+      setNewPassword('');
+      setSuccessMessage('');
+      setErrorMessage('');
+      // Reauthenticate the user with their current password
+      if (currentUser && currentUser.email) {
+        await signInWithEmailAndPassword(
+          auth,
+          currentUser.email,
+          currentPassword,
+        );
+
+        // If authentication is successful, update the password
+        await updatePassword(currentUser, newPassword);
+
+        setSuccessMessage('Your password has been updated successfully.');
+        setTimeout(() => {
+          setSuccessMessage('');
+          router.push('/login');
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Error resetting password:', error);
+      setErrorMessage('Failed to reset password. Please try again.');
+    }
+  };
+
   return (
     <div className="main">
       <Navbar />
-      <h1>Welcome, {currentUser ? currentUser.displayName : 'User'}!</h1>
+      <h1 className="welcome-header">
+        Welcome, {currentUser ? currentUser.displayName : 'User'}!
+      </h1>
       <div className="column-container">
         <div className="column">
+          <h1 className="user-settings-header">User Settings</h1>
           {/* Display profile picture */}
           <div className="profile-pic-container">
             <Image
@@ -183,6 +252,17 @@ export default function Profile() {
             Edit Name
           </button>
 
+          <button onClick={handlePasswordReset} className="reset-password-btn">
+            <Image
+              src="/assets/edit_icon.svg"
+              alt="Edit Icon"
+              width={20}
+              height={22.5}
+              className="edit-icon-2"
+            />
+            Reset Password
+          </button>
+
           {/* Pop-up for editing profile name */}
           {isEditingName && (
             <div className="modal-overlay">
@@ -195,9 +275,13 @@ export default function Profile() {
                   onChange={handleNameChange}
                   placeholder="New name"
                 />
-                <button onClick={handleUpdateName}>Save</button>
-                <button onClick={handleClearNane}>Clear</button>
-                <button onClick={() => setIsEditingName(false)}>Cancel</button>
+                <div className="button-container">
+                  <button onClick={handleUpdateName}>Save</button>
+                  <button onClick={handleClearNane}>Clear</button>
+                  <button onClick={() => setIsEditingName(false)}>
+                    Cancel
+                  </button>
+                </div>
                 {errorMessage && (
                   <p className="error-message">{errorMessage}</p>
                 )}
@@ -213,14 +297,56 @@ export default function Profile() {
                   accept="image/*"
                   onChange={handleProfilePicChange}
                 />
-                <button onClick={handleUpdateProfile}>Save</button>
-                <button onClick={() => setIsEditingPic(false)}>Cancel</button>
+                <div className="button-container">
+                  <button onClick={handleUpdateProfile}>Save</button>
+                  <button onClick={() => setIsEditingPic(false)}>Cancel</button>
+                </div>
+                {errorMessage && (
+                  <p className="error-message">{errorMessage}</p>
+                )}
+              </div>
+            </div>
+          )}
+          {isResettingPassword && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <h2>Reset Password</h2>
+                <input
+                  type="password"
+                  placeholder="Current Password"
+                  value={currentPassword}
+                  onChange={handleCurrentPasswordChange}
+                />
+                <input
+                  type="password"
+                  placeholder="New Password"
+                  value={newPassword}
+                  onChange={handleNewPasswordChange}
+                />
+                <input
+                  type="password"
+                  placeholder="Confirm New Password"
+                  value={confirmPassword}
+                  onChange={handleConfirmPasswordChange}
+                />
+                <div className="button-container">
+                  <button onClick={handleResetPassword}>Save</button>
+                  <button onClick={() => setIsResettingPassword(false)}>
+                    Cancel
+                  </button>
+                </div>
+                {errorMessage && (
+                  <p className="error-message">{errorMessage}</p>
+                )}
+                {successMessage && (
+                  <p className="success-message">{successMessage}</p>
+                )}
               </div>
             </div>
           )}
         </div>
         <div className="column">
-          <h1>Lifetime Stats</h1>
+          <h1 className="lifetime-stats-header">Lifetime Stats</h1>
           <h4>Number of Receipts Scanned: {receiptCount}</h4>
           <div className="summary-pie-container">
             <SummaryPie data={mockPieData} />

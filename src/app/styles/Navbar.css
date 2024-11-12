@@ -45,3 +45,25 @@
   background-color: var(--foreground);
   color: var(--background);
 }
+
+.header-nav-item-link {
+  position: relative;
+  padding-bottom: 5px;
+}
+
+.header-nav-item-link.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--green);
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.header-nav-item-link.active:hover::after {
+  transform: scaleX(0);
+}

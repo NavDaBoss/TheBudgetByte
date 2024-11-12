@@ -10,6 +10,11 @@ jest.mock('next/navigation', () => ({
   },
 }));
 
+jest.mock('next/navigation', () => ({
+  usePathname: jest.fn(),
+  useRouter: jest.fn(),
+}));
+
 // Mock Firebase modules
 const mockApp = {};
 

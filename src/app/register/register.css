@@ -18,12 +18,6 @@
   margin: 10px 0 20px 0;
 }
 
-h1 {
-  font-weight: 400;
-  text-transform: uppercase;
-  padding-top: 3.125rem;
-}
-
 .input-container {
   display: flex;
   align-items: center;
@@ -67,7 +61,7 @@ h1 {
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  background-color: #15be53;
+  background-color: var(--green);
   height: 50px;
   width: 236.562px;
   border-radius: 6px;

@@ -14,7 +14,6 @@ import {
 import { FirebaseError } from '@firebase/app';
 import './login.css';
 import Image from 'next/image';
-import Navbar from '../components/Navbar';
 
 export default function Login() {
   const [email, setEmail] = useState('');
