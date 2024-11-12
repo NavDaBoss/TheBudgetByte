@@ -1,6 +1,5 @@
 'use client';
 
-
 // pages/BudgetBytePage.js
 import React, { useState } from 'react';
 import Head from 'next/head';
@@ -9,7 +8,6 @@ import './landing.css';
 import { useRouter } from 'next/navigation';
 import GroceryData from './groceries.json';
 import Summary from './components/Summary';
-
 
 export enum FoodTypes {
   Veggies = 'Veggies',
@@ -155,8 +153,6 @@ const Receipt = ({ groceries }) => {
   );
 };
 
-
-
 export default function BudgetBytePage() {
   const router = useRouter();
 
@@ -171,20 +167,25 @@ export default function BudgetBytePage() {
       </Head>
       <div className="titleContainer">
         <h1 className="h1">BUDGET BYTE</h1>
-        <button className="loginButton" onClick={handleLogin}>LOGIN</button>
-        
+        <button className="loginButton" onClick={handleLogin}>
+          LOGIN
+        </button>
       </div>
       <div className="container">
         <div className="leftSection">
           <h2 className="slogan">Your Website For Health and Wealth</h2>
           <ul className="featuresList">
-            <li>Scan your grocery receipt to classify purchased foods into food groups</li>
+            <li>
+              Scan your grocery receipt to classify purchased foods into food
+              groups
+            </li>
 
             <li>See how much you spend in each food group</li>
-            <li>Create an account to get a monthly summary of your grocery expenses</li>
+            <li>
+              Create an account to get a monthly summary of your grocery
+              expenses
+            </li>
           </ul>
-
-
 
           <div className="buttonGroup">
             <button className="scanButton">SCAN RECEIPT</button>
@@ -192,63 +193,64 @@ export default function BudgetBytePage() {
         </div>
         <div className="rightSection">
           <Summary
-              groups={[
-                  {
-                    type: FoodTypes.Veggies,
-                    totalCost: 80,
-                    quantity: 4,
-                    pricePercentage: 18.8,
-                  },
-                  {
-                    type: FoodTypes.Fruits,
-                    totalCost: 50,
-                    quantity: 3,
-                    pricePercentage: 11.1,
-                  },
-                  {
-                    type: FoodTypes.Grain,
-                    totalCost: 60,
-                    quantity: 5,
-                    pricePercentage: 13.3,
-                  },
-                  {
-                    type: FoodTypes.Protein,
-                    totalCost: 200,
-                    quantity: 3,
-                    pricePercentage: 44.4,
-                  },
-                  {
-                    type: FoodTypes.Dairy,
-                    totalCost: 60,
-                    quantity: 2,
-                    pricePercentage: 13.3,
-                  },
-                ]
-              }
-              />
-                <Receipt groceries={[
-                                    {
-                                      "itemName": "bagels",
-                                      "group": "grains",
-                                      "price": 4.66,
-                                      "quantity": 1,
-                                      "totalPrice": 4.66
-                                    },
-                                    {
-                                      "itemName": "cheese",
-                                      "group": "dairy",
-                                      "price": 3.45,
-                                      "quantity": 2,
-                                      "totalPrice": 6.9
-                                    },
-                                    {
-                                      "itemName": "apples",
-                                      "group": "fruits",
-                                      "price": 1.99,
-                                      "quantity": 3,
-                                      "totalPrice": 5.97
-                                    }
-                                  ]} />
+            groups={[
+              {
+                type: FoodTypes.Veggies,
+                totalCost: 80,
+                quantity: 4,
+                pricePercentage: 18.8,
+              },
+              {
+                type: FoodTypes.Fruits,
+                totalCost: 50,
+                quantity: 3,
+                pricePercentage: 11.1,
+              },
+              {
+                type: FoodTypes.Grain,
+                totalCost: 60,
+                quantity: 5,
+                pricePercentage: 13.3,
+              },
+              {
+                type: FoodTypes.Protein,
+                totalCost: 200,
+                quantity: 3,
+                pricePercentage: 44.4,
+              },
+              {
+                type: FoodTypes.Dairy,
+                totalCost: 60,
+                quantity: 2,
+                pricePercentage: 13.3,
+              },
+            ]}
+          />
+          <Receipt
+            groceries={[
+              {
+                itemName: 'bagels',
+                group: 'grains',
+                price: 4.66,
+                quantity: 1,
+                totalPrice: 4.66,
+              },
+              {
+                itemName: 'cheese',
+                group: 'dairy',
+                price: 3.45,
+                quantity: 2,
+                totalPrice: 6.9,
+              },
+              {
+                itemName: 'apples',
+                group: 'fruits',
+                price: 1.99,
+                quantity: 3,
+                totalPrice: 5.97,
+              },
+            ]}
+          />
         </div>
       </div>
     </div>
