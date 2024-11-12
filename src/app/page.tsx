@@ -1,35 +1,157 @@
-// 'use client';
-
-// import styles from './page.module.css';
-// import { useRouter } from 'next/navigation';
-// import { useAuth } from './hooks/useAuth';
-// import { useEffect } from 'react';
-
-// export default function Home() {
-//   const router = useRouter();
-//   const user = useAuth();
-
-//   return (
-//     <div>
-//       <h1>Welcome to BudgetByte!!</h1>
-//       <p>Please log in or register to continue</p>
-//       <button onClick={() => router.push('/login')}>Log In</button>
-//       <button onClick={() => router.push('/register')}>Register</button>
-//       <button onClick={() => router.push('/profile')}>Profile</button>
-//       <button onClick={() => router.push('/dashboard')}>Dashboard</button>
-//       <button onClick={() => router.push('/ocr')}>OCR</button>
-//       <button onClick={() => router.push('/analytics')}>Analytics</button>
-//     </div>
-//   );
-// }
-
 'use client';
 
 // pages/BudgetBytePage.js
+import React, { useState } from 'react';
 import Head from 'next/head';
-import './globals.css';
-import styles from './page.module.css';
+import EditIcon from '@mui/icons-material/EditOutlined';
+import './landing.css';
 import { useRouter } from 'next/navigation';
+import GroceryData from './groceries.json';
+import Summary from './components/Summary';
+
+export enum FoodTypes {
+  Veggies = 'Veggies',
+  Fruits = 'Fruits',
+  Grain = 'Grain',
+  Protein = 'Protein',
+  Dairy = 'Dairy',
+}
+
+const ReceiptHead = ({ sortColumn }) => {
+  const [sortField, setSortField] = useState('');
+  const [order, setOrder] = useState('asc');
+
+  const handleSortChange = (accessor) => {
+    let sortOrder = 'asc';
+    if (accessor === sortField) {
+      sortOrder = order === 'asc' ? 'desc' : order === 'desc' ? 'none' : 'asc';
+    }
+    setSortField(accessor);
+    setOrder(sortOrder);
+    sortColumn(accessor, sortOrder);
+  };
+
+  return (
+    <thead className="receipt-table-head">
+      <tr>
+        <th key="quantity" onClick={() => handleSortChange('quantity')}>
+          QTY
+        </th>
+        <th key="itemName" onClick={() => handleSortChange('itemName')}>
+          ITEM
+        </th>
+        <th key="group" onClick={() => handleSortChange('group')}>
+          GROUP
+        </th>
+        <th key="price" onClick={() => handleSortChange('price')}>
+          PRICE
+        </th>
+      </tr>
+    </thead>
+  );
+};
+
+const ReceiptRow = ({ item }) => {
+  return (
+    <tr>
+      <td className="quantity-column">{item.quantity}</td>
+      <td className="item-name-column">
+        {item.itemName}
+        <EditIcon />
+      </td>
+      <td className="group-column">{item.group}</td>
+      <td className="price-column">${item.price.toFixed(2)}</td>
+    </tr>
+  );
+};
+
+const ReceiptTable = ({ groceries, filterText, sortColumn }) => {
+  const rows = [];
+
+  groceries.map((item) => {
+    if (item.itemName.toLowerCase().indexOf(filterText.toLowerCase()) === -1) {
+      return;
+    }
+    rows.push(<ReceiptRow item={item} key={item.itemName} />);
+  });
+
+  return (
+    <table className="receipt-table">
+      <colgroup>
+        <col style={{ width: '15%' }} />
+        <col style={{ width: '40%' }} />
+        <col style={{ width: '25%' }} />
+        <col style={{ width: '20%' }} />
+      </colgroup>
+
+      <ReceiptHead sortColumn={sortColumn} />
+      <tbody className="receipt-body">{rows}</tbody>
+    </table>
+  );
+};
+
+const SearchBar = ({ filterText, onFilterTextChange }) => {
+  return (
+    <input
+      className="search-bar"
+      type="text"
+      value={filterText}
+      placeholder="Search..."
+      onChange={(e) => onFilterTextChange(e.target.value)}
+    />
+  );
+};
+
+const FilterableReceipt = ({ groceries }) => {
+  const [tableData, setTableData] = useState(groceries);
+  const [filterText, setFilterText] = useState('');
+
+  const sortColumn = (sortField, sortOrder) => {
+    if (sortOrder === 'none') {
+      setTableData(groceries);
+      return;
+    }
+
+    if (sortField) {
+      const sorted = [...groceries].sort((a, b) => {
+        if (typeof a[sortField] === 'number') {
+          return (a[sortField] - b[sortField]) * (sortOrder === 'asc' ? 1 : -1);
+        }
+        a = a[sortField].toLowerCase();
+        b = b[sortField].toLowerCase();
+
+        return (
+          a.localeCompare(b, 'en', {
+            numeric: true,
+          }) * (sortOrder === 'asc' ? 1 : -1)
+        );
+      });
+      setTableData(sorted);
+    }
+  };
+
+  return (
+    <div>
+      <div className="receipt-head">
+        <h1>Receipt</h1>
+        <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
+      </div>
+      <ReceiptTable
+        groceries={tableData}
+        filterText={filterText}
+        sortColumn={sortColumn}
+      />
+    </div>
+  );
+};
+
+const Receipt = ({ groceries }) => {
+  return (
+    <div className="receipt">
+      <FilterableReceipt groceries={groceries} />
+    </div>
+  );
+};
 
 export default function BudgetBytePage() {
   const router = useRouter();
@@ -43,62 +165,92 @@ export default function BudgetBytePage() {
       <Head>
         <title>Budget Byte</title>
       </Head>
-      <div className={styles.titleContainer}>
-        <h1 className={styles.h1}>BUDGET BYTE</h1>
+      <div className="titleContainer">
+        <h1 className="h1">BUDGET BYTE</h1>
+        <button className="loginButton" onClick={handleLogin}>
+          LOGIN
+        </button>
       </div>
-      <div className={styles.container}>
-        <div className={styles.leftSection}>
-          <h2 className={styles.h2}>Your website for health and wealth</h2>
-          <p className={styles.description}>
-            Scan your receipt from your most recent grocery trip
-          </p>
-          <div className={styles.buttonGroup}>
-            <button className={styles.scanButton}>SCAN RECEIPT</button>
-            <button className={styles.loginButton} onClick={handleLogin}>
-              LOGIN
-            </button>
+      <div className="container">
+        <div className="leftSection">
+          <h2 className="slogan">Your Website For Health and Wealth</h2>
+          <ul className="featuresList">
+            <li>
+              Scan your grocery receipt to classify purchased foods into food
+              groups
+            </li>
+
+            <li>See how much you spend in each food group</li>
+            <li>
+              Create an account to get a monthly summary of your grocery
+              expenses
+            </li>
+          </ul>
+
+          <div className="buttonGroup">
+            <button className="scanButton">SCAN RECEIPT</button>
           </div>
         </div>
-        <div className={styles.rightSection}>
-          <div className={styles.receipt}>
-            <p className={styles.date}>Thursday, October 10, 2024</p>
-            <h3>Grocery Trip #0001 for Eric</h3>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>QTY</th>
-                  <th>ITEMS</th>
-                  <th>CATEGORY</th>
-                  <th>PRICE</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>01</td>
-                  <td>Bagels</td>
-                  <td>Grains</td>
-                  <td>$4.66</td>
-                </tr>
-                <tr>
-                  <td>02</td>
-                  <td>Cheese</td>
-                  <td>Dairy</td>
-                  <td>$3.45</td>
-                </tr>
-                <tr>
-                  <td>03</td>
-                  <td>Apples</td>
-                  <td>Fruits</td>
-                  <td>$1.99</td>
-                </tr>
-              </tbody>
-            </table>
-            <div className={styles.summary}>
-              <p>Item Count: 6</p>
-              <p>Total: $17.53</p>
-            </div>
-            <div className={styles.chart}>{/* Placeholder for chart */}</div>
-          </div>
+        <div className="rightSection">
+          <Summary
+            groups={[
+              {
+                type: FoodTypes.Veggies,
+                totalCost: 80,
+                quantity: 4,
+                pricePercentage: 18.8,
+              },
+              {
+                type: FoodTypes.Fruits,
+                totalCost: 50,
+                quantity: 3,
+                pricePercentage: 11.1,
+              },
+              {
+                type: FoodTypes.Grain,
+                totalCost: 60,
+                quantity: 5,
+                pricePercentage: 13.3,
+              },
+              {
+                type: FoodTypes.Protein,
+                totalCost: 200,
+                quantity: 3,
+                pricePercentage: 44.4,
+              },
+              {
+                type: FoodTypes.Dairy,
+                totalCost: 60,
+                quantity: 2,
+                pricePercentage: 13.3,
+              },
+            ]}
+          />
+          <Receipt
+            groceries={[
+              {
+                itemName: 'bagels',
+                group: 'grains',
+                price: 4.66,
+                quantity: 1,
+                totalPrice: 4.66,
+              },
+              {
+                itemName: 'cheese',
+                group: 'dairy',
+                price: 3.45,
+                quantity: 2,
+                totalPrice: 6.9,
+              },
+              {
+                itemName: 'apples',
+                group: 'fruits',
+                price: 1.99,
+                quantity: 3,
+                totalPrice: 5.97,
+              },
+            ]}
+          />
         </div>
       </div>
     </div>
