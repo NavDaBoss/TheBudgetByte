@@ -1,7 +1,7 @@
-enum FoodTypes {
-  Vegetables = 'Veggies',
+export enum FoodTypes {
+  Vegetables = 'Vegetables',
   Fruits = 'Fruits',
-  Grains = 'Grain',
+  Grains = 'Grains',
   Protein = 'Protein',
   Dairy = 'Dairy',
 }
@@ -32,10 +32,4 @@ interface YearlyOverview {
   userID: string;
 }
 
-export type {
-  FoodTypes,
-  FoodGroupInfo,
-  MonthlyData,
-  YearlyOverviewData,
-  YearlyOverview,
-};
+export type { FoodGroupInfo, MonthlyData, YearlyOverviewData, YearlyOverview };
