@@ -41,7 +41,7 @@ const ReceiptHead = ({ sortColumn }) => {
         <th
           key="group"
           className="group-column"
-          onClick={() => handleSortChange('group')}
+          onClick={() => handleSortChange('foodGroup')}
         >
           GROUP
           <span className="sort-arrow"></span>
@@ -49,7 +49,7 @@ const ReceiptHead = ({ sortColumn }) => {
         <th
           key="price"
           className="price-column"
-          onClick={() => handleSortChange('price')}
+          onClick={() => handleSortChange('itemPrice')}
         >
           PRICE
           <span className="sort-arrow"></span>
