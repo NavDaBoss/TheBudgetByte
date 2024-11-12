@@ -15,6 +15,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
+// import { updateUsersYearlyOverview } from '../analytics/updateYearlyData';
 
 // For my MUI Upload Button
 const VisuallyHiddenInput = styled('input')({
@@ -146,7 +147,6 @@ export default function OcrUploadButton() {
 
       // Send the OCR result to Firestore (to 'receiptData' collection)
       const apiResponse = await openaiTextExtraction(result.data.text);
-
       if (apiResponse) {
         const docRef = await addDoc(collection(db, 'receiptData'), {
           ...apiResponse,
@@ -157,6 +157,7 @@ export default function OcrUploadButton() {
 
         await updateDoc(docRef, { receiptID: docRef.id });
         console.log('OCR result saved to Firestore');
+        // updateUsersYearlyOverview(apiResponse.groceries, apiResponse.receiptDate);
       }
     } catch (error) {
       console.error('Error extracting text or saving to Firestore:', error);
