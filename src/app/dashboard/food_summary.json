@@ -1,31 +1,31 @@
 {
   "foodGroups": [
     {
-      "type": "fruits",
+      "type": "Fruits",
       "quantity": 3,
       "totalCost": 5.97,
       "pricePercentage": 34.1
     },
     {
-      "type": "vegetables",
+      "type": "Vegetables",
       "quantity": 0,
       "totalCost": 0.0,
       "pricePercentage": 0
     },
     {
-      "type": "grains",
+      "type": "Grains",
       "quantity": 1,
       "totalCost": 4.66,
       "pricePercentage": 26.6
     },
     {
-      "type": "protein",
+      "type": "Protein",
       "quantity": 0,
       "totalCost": 0.0,
       "pricePercentage": 0
     },
     {
-      "type": "dairy",
+      "type": "Dairy",
       "quantity": 2,
       "totalCost": 6.9,
       "pricePercentage": 39.4

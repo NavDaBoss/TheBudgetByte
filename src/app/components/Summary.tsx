@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
-
-import SummaryPie from '../components/SummaryPie';
+import { useState, useMemo } from 'react';
+import { Doughnut } from 'react-chartjs-2';
+import 'chart.js/auto';
 
 import '../styles/Summary.css';
 
@@ -21,11 +21,10 @@ const SummaryHead = ({ sortColumn }) => {
   return (
     <thead>
       <tr>
-        <th key="select" className="select-column"></th>
         <th
           key="group"
           className="group-column"
-          onClick={() => handleSortChange('type')}
+          onClick={() => handleSortChange('foodGroup')}
         >
           Group
           <span className="sort-arrow"></span>
@@ -58,81 +57,69 @@ const SummaryHead = ({ sortColumn }) => {
   );
 };
 
-const SummaryTable = ({ groups, sortColumn }) => {
-  const rows = [];
+const Summary = ({ data, totalAmount }) => {
+  const colorMap = {
+    Fruits: 'red',
+    Vegetables: 'green',
+    Protein: 'purple',
+    Grains: 'orange',
+    Dairy: 'blue',
+  };
 
-  groups.map((group) => {
-    rows.push(
-      <tr key={group.type}>
-        <td className="select-column">
-          <input type="checkbox" />
-        </td>
-        <td className="group-column">{group.type}</td>
-        <td className="quantity-column">{group.quantity}</td>
-        <td className="price-column">${group.totalCost.toFixed(2)}</td>
-        <td className="price-percent-column">{group.pricePercentage}%</td>
-      </tr>,
-    );
-  });
-
-  return (
-    <table className="summary-table">
-      <SummaryHead sortColumn={sortColumn} />
-      <tbody>{rows}</tbody>
-    </table>
-  );
-};
-
-const Summary = ({ groups }) => {
-  const [tableData, setTableData] = useState(groups);
-
-  useEffect(() => {
-    setTableData(groups);
-  }, [groups]);
-
-  // const pieData = tableData.map((group) => ({
-  //   name: group.type.toUpperCase(),
-  //   value: group.pricePercentage,
-  // }));
   const pieData = useMemo(
     () =>
-      groups.map((group) => ({
-        name: group.type.toUpperCase(),
-        value: group.pricePercentage,
-      })),
-    [groups],
+      data
+        .map((item) => ({
+          label: item.type,
+          value: item.pricePercentage,
+          color: colorMap[item.type],
+        }))
+        .sort((a, b) => b.value - a.value),
+    [data],
   );
 
-  const sortColumn = (sortField, sortOrder) => {
-    if (sortOrder === 'none') {
-      setTableData(groups);
-      return;
-    }
-
-    const sorted = [...groups].sort((a, b) => {
-      if (typeof a[sortField] === 'number') {
-        return (a[sortField] - b[sortField]) * (sortOrder === 'asc' ? 1 : -1);
-      }
-      a = a[sortField].toLowerCase();
-      b = b[sortField].toLowerCase();
-
-      return (
-        a.localeCompare(b, 'en', {
-          numeric: true,
-        }) * (sortOrder === 'asc' ? 1 : -1)
-      );
-    });
-    setTableData(sorted);
+  const chartData = {
+    labels: pieData.map((item) => item.label),
+    datasets: [
+      {
+        data: pieData.map((item) => item.value),
+        backgroundColor: pieData.map((item) => item.color),
+        borderWidth: 0,
+      },
+    ],
   };
 
   return (
-    <div className="summary-container">
-      <div className="summary-table-container">
-        <h1>Summary</h1>
-        <SummaryTable groups={tableData} sortColumn={sortColumn} />
-      </div>
-      <div className="pie-chart-container">
-        <SummaryPie data={pieData} />
+    <div className="summary-card">
+      <h2>Summary</h2>
+      <div className="chart-legend-container">
+        <div className="doughnut-chart">
+          <Doughnut
+            data={chartData}
+            options={{
+              cutout: '80%',
+              plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false },
+              },
+            }}
+          />
+          <div className="doughnut-center">
+            <h2>${totalAmount}</h2>
+          </div>
+        </div>
+        <div className="food-group-legend">
+          {pieData.map((item) => (
+            <div className="legend-item">
+              <span
+                className="legend-color"
+                style={{ backgroundColor: item.color }}
+              ></span>
+              <span className="legend-label">{item.label}</span>
+              <span className="legend-percentage">{item.value}%</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

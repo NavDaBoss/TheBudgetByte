@@ -210,9 +210,12 @@ const Analytics = () => {
             />
             <div className="summary-container">
               <Summary
-                groups={
+                data={
                   userData.yearlyOverview[selectedYear][selectedMonth]
                     .foodGroups
+                }
+                totalAmount={
+                  userData.yearlyOverview[selectedYear][selectedMonth].totalSpent
                 }
               />
             </div>
