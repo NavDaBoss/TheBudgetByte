@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
-
-import SummaryPie from '../components/SummaryPie';
+import { useState, useMemo } from 'react';
+import { Doughnut } from 'react-chartjs-2';
+import 'chart.js/auto';
 
 import '../styles/Summary.css';
 
@@ -57,76 +57,69 @@ const SummaryHead = ({ sortColumn }) => {
   );
 };
 
-const SummaryTable = ({ foodGroups, sortColumn }) => {
-  const rows = [];
-
-  foodGroups.map((foodGroup) => {
-    rows.push(
-      <tr key={foodGroups.foodGroup}>
-        <td className="group-column">{foodGroup.foodGroup}</td>
-        <td className="quantity-column">{foodGroup.quantity}</td>
-        <td className="price-column">${foodGroup.totalCost.toFixed(2)}</td>
-        <td className="price-percent-column">{foodGroup.pricePercentage}%</td>
-      </tr>,
-    );
-  });
-
-  return (
-    <table className="summary-table">
-      <SummaryHead sortColumn={sortColumn} />
-      <tbody>{rows}</tbody>
-    </table>
-  );
-};
-
-const Summary = ({ foodGroups }) => {
-  const [tableData, setTableData] = useState(foodGroups);
-
-  useEffect(() => {
-    setTableData(foodGroups);
-  }, [foodGroups]);
+const Summary = ({ data, totalAmount }) => {
+  const colorMap = {
+    Fruits: 'red',
+    Vegetables: 'green',
+    Protein: 'purple',
+    Grains: 'orange',
+    Dairy: 'blue',
+  };
 
   const pieData = useMemo(
     () =>
-      foodGroups
-        .map((foodGroup) => ({
-          label: foodGroup.quantity != 0 ? foodGroup.foodGroup : '',
-          value: foodGroup.pricePercentage,
+      data
+        .map((item) => ({
+          label: item.type,
+          value: item.pricePercentage,
+          color: colorMap[item.type],
         }))
-        .filter((item) => item.label !== ''),
-    [foodGroups],
+        .sort((a, b) => b.value - a.value),
+    [data],
   );
 
-  const sortColumn = (sortField, sortOrder) => {
-    if (sortOrder === 'none') {
-      setTableData(foodGroups);
-      return;
-    }
-
-    const sorted = [...foodGroups].sort((a, b) => {
-      if (typeof a[sortField] === 'number') {
-        return (a[sortField] - b[sortField]) * (sortOrder === 'asc' ? 1 : -1);
-      }
-      a = a[sortField].toLowerCase();
-      b = b[sortField].toLowerCase();
-
-      return (
-        a.localeCompare(b, 'en', {
-          numeric: true,
-        }) * (sortOrder === 'asc' ? 1 : -1)
-      );
-    });
-    setTableData(sorted);
+  const chartData = {
+    labels: pieData.map((item) => item.label),
+    datasets: [
+      {
+        data: pieData.map((item) => item.value),
+        backgroundColor: pieData.map((item) => item.color),
+        borderWidth: 0,
+      },
+    ],
   };
 
   return (
-    <div className="summary-container">
-      <div className="summary-table-container">
-        <h1>Summary</h1>
-        <SummaryTable foodGroups={tableData} sortColumn={sortColumn} />
-      </div>
-      <div className="pie-chart-container">
-        <SummaryPie data={pieData} />
+    <div className="summary-card">
+      <h2>Summary</h2>
+      <div className="chart-legend-container">
+        <div className="doughnut-chart">
+          <Doughnut
+            data={chartData}
+            options={{
+              cutout: '80%',
+              plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false },
+              },
+            }}
+          />
+          <div className="doughnut-center">
+            <h2>${totalAmount}</h2>
+          </div>
+        </div>
+        <div className="food-group-legend">
+          {pieData.map((item) => (
+            <div className="legend-item">
+              <span
+                className="legend-color"
+                style={{ backgroundColor: item.color }}
+              ></span>
+              <span className="legend-label">{item.label}</span>
+              <span className="legend-percentage">{item.value}%</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

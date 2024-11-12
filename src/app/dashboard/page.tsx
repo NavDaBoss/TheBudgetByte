@@ -20,7 +20,6 @@ import Summary from '../components/Summary';
 import Receipt from '../components/Receipt';
 import OcrUploadButton from '../components/OcrUploadButton';
 
-import GroceryData from './groceries.json';
 import SummaryData from './food_summary.json';
 
 const Dashboard = () => {
@@ -52,7 +51,7 @@ const Dashboard = () => {
 
           if (!querySnapshot.empty) {
             const mostRecentReceipt = querySnapshot.docs[0].data();
-            console.log('Fetched receipt:', mostRecentReceipt.groceries);
+            // console.log('Fetched receipt:', mostRecentReceipt.groceries);
             setGroceries(mostRecentReceipt.groceries || []);
           } else {
             console.log('No recent receipts found');
@@ -69,7 +68,10 @@ const Dashboard = () => {
     <div>
       <Navbar />
       <div className="section-container">
-        <Summary foodGroups={SummaryData.foodGroups} />
+        <Summary
+          data={SummaryData.foodGroups}
+          totalAmount={SummaryData.summary.totalCost}
+        />
         <div className="receipt-container">
           <Receipt groceries={groceries} />
         </div>
