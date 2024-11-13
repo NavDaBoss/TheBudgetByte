@@ -14,31 +14,42 @@ import {
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import './profile.css';
 import Navbar from '../components/Navbar';
-import SummaryPie from '../components/SummaryPie';
 import Image from 'next/image';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { updatePassword } from '@firebase/auth';
+import Summary from '../components/Summary';
+import SummaryData from './food_summary.json';
 
 export default function Profile() {
   const router = useRouter();
   const currentUser = auth.currentUser;
   const [receiptCount, setReceiptCount] = useState<number>(0);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
 
   useEffect(() => {
     if (!currentUser) {
       router.push('/login');
     } else {
-      const fetchReceiptCount = async () => {
+      const fetchData = async () => {
         try {
           const receiptsRef = collection(db, 'receiptData');
           const q = query(receiptsRef, where('userID', '==', currentUser.uid));
           const querySnapshot = await getDocs(q);
           setReceiptCount(querySnapshot.size);
+
+          let total = 0;
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            if (data.receiptBalance) {
+              total += parseFloat(data.receiptBalance);
+            }
+          });
+          setTotalAmount(parseFloat(total.toFixed(2)));
         } catch (error) {
-          console.error('Error fetching receipt count:', error);
+          console.error('Error fetching data:', error);
         }
       };
-      fetchReceiptCount();
+      fetchData();
     }
   }, [currentUser, router]);
 
@@ -52,14 +63,6 @@ export default function Profile() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-
-  const mockPieData = [
-    { name: 'Fruits', value: 30 },
-    { name: 'Veggies', value: 20 },
-    { name: 'Grains', value: 25 },
-    { name: 'Proteins', value: 15 },
-    { name: 'Dairy', value: 10 },
-  ];
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewName(event.target.value);
@@ -99,7 +102,7 @@ export default function Profile() {
     setIsEditingName(true);
   };
 
-  const handlePasswordReset = () => {
+  const handleEditResetPassword = () => {
     setIsResettingPassword(true);
   };
 
@@ -247,12 +250,15 @@ export default function Profile() {
               alt="Edit Icon"
               width={20}
               height={22.5}
-              className="edit-icon"
+              className="edit-icon-1"
             />
             Edit Name
           </button>
 
-          <button onClick={handlePasswordReset} className="reset-password-btn">
+          <button
+            onClick={handleEditResetPassword}
+            className="reset-password-btn"
+          >
             <Image
               src="/assets/edit_icon.svg"
               alt="Edit Icon"
@@ -349,7 +355,7 @@ export default function Profile() {
           <h1 className="lifetime-stats-header">Lifetime Stats</h1>
           <h4>Number of Receipts Scanned: {receiptCount}</h4>
           <div className="summary-pie-container">
-            <SummaryPie data={mockPieData} />
+            <Summary data={SummaryData.foodGroups} totalAmount={totalAmount} />
           </div>
         </div>
       </div>
