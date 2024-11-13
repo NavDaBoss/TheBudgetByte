@@ -193,33 +193,33 @@ export default function BudgetBytePage() {
         </div>
         <div className="rightSection">
           <Summary
-            groups={[
+            data={[
               {
-                type: FoodTypes.Veggies,
+                type: 'Vegetables',
                 totalCost: 80,
                 quantity: 4,
                 pricePercentage: 18.8,
               },
               {
-                type: FoodTypes.Fruits,
+                type: 'Fruits',
                 totalCost: 50,
                 quantity: 3,
                 pricePercentage: 11.1,
               },
               {
-                type: FoodTypes.Grain,
+                type: 'Grains',
                 totalCost: 60,
                 quantity: 5,
                 pricePercentage: 13.3,
               },
               {
-                type: FoodTypes.Protein,
+                type: 'Protein',
                 totalCost: 200,
                 quantity: 3,
                 pricePercentage: 44.4,
               },
               {
-                type: FoodTypes.Dairy,
+                type: 'Dairy',
                 totalCost: 60,
                 quantity: 2,
                 pricePercentage: 13.3,

@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+// import { getFirestore, doc, updateDoc } from 'firebase/firestore';
 
 import '../styles/Receipt.css';
 
+import EditIcon from '@mui/icons-material/EditSharp';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
@@ -59,13 +61,116 @@ const ReceiptHead = ({ sortColumn }) => {
   );
 };
 
-const ReceiptRow = ({ item }) => {
+const ReceiptRow = ({ item, onUpdate }) => {
+  const [editableItem, setEditableItem] = useState(item);
+  const [isEditing, setIsEditing] = useState(null);
+  const [isHovered, setIsHovered] = useState(null);
+  const [tempEditValue, setTempEditValue] = useState(null);
+
+  const handleEdit = (field) => {
+    setIsEditing(field);
+    setTempEditValue(editableItem[field]);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      setTempEditValue((prev) => ({
+        ...prev,
+        [isEditing]: tempEditValue,
+      }));
+      setIsEditing(null);
+    }
+  };
+
+  const handleChange = (field, value) => {
+    setEditableItem((prev) => ({
+      ...prev,
+      [field]: field === 'itemPrice' ? parseFloat(value) || 0 : value,
+    }));
+  };
+
+  // const handleBlue = async () => {
+  //   onUpdate(editableItem);
+  // };
+
   return (
-    <tr>
-      <td className="quantity-column">{item.quantity}</td>
-      <td className="item-name-column">{item.itemName}</td>
-      <td className="group-column">{item.foodGroup}</td>
-      <td className="price-column">${item.itemPrice.toFixed(2)}</td>
+    <tr onMouseLeave={() => setIsHovered(null)}>
+      <td
+        className="quantity-column"
+        onMouseEnter={() => setIsHovered('quantity')}
+      >
+        {isEditing === 'quantity' ? (
+          <input
+            type="number"
+            value={editableItem.quantity}
+            onChange={(e) => handleChange('quantity', e.target.value)}
+            onKeyDown={handleKeyDown}
+            // onBlur={handleBlur}
+            className="editable-input"
+          />
+        ) : (
+          <>
+            {editableItem.quantity}
+            {isHovered === 'quantity' && (
+              <EditIcon
+                className="edit-icon"
+                onClick={() => handleEdit('quantity')}
+              />
+            )}
+          </>
+        )}
+      </td>
+      <td
+        className="item-name-column"
+        onMouseEnter={() => setIsHovered('itemName')}
+      >
+        {isEditing === 'itemName' ? (
+          <input
+            type="text"
+            value={editableItem.itemName}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => handleChange('itemName', e.target.value)}
+            // onBlur={handleBlur}
+            className="editable-input"
+          />
+        ) : (
+          <>
+            {editableItem.itemName}
+            {isHovered === 'itemName' && (
+              <EditIcon
+                className="edit-icon"
+                onClick={() => handleEdit('itemName')}
+              />
+            )}
+          </>
+        )}
+      </td>
+      <td className="food-group-column">{editableItem.foodGroup}</td>
+      <td
+        className="price-column"
+        onMouseEnter={() => setIsHovered('itemPrice')}
+      >
+        {isEditing === 'itemPrice' ? (
+          <input
+            type="number"
+            value={editableItem.itemPrice}
+            onChange={(e) => handleChange('itemPrice', e.target.value)}
+            onKeyDown={handleKeyDown}
+            // onBlur={handleBlur}
+            className="editable-input"
+          />
+        ) : (
+          <>
+            {editableItem.itemPrice}
+            {isHovered === 'itemPrice' && (
+              <EditIcon
+                className="edit-icon"
+                onClick={() => handleEdit('itemPrice')}
+              />
+            )}
+          </>
+        )}
+      </td>
     </tr>
   );
 };
@@ -77,6 +182,18 @@ const ReceiptTable = ({
   page,
   itemsPerPage,
 }) => {
+  // const db = getFirestore();
+  //
+  // const updateItemInFirebase = async (updatedItem) => {
+  //   try {
+  //     const itemDocRef = doc(db, 'receiptData', 'groceries', updatedItem.id);
+  //     await updateDoc(itemDocRef, updatedItem);
+  //     console.log('Item updated successfully');
+  //   } catch (error) {
+  //     console.error('Error updating item in Firebase:', error);
+  //   }
+  // };
+
   const startIndex = page * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedGroceries = groceries.slice(startIndex, endIndex);
@@ -87,7 +204,7 @@ const ReceiptTable = ({
     if (item.itemName.toLowerCase().indexOf(filterText.toLowerCase()) === -1) {
       return;
     }
-    rows.push(<ReceiptRow item={item} key={item.itemName} />);
+    rows.push(<ReceiptRow key={item.itemName} item={item} />);
   });
 
   return (

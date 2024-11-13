@@ -1,5 +1,5 @@
 /* Search Bar */
-input {
+.search-bar {
   padding: 10px;
   border: 2px solid black;
   border-radius: 4px;
@@ -10,12 +10,46 @@ input {
   color: black;
 }
 
-input::placeholder {
+.search-bar::placeholder {
   color: black;
   opacity: 1;
 }
 
-input:focus {
+.search-bar:focus {
+  border-color: blue;
+  outline: none;
+}
+
+.edit-icon {
+  margin-left: 0.5rem;
+  cursor: pointer;
+  visibility: hidden;
+}
+
+.receipt-table td:hover .edit-icon {
+  visibility: visible;
+}
+
+.editable-input {
+  width: auto;
+  min-width: 50px;
+  padding: 1rem;
+  border: 2px solid black;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-shadow: none;
+  transition: border-color 0.3s;
+  background-color: var(--background);
+  text-align: inherit;
+  color: black;
+}
+
+.editable-input::placeholder {
+  color: black;
+  outline: none;
+}
+
+.editable-input:focus {
   border-color: blue;
   outline: none;
 }
@@ -94,16 +128,21 @@ input:focus {
 }
 
 .receipt-table th {
+  text-transform: uppercase;
   padding: 1rem;
   border-bottom: 2px dashed black;
+}
+
+.receipt-table td {
+  position: relative;
 }
 
 .receipt-table td:last-child {
   letter-spacing: 0.5px;
 }
 
-.receipt-body {
-  text-transform: uppercase;
+.food-group-column {
+  text-transform: capitalize;
 }
 
 .receipt-body td {
@@ -115,13 +154,9 @@ input:focus {
 }
 
 .receipt-body tr:hover {
-  filter: brightness(0.9);
+  filter: brightness(0.8);
+  background-color: var(--background);
   transition: filter 0.3s ease;
-}
-
-.edit-icon-wrapper {
-  position: relative;
-  top: -1px;
 }
 
 .sort-arrow {

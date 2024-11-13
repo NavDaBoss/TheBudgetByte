@@ -110,7 +110,7 @@ const Summary = ({ data, totalAmount }) => {
         </div>
         <div className="food-group-legend">
           {pieData.map((item) => (
-            <div className="legend-item">
+            <div key={item.label} className="legend-item">
               <span
                 className="legend-color"
                 style={{ backgroundColor: item.color }}
