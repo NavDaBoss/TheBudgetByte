@@ -48,8 +48,6 @@ export default function OcrUploadButton() {
   // SENDS REQUEST TO API AND RECEIVES RESPONSE
   const openaiTextExtraction = async (promptText) => {
     try {
-      // const promptText = 'Give me a hex color for blue.';
-      // setPrompt(promptText);
       const res = await fetch('/api/openai', {
         method: 'POST',
         headers: {
@@ -84,7 +82,7 @@ export default function OcrUploadButton() {
   // Handle dialog close
   const handleDialogClose = () => {
     setIsDialogOpen(false);
-    setSelectedImage(null); // Optionally reset the selected image
+    setSelectedImage(null); 
   };
 
   // Handle image upload
@@ -111,45 +109,13 @@ export default function OcrUploadButton() {
       // SEND OPENAI REQUEST WITH THE OCR TEXT
       setPrompt(result.data.text);
 
-      // Extract the valuable data
-      // await openaiTextExtraction(result.data.text);
-
-      // console.log('groceries2222:', gptResponse.groceries);
-
-      // type GroceryItem = {
-      //   itemName: string;
-      //   price: number;
-      // };
-      // let grocery: GroceryItem[] = [];
-
-      // FOR LINE BY LINE EXTRACTION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      // Winner so far?
-      // const pattern = /([A-Za-z\s]+)\s+(\d+\.\d{2})/;
-      // const text = result.data.text;
-      // result.data.lines.forEach((line, index) => {
-      //   // console.log(`Line ${index + 1}:`, line.text); // Print the line text
-      //   // console.log(`Confidence: ${line.confidence}`); // Print the line confidence
-
-      //   // Apply regex to extract item name and price
-      //   const match = line.text.match(pattern);
-      //   if (match) {
-      //     const itemName = match[1].trim(); // Extract the item name
-      //     // const price = parseFloat(match[2]); // Extract and convert the price to a number
-      //     let price = parseFloat(match[2].replace(',', '.'));
-
-      //     // Push the extracted item name and price into the grocery array
-      //     grocery.push({
-      //       itemName: itemName,
-      //       price: price,
-      //     });
-      //   }
-      // });
-
-      // Send the OCR result to Firestore (to 'receiptData' collection)
+      // Send the result to Firestore (to 'receiptData' collection)
       const apiResponse = await openaiTextExtraction(result.data.text);
       if (apiResponse) {
         const docRef = await addDoc(collection(db, 'receiptData'), {
-          ...apiResponse,
+          // ...apiResponse,
+          groceryStore: apiResponse.groceryStore,
+          receiptDate: apiResponse.receiptDate,
           submittedTimestamp: new Date(),
           fileName: selectedImage.name,
           userID: currentUser.uid,
@@ -157,6 +123,21 @@ export default function OcrUploadButton() {
 
         await updateDoc(docRef, { receiptID: docRef.id });
         console.log('OCR result saved to Firestore');
+
+        // Reference 'groceries' subcollection to main document
+        const groceriesSubCollectionRef = collection(docRef, 'groceries');
+
+        // Loop through each dictionary in groceries
+        apiResponse.groceries.forEach(async (item) => {
+          await addDoc(groceriesSubCollectionRef, {
+            itemName: item.itemName,
+            itemPrice: item.itemPrice,
+            quantity: item.quantity,
+            foodGroup: item.foodGroup,
+            totalPrice: item.totalPrice,
+          });
+        });
+
         updateUsersYearlyOverview(
           apiResponse.groceries,
           apiResponse.receiptDate,
