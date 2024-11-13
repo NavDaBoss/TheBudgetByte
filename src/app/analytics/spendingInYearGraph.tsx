@@ -6,31 +6,18 @@ import {
   GraphParams,
 } from '../components/YearlyGraph';
 import {
+  monthNames,
   FoodTypes,
   FoodGroupInfo,
   MonthlyData,
   YearlyOverview,
 } from './yearlyOverviewInterface';
-export const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
 
 // Displays the months before and after
 const getMonthsToDisplay = (monthlyData: { [month: string]: MonthlyData }) => {
   // Sort the keys of monthlyData according to the `months` array order
   const sortedMonths = Object.keys(monthlyData).sort(
-    (a, b) => months.indexOf(a) - months.indexOf(b),
+    (a, b) => monthNames.indexOf(a) - monthNames.indexOf(b),
   );
 
   // Find the first and last months with data in sortedMonths
@@ -38,18 +25,18 @@ const getMonthsToDisplay = (monthlyData: { [month: string]: MonthlyData }) => {
   const lastMonth = sortedMonths[sortedMonths.length - 1];
 
   // Get the indices of these months in the full `months` array.
-  let start = months.indexOf(firstMonth);
-  let end = months.indexOf(lastMonth);
+  let start = monthNames.indexOf(firstMonth);
+  let end = monthNames.indexOf(lastMonth);
 
   // Display the month before and after the months with data.
   if (start > 0) {
     start -= 1;
   }
-  if (end < months.length - 1) {
+  if (end < monthNames.length - 1) {
     end += 1;
   }
   // Use end + 1 to include last month in the slide.
-  return months.slice(start, end + 1);
+  return monthNames.slice(start, end + 1);
 };
 
 const createYearlyMoneySpentGraphParams = (

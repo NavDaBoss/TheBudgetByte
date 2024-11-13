@@ -4,12 +4,12 @@ import React, { useEffect, useState } from 'react';
 import './analytics.css';
 import Navbar from '../components/Navbar';
 import Summary from '../components/Summary';
-import { YearlyOverview } from './yearlyOverviewInterface';
+import { YearlyOverview , monthNames} from './yearlyOverviewInterface';
 import { useRouter } from 'next/navigation';
 import { auth, db } from '../firebase/firebaseConfig';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import DropDown from '../components/DropdownButton';
-import SpendingInYearGraph, { months } from './spendingInYearGraph';
+import SpendingInYearGraph from './spendingInYearGraph';
 
 // Uses the summary in dashboard populated with the food data from the selected month out of the selected year.
 const AnalyticsSummary = ({
@@ -90,7 +90,7 @@ const Analytics = () => {
       // Sort the keys of monthlyData according to the `months` array order (January -> December).
       const sortedMonths = Object.keys(
         yearlyOverview.yearlyOverviewData[initialYear],
-      ).sort((a, b) => months.indexOf(a) - months.indexOf(b));
+      ).sort((a, b) => monthNames.indexOf(a) - monthNames.indexOf(b));
 
       setSelectedYear(initialYear);
       setSelectedMonth(sortedMonths[0]);
@@ -126,7 +126,7 @@ const Analytics = () => {
             <DropDown
               selectedValue={selectedMonth}
               setSelectedValue={setSelectedMonth}
-              values={months}
+              values={monthNames}
               drop_label="Selected Month:"
             />
             <AnalyticsSummary
