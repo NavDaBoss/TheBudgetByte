@@ -2,7 +2,7 @@
   --background: #f0f0f0;
   --foreground: #171717;
   --green: #15be53;
-  --light-grey: #CCCCCC;
+  --light-grey: #cccccc;
   --gutterWidth: 16px;
   --windowWidth: 100vw;
   --layoutWidth: calc(var(--windowWidth) - var(--gutterWidth) * 2);
