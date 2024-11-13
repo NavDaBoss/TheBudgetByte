@@ -28,6 +28,7 @@
 .input-container {
   display: flex;
   align-items: center;
+  justify-content: center;
   border: 1px solid #ccc;
   padding: 0.5rem;
   border-radius: 6px;
@@ -128,27 +129,37 @@
   z-index: 1000;
 }
 
-.modal-content {
+.modal-content-pwd {
   background: #fff;
   padding: 20px;
   border-radius: 6px;
   width: 90%;
   max-width: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--light-grey);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.modal-content input {
+.modal-content-pwd input {
   border: none;
   outline: none;
   padding-left: 10px;
+  background-color: transparent;
 }
 
-.modal-content h2 {
+.modal-content-pwd h2 {
   margin-bottom: 15px;
 }
 
-.modal-content button {
+.modal-content-pwd .button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.modal-content-pwd button {
   padding: 10px 15px;
   margin: 5px;
   cursor: pointer;
