@@ -17,12 +17,37 @@ export enum FoodTypes {
   Dairy = 'Dairy',
 }
 
-const ReceiptHead = ({ sortColumn }) => {
+// types.ts
+export interface GroceryItem {
+  itemName: string;
+  group: string;
+  price: number;
+  quantity: number;
+  totalPrice: number;
+}
+
+export interface SortColumnProps {
+  sortField: string;
+  sortOrder: 'asc' | 'desc' | 'none';
+}
+
+export interface SummaryGroup {
+  type: FoodTypes;
+  totalCost: number;
+  quantity: number;
+  pricePercentage: number;
+}
+
+interface RecieptHeadProps {
+  sortColumn: (accessor: string, sortOrder: 'asc' | 'desc' | 'none') => void;
+}
+
+const ReceiptHead: React.FC<RecieptHeadProps> = ({ sortColumn }) => {
   const [sortField, setSortField] = useState('');
   const [order, setOrder] = useState('asc');
 
-  const handleSortChange = (accessor) => {
-    let sortOrder = 'asc';
+  const handleSortChange = (accessor: string) => {
+    let sortOrder: 'asc' | 'desc' | 'none' = 'asc';
     if (accessor === sortField) {
       sortOrder = order === 'asc' ? 'desc' : order === 'desc' ? 'none' : 'asc';
     }
@@ -51,7 +76,11 @@ const ReceiptHead = ({ sortColumn }) => {
   );
 };
 
-const ReceiptRow = ({ item }) => {
+interface ReceiptRowProps {
+  item: GroceryItem;
+}
+
+const ReceiptRow: React.FC<ReceiptRowProps> = ({ item }) => {
   return (
     <tr>
       <td className="quantity-column">{item.quantity}</td>
@@ -65,15 +94,22 @@ const ReceiptRow = ({ item }) => {
   );
 };
 
-const ReceiptTable = ({ groceries, filterText, sortColumn }) => {
-  const rows = [];
+interface ReceiptTableProps {
+  groceries: GroceryItem[];
+  filterText: string;
+  sortColumn: (accessor: string, sortOrder: 'asc' | 'desc' | 'none') => void;
+}
 
-  groceries.map((item) => {
-    if (item.itemName.toLowerCase().indexOf(filterText.toLowerCase()) === -1) {
-      return;
-    }
-    rows.push(<ReceiptRow item={item} key={item.itemName} />);
-  });
+const ReceiptTable: React.FC<ReceiptTableProps> = ({
+  groceries,
+  filterText,
+  sortColumn,
+}) => {
+  const rows = groceries
+    .filter((item) =>
+      item.itemName.toLowerCase().includes(filterText.toLowerCase()),
+    )
+    .map((item) => <ReceiptRow item={item} key={item.itemName} />);
 
   return (
     <table className="receipt-table">
@@ -90,7 +126,14 @@ const ReceiptTable = ({ groceries, filterText, sortColumn }) => {
   );
 };
 
-const SearchBar = ({ filterText, onFilterTextChange }) => {
+interface SearchBarProps {
+  filterText: string;
+  onFilterTextChange: (text: string) => void;
+}
+const SearchBar: React.FC<SearchBarProps> = ({
+  filterText,
+  onFilterTextChange,
+}) => {
   return (
     <input
       className="search-bar"
@@ -102,11 +145,18 @@ const SearchBar = ({ filterText, onFilterTextChange }) => {
   );
 };
 
-const FilterableReceipt = ({ groceries }) => {
+interface FilterableRecieptProps {
+  groceries: GroceryItem[];
+}
+
+const FilterableReceipt: React.FC<FilterableRecieptProps> = ({ groceries }) => {
   const [tableData, setTableData] = useState(groceries);
   const [filterText, setFilterText] = useState('');
 
-  const sortColumn = (sortField, sortOrder) => {
+  const sortColumn = (
+    sortField: string,
+    sortOrder: 'asc' | 'desc' | 'none',
+  ) => {
     if (sortOrder === 'none') {
       setTableData(groceries);
       return;
@@ -114,16 +164,19 @@ const FilterableReceipt = ({ groceries }) => {
 
     if (sortField) {
       const sorted = [...groceries].sort((a, b) => {
-        if (typeof a[sortField] === 'number') {
-          return (a[sortField] - b[sortField]) * (sortOrder === 'asc' ? 1 : -1);
+        if (typeof a[sortField as keyof GroceryItem] === 'number') {
+          return (
+            ((a[sortField as keyof GroceryItem] as number) -
+              (b[sortField as keyof GroceryItem] as number)) *
+            (sortOrder === 'asc' ? 1 : -1)
+          );
         }
-        a = a[sortField].toLowerCase();
-        b = b[sortField].toLowerCase();
-
         return (
-          a.localeCompare(b, 'en', {
-            numeric: true,
-          }) * (sortOrder === 'asc' ? 1 : -1)
+          a[sortField as keyof GroceryItem]
+            .toString()
+            .localeCompare(b[sortField as keyof GroceryItem].toString(), 'en', {
+              numeric: true,
+            }) * (sortOrder === 'asc' ? 1 : -1)
         );
       });
       setTableData(sorted);
@@ -145,7 +198,11 @@ const FilterableReceipt = ({ groceries }) => {
   );
 };
 
-const Receipt = ({ groceries }) => {
+interface ReceiptProps {
+  groceries: GroceryItem[];
+}
+
+const Receipt: React.FC<ReceiptProps> = ({ groceries }) => {
   return (
     <div className="receipt">
       <FilterableReceipt groceries={groceries} />
