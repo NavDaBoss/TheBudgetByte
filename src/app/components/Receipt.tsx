@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 // import { getFirestore, doc, updateDoc } from 'firebase/firestore';
 
 import '../styles/Receipt.css';
@@ -21,6 +21,20 @@ const ReceiptHead = ({ sortColumn }) => {
     sortColumn(accessor, sortOrder);
   };
 
+  const getSortArrowStyle = (accessor) => {
+    if (sortField !== accessor)
+      return { borderTopColor: 'black', transform: 'rotate(0deg)' };
+
+    const color =
+      order === 'asc' ? 'green' : order === 'desc' ? 'red' : 'black';
+    const rotation = order === 'asc' ? 'rotate(180deg)' : 'rotate(0deg)';
+
+    return {
+      borderTopColor: color,
+      transform: rotation,
+    };
+  };
+
   return (
     <thead>
       <tr>
@@ -30,7 +44,10 @@ const ReceiptHead = ({ sortColumn }) => {
           onClick={() => handleSortChange('quantity')}
         >
           QTY
-          <span className="sort-arrow"></span>
+          <span
+            className="sort-arrow"
+            style={getSortArrowStyle('quantity')}
+          ></span>
         </th>
         <th
           key="itemName"
@@ -38,7 +55,10 @@ const ReceiptHead = ({ sortColumn }) => {
           onClick={() => handleSortChange('itemName')}
         >
           ITEM
-          <span className="sort-arrow"></span>
+          <span
+            className="sort-arrow"
+            style={getSortArrowStyle('itemName')}
+          ></span>
         </th>
         <th
           key="group"
@@ -46,7 +66,10 @@ const ReceiptHead = ({ sortColumn }) => {
           onClick={() => handleSortChange('foodGroup')}
         >
           GROUP
-          <span className="sort-arrow"></span>
+          <span
+            className="sort-arrow"
+            style={getSortArrowStyle('foodGroup')}
+          ></span>
         </th>
         <th
           key="price"
@@ -54,7 +77,10 @@ const ReceiptHead = ({ sortColumn }) => {
           onClick={() => handleSortChange('itemPrice')}
         >
           PRICE
-          <span className="sort-arrow"></span>
+          <span
+            className="sort-arrow"
+            style={getSortArrowStyle('itemPrice')}
+          ></span>
         </th>
       </tr>
     </thead>
@@ -66,6 +92,7 @@ const ReceiptRow = ({ item, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(null);
   const [isHovered, setIsHovered] = useState(null);
   const [tempEditValue, setTempEditValue] = useState(null);
+  const inputRef = useRef(null);
 
   const handleEdit = (field) => {
     setIsEditing(field);
@@ -82,6 +109,20 @@ const ReceiptRow = ({ item, onUpdate }) => {
     }
   };
 
+  const handleClickOutside = (event) => {
+    if (inputRef.current && !inputRef.current.contains(event.target)) {
+      setTempEditValue(null);
+      setIsEditing(null);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const handleChange = (field, value) => {
     setEditableItem((prev) => ({
       ...prev,
@@ -89,9 +130,11 @@ const ReceiptRow = ({ item, onUpdate }) => {
     }));
   };
 
-  // const handleBlue = async () => {
-  //   onUpdate(editableItem);
-  // };
+  const handleBlur = async () => {
+    // onUpdate(editableItem);
+    setTempEditValue(null);
+    setIsEditing(null);
+  };
 
   return (
     <tr onMouseLeave={() => setIsHovered(null)}>
@@ -105,7 +148,7 @@ const ReceiptRow = ({ item, onUpdate }) => {
             value={editableItem.quantity}
             onChange={(e) => handleChange('quantity', e.target.value)}
             onKeyDown={handleKeyDown}
-            // onBlur={handleBlur}
+            onBlur={handleBlur}
             className="editable-input"
           />
         ) : (
@@ -130,7 +173,7 @@ const ReceiptRow = ({ item, onUpdate }) => {
             value={editableItem.itemName}
             onKeyDown={handleKeyDown}
             onChange={(e) => handleChange('itemName', e.target.value)}
-            // onBlur={handleBlur}
+            onBlur={handleBlur}
             className="editable-input"
           />
         ) : (
@@ -156,12 +199,12 @@ const ReceiptRow = ({ item, onUpdate }) => {
             value={editableItem.itemPrice}
             onChange={(e) => handleChange('itemPrice', e.target.value)}
             onKeyDown={handleKeyDown}
-            // onBlur={handleBlur}
+            onBlur={handleBlur}
             className="editable-input"
           />
         ) : (
           <>
-            {editableItem.itemPrice}
+            ${editableItem.itemPrice.toFixed(2)}
             {isHovered === 'itemPrice' && (
               <EditIcon
                 className="edit-icon"
@@ -286,7 +329,7 @@ const Receipt = ({ groceries }) => {
   const endItem = Math.min(startItem + itemsPerPage - 1, tableData.length);
 
   return (
-    <div>
+    <div className="receipt-card">
       <div className="receipt-head">
         <h1>Receipt</h1>
         <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
