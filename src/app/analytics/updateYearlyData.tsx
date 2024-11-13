@@ -14,6 +14,7 @@ import {
   doc,
 } from 'firebase/firestore';
 import {
+  monthNames,
   FoodTypes,
   MonthlyData,
   YearlyOverview,
@@ -97,20 +98,6 @@ const getMonthFromReceiptDate = (receiptDate: string): string | null => {
     const month = parseInt(match[1], 10);
     // Validate the month (should be between 1 and 12)
     if (month >= 1 && month <= 12) {
-      const monthNames = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-      ];
       return monthNames[month - 1];
     }
   }
