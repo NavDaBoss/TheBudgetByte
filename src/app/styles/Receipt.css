@@ -1,0 +1,199 @@
+.receipt-component-card {
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 2px solid var(--light-grey);
+  margin: 2rem;
+}
+
+/* Search Bar */
+.search-bar {
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-shadow: none;
+  transition: border-color 0.3s;
+  background-color: var(--background);
+  color: black;
+}
+
+.search-bar::placeholder {
+  color: black;
+  opacity: 1;
+}
+
+.search-bar:focus {
+  border-color: blue;
+  outline: none;
+}
+
+/* Receipt */
+.receipt-component-container {
+  width: 60%;
+  margin: 10px 0;
+}
+
+/* Receipt Header */
+.receipt-component-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0;
+  position: relative;
+  gap: 20px;
+}
+
+.receipt-component-head h1 {
+  margin-right: auto;
+  font-weight: 700;
+}
+
+.rows-per-page label {
+  font-weight: 700;
+}
+
+.rows-per-page select {
+  margin-left: 0.5rem;
+  padding: 0.3rem;
+  font-weight: 700;
+}
+
+/* Receipt Table */
+.receipt-component-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.receipt-component-table thead {
+  text-align: left;
+}
+
+.receipt-component-table th {
+  padding: 1rem;
+  border-bottom: 2px dashed black;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.receipt-quantity-column,
+.receipt-price-column {
+  text-align: right;
+}
+
+.receipt-quantity-column {
+  width: 15%;
+}
+
+.receipt-item-name-column {
+  width: 40%;
+}
+
+.receipt-food-group-column {
+  width: 25%;
+}
+
+.receipt-price-column {
+  width: 25%;
+}
+
+.edit-icon {
+  position: relative;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  vertical-align: middle;
+  top: -2px;
+  font-size: 1.25rem;
+  visibility: hidden;
+}
+
+.editable-input {
+  width: 100%;
+  padding: 0.5rem 0.5rem;
+  border: none;
+  border-bottom: 2px solid black;
+  box-shadow: none;
+  font-size: 1rem;
+  text-align: left;
+  background-color: var(--background);
+  color: black;
+  transition: border-color 0.3s;
+}
+
+.editable-input::placeholder {
+  color: black;
+  outline: none;
+}
+
+.editable-input:focus {
+  border-color: red;
+  outline: none;
+}
+
+.editable-select {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 2px solid var(--foreground);
+  border-radius: 4px;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.receipt-component-table tr {
+  height: 3rem;
+}
+
+.receipt-component-body td {
+  padding: 0.5rem 1.5rem;
+}
+
+.receipt-component-body tr:last-child {
+  border-bottom: 2px dashed black;
+}
+
+.sort-arrow {
+  display: inline-block;
+  margin-left: 20px;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid black;
+}
+
+.receipt-component-body tr:hover {
+  background-color: var(--light-grey);
+  transition: filter 0.3s ease;
+}
+
+.receipt-component-body tr:hover .edit-icon {
+  visibility: visible;
+}
+
+.receipt-component-table th:hover {
+  cursor: pointer;
+}
+
+/* Pagination */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.pagination-controls button {
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.pagination-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination-controls span {
+  font-weight: 700;
+}
