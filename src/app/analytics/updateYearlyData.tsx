@@ -154,7 +154,8 @@ const updateFoodGroups = (
   foodGroupsTotalQuantity: Record<FoodTypes, number>,
 ) => {
   // No need to update when there is no spending.
-  if (monthOverview.totalSpent === 0) {
+  if (monthOverview.totalSpent <= 0) {
+    console.log('Monthly data was not updated since the total spent <= 0.');
     return;
   }
   for (const foodType of Object.values(FoodTypes)) {
@@ -164,16 +165,21 @@ const updateFoodGroups = (
     if (existingGroup) {
       existingGroup.totalCost += foodGroupsTotalCost[foodType];
       existingGroup.quantity += foodGroupsTotalQuantity[foodType];
-      existingGroup.pricePercentage =
-        (existingGroup.totalCost / monthOverview.totalSpent) * 100;
+      existingGroup.pricePercentage = Number(
+        ((existingGroup.totalCost / monthOverview.totalSpent) * 100).toFixed(2),
+      );
     } else {
       // Add new entry if the foodGroup doesn't exist
       monthOverview.foodGroups.push({
         type: foodType,
         totalCost: foodGroupsTotalCost[foodType],
         quantity: foodGroupsTotalQuantity[foodType],
-        pricePercentage:
-          (foodGroupsTotalCost[foodType] / monthOverview.totalSpent) * 100,
+        pricePercentage: Number(
+          (
+            (foodGroupsTotalCost[foodType] / monthOverview.totalSpent) *
+            100
+          ).toFixed(2),
+        ),
       });
     }
   }
@@ -188,6 +194,7 @@ export const updateUsersYearlyOverview = async (
   const month = getMonthFromReceiptDate(receiptDate);
   const overview = await createOrGetYearlyOverview();
   if (!overview || !year || !month) {
+    console.log('could not find an overview, year, or month');
     return;
   }
   const yearOverview = createOrGetYearData(overview, year);
@@ -209,7 +216,9 @@ export const updateUsersYearlyOverview = async (
   for (const grocery of groceries) {
     if (
       grocery.foodGroup === '' ||
-      !Object.values(FoodTypes).includes(grocery.foodGroup as FoodTypes)
+      !Object.values(FoodTypes).includes(
+        (grocery.foodGroup as FoodTypes) || grocery.totalPrice < 0,
+      )
     ) {
       continue;
     }
@@ -234,7 +243,8 @@ export const updateUsersYearlyOverview = async (
   console.log('total spent' + totalSpent);
   console.log('total quantitity' + totalQuantity);
   // Update month overview and food groups with new totals
-  monthOverview.totalSpent += totalSpent;
+  monthOverview.totalSpent =
+    Math.round((monthOverview.totalSpent + totalSpent) * 100) / 100;
   monthOverview.totalQuantity += totalQuantity;
   updateFoodGroups(monthOverview, foodGroupsTotalCost, foodGroupsTotalQuantity);
   console.log(yearOverview);
