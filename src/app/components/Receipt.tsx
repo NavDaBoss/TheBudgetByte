@@ -136,6 +136,14 @@ const ReceiptRow = ({ item, onUpdate }) => {
     setIsEditing(null);
   };
 
+  const foodGroupOptions = [
+    'Grains',
+    'Vegetables',
+    'Fruits',
+    'Protein',
+    'Dairy',
+  ];
+
   return (
     <tr onMouseLeave={() => setIsHovered(null)}>
       <td
@@ -188,7 +196,35 @@ const ReceiptRow = ({ item, onUpdate }) => {
           </>
         )}
       </td>
-      <td className="food-group-column">{editableItem.foodGroup}</td>
+      <td
+        className="food-group-column"
+        onMouseEnter={() => setIsHovered('foodGroup')}
+      >
+        {isEditing === 'foodGroup' ? (
+          <select
+            value={editableItem.foodGroup}
+            onChange={(e) => handleChange('foodGroup', e.target.value)}
+            onBlur={handleBlur}
+            className="editable-select"
+          >
+            {foodGroupOptions.map((group) => (
+              <option key={group} value={group}>
+                {group}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <>
+            {editableItem.foodGroup}
+            {isHovered === 'foodGroup' && (
+              <EditIcon
+                className="edit-icon"
+                onClick={() => handleEdit('foodGroup')}
+              />
+            )}
+          </>
+        )}
+      </td>
       <td
         className="price-column"
         onMouseEnter={() => setIsHovered('itemPrice')}

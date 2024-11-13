@@ -108,9 +108,9 @@
 
 .editable-input {
   width: 100%;
-  padding: 0.5rem;
-  border: 2px solid black;
-  border-radius: 4px;
+  padding: 0.5rem 0.5rem;
+  border: none;
+  border-bottom: 2px solid black;
   box-shadow: none;
   font-size: 1rem;
   text-align: left;
@@ -125,20 +125,21 @@
 }
 
 .editable-input:focus {
-  border-color: blue;
+  border-color: red;
   outline: none;
 }
 
+.editable-select {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 2px solid var(--foreground);
+  border-radius: 4px;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
 .receipt-table tr {
-  height: 2.5rem;
-}
-
-.receipt-table tr:first-child td {
-  padding-top: 1rem;
-}
-
-.receipt-table tr:last-child td {
-  padding-bottom: 1rem;
+  height: 3rem;
 }
 
 .receipt-body td {
