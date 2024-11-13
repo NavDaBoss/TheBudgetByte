@@ -57,7 +57,7 @@ const ReceiptHead: React.FC<RecieptHeadProps> = ({ sortColumn }) => {
   };
 
   return (
-    <thead className="receipt-table-head">
+    <thead className="landing-receipt-table-head">
       <tr>
         <th key="quantity" onClick={() => handleSortChange('quantity')}>
           QTY
@@ -112,7 +112,7 @@ const ReceiptTable: React.FC<ReceiptTableProps> = ({
     .map((item) => <ReceiptRow item={item} key={item.itemName} />);
 
   return (
-    <table className="receipt-table">
+    <table className="landing-receipt-table">
       <colgroup>
         <col style={{ width: '15%' }} />
         <col style={{ width: '40%' }} />
@@ -121,7 +121,7 @@ const ReceiptTable: React.FC<ReceiptTableProps> = ({
       </colgroup>
 
       <ReceiptHead sortColumn={sortColumn} />
-      <tbody className="receipt-body">{rows}</tbody>
+      <tbody className="landing-receipt-body">{rows}</tbody>
     </table>
   );
 };
@@ -185,7 +185,7 @@ const FilterableReceipt: React.FC<FilterableRecieptProps> = ({ groceries }) => {
 
   return (
     <div>
-      <div className="receipt-head">
+      <div className="landing-receipt-head">
         <h1>Receipt</h1>
         <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
       </div>
@@ -204,7 +204,7 @@ interface ReceiptProps {
 
 const Receipt: React.FC<ReceiptProps> = ({ groceries }) => {
   return (
-    <div className="receipt">
+    <div className="landing-receipt">
       <FilterableReceipt groceries={groceries} />
     </div>
   );
