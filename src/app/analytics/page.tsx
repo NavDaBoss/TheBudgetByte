@@ -215,7 +215,8 @@ const Analytics = () => {
                     .foodGroups
                 }
                 totalAmount={
-                  userData.yearlyOverview[selectedYear][selectedMonth].totalSpent
+                  userData.yearlyOverview[selectedYear][selectedMonth]
+                    .totalSpent
                 }
               />
             </div>

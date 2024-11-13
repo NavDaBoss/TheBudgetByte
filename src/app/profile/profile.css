@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: row;
   width: 80%;
-  max-width: 50rem;
+  max-width: 70rem;
   padding-bottom: 10px;
   max-height: 75vh;
 }
@@ -30,13 +30,6 @@
   margin-bottom: 10px;
   margin-top: 10px;
 }
-
-.summary-pie-container {
-  display: grid;
-  place-items: center;
-  width: 80%;
-}
-
 .edit-name-btn,
 .upload-image-btn,
 .reset-password-btn {
@@ -57,7 +50,7 @@
 .upload-icon {
   margin-right: 30px;
 }
-.edit-icon {
+.edit-icon-1 {
   margin-right: 30px;
   margin-left: -27px;
 }
@@ -146,4 +139,16 @@
 .success-message {
   color: var(--green);
   margin-bottom: 5px;
+}
+
+@media (max-width: 768px) {
+  .column-container {
+    flex-direction: column;
+    width: 90%;
+  }
+
+  .column {
+    width: 100%;
+    margin: 10px 0;
+  }
 }
