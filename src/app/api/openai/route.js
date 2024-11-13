@@ -11,7 +11,7 @@ export const groceryItemSchema = z.object({
   itemPrice: z.number(),
   quantity: z.number().int(),
   foodGroup: z.string(),
-  totalPrice: z.number()
+  totalPrice: z.number(),
 });
 
 export const groceryReceiptExtraction = z.object({

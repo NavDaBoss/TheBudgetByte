@@ -82,7 +82,7 @@ export default function OcrUploadButton() {
   // Handle dialog close
   const handleDialogClose = () => {
     setIsDialogOpen(false);
-    setSelectedImage(null); 
+    setSelectedImage(null);
   };
 
   // Handle image upload
