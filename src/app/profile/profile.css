@@ -22,7 +22,7 @@
   width: 50%;
   background-color: #f0f0f0;
   border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--light-grey);
 }
 
 .profile-pic-container,
@@ -96,7 +96,7 @@
   border-radius: 6px;
   width: 90%;
   max-width: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--light-grey);
   text-align: center;
   display: flex;
   flex-direction: column;

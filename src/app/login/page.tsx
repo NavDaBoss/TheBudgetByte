@@ -137,7 +137,7 @@ export default function Login() {
 
       {isModalOpen && (
         <div className="modal-overlay">
-          <div className="modal-content">
+          <div className="modal-content-pwd">
             <h2>Reset Password</h2>
             <div className="input-container">
               <Image
@@ -154,8 +154,10 @@ export default function Login() {
                 onChange={(e) => setResetEmail(e.target.value)}
               />
             </div>
-            <button onClick={forgotPassword}>Send Reset Email</button>
-            <button onClick={() => setIsModalOpen(false)}>Close</button>
+            <div className="button-container">
+              <button onClick={forgotPassword}>Send Reset Email</button>
+              <button onClick={() => setIsModalOpen(false)}>Close</button>
+            </div>
           </div>
         </div>
       )}
