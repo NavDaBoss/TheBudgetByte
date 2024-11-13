@@ -86,12 +86,17 @@ const Analytics = () => {
       const years = Object.keys(yearlyOverview.yearlyOverviewData).sort(
         (a, b) => Number(b) - Number(a),
       );
+      if (!years || years.length === 0) {
+        return;
+      }
       const initialYear = years[0];
       // Sort the keys of monthlyData according to the `months` array order (January -> December).
       const sortedMonths = Object.keys(
         yearlyOverview.yearlyOverviewData[initialYear],
       ).sort((a, b) => monthNames.indexOf(a) - monthNames.indexOf(b));
-
+      if (!sortedMonths || sortedMonths.length === 0) {
+        return;
+      }
       setSelectedYear(initialYear);
       setSelectedMonth(sortedMonths[0]);
     }

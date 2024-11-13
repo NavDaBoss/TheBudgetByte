@@ -48,7 +48,8 @@ const createYearlyMoneySpentGraphParams = (
   // get the data for all populated months of the selected year
   const monthlyData = yearlyOverview.yearlyOverviewData[selectedYear];
   if (!monthlyData) {
-    throw new Error(`No data available for ${selectedYear}`);
+    console.log(`No data available for ${selectedYear}`);
+    return null;
   }
 
   const displayedMonths = getMonthsToDisplay(monthlyData);
