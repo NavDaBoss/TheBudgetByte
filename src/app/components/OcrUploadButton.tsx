@@ -39,14 +39,14 @@ export default function OcrUploadButton() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // For OpenAI API
-  const [gptPrompt, setPrompt] = useState('');
-  const [gptResponse, setResponse] = useState(null);
-  const [gptError, setError] = useState('');
+  // const [gptPrompt, setPrompt] = useState('');
+  // const [gptResponse, setResponse] = useState(null);
+  // const [gptError, setError] = useState('');
 
   const currentUser = auth.currentUser;
 
   // SENDS REQUEST TO API AND RECEIVES RESPONSE
-  const openaiTextExtraction = async (promptText) => {
+  const openaiTextExtraction = async (promptText: string) => {
     try {
       const res = await fetch('/api/openai', {
         method: 'POST',
@@ -58,18 +58,18 @@ export default function OcrUploadButton() {
       const data = await res.json();
 
       if (res.ok) {
-        setResponse(data.response); // response now contains a string
+        // setResponse(data.response); // response now contains a string
         console.log('API response received IN CLIENT:', data.response); // Log the response from the server
         console.log('groceries:', data.response.groceries);
         return data.response;
       } else {
-        setError(data.error || 'An error occurred.');
-        console.log('API error received:', gptError); // Log the response from the server
+        // setError(data.error || 'An error occurred.');
+        console.log('API error received:', data.error); // Log the response from the server
         return null;
       }
     } catch (err) {
-      setError('Failed to fetch response from API.');
-      console.log('API error received:', gptError); // Log the response from the server
+      // setError('Failed to fetch response from API.');
+      console.log('API error received:', err); // Log the response from the server
       return null;
     }
   };
@@ -107,7 +107,7 @@ export default function OcrUploadButton() {
       console.log('Raw OCR Result:', result.data.text);
 
       // SEND OPENAI REQUEST WITH THE OCR TEXT
-      setPrompt(result.data.text);
+      // setPrompt(result.data.text);
 
       // Send the result to Firestore (to 'receiptData' collection)
       const apiResponse = await openaiTextExtraction(result.data.text);
@@ -116,6 +116,7 @@ export default function OcrUploadButton() {
           // ...apiResponse,
           groceryStore: apiResponse.groceryStore,
           receiptDate: apiResponse.receiptDate,
+          receiptBalance: apiResponse.receiptBalance,
           submittedTimestamp: new Date(),
           fileName: selectedImage.name,
           userID: currentUser.uid,
@@ -123,6 +124,7 @@ export default function OcrUploadButton() {
 
         await updateDoc(docRef, { receiptID: docRef.id });
         console.log('OCR result saved to Firestore');
+        console.log('docRef = ', docRef.id)
 
         // Reference 'groceries' subcollection to main document
         const groceriesSubCollectionRef = collection(docRef, 'groceries');
