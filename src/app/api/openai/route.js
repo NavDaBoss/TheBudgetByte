@@ -18,7 +18,7 @@ export const groceryReceiptExtraction = z.object({
   groceryStore: z.string(),
   receiptDate: z.string(),
   groceries: z.array(groceryItemSchema),
-  receiptBalance: z.number(),
+  receiptBalance: z.number(), // this should be calculated dynamically after we scan grocery items
 });
 
 export async function POST(request) {
@@ -34,7 +34,7 @@ export async function POST(request) {
         {
           role: 'system',
           content:
-            'You are an expert at structured data extraction. You will be given unstructured text from a grocery receipt and should convert it into the given structure. Only extract food items. If you cannot find: groceryStore, receiptBalance, or receiptDate, I want you to put either an empty string or -999. I want you to categorize it into 5 food groups: Fruits, Vegetables, Protein, Grains, and Dairy',
+            'You are an expert at structured data extraction. You will be given unstructured text from a grocery receipt and should convert it into the given structure. Please format any dates in the style mm/dd/yyyy, if you cannot find the date please put an empty string. Sometimes there will be items that are not food, do not extract those items. For all food, I want you to categorize them into 5 food groups: Fruits, Vegetables, Protein, Grains, and Dairy. If you are unsure of what food group a grocery belongs to, categorize it as Uncategorized.',
         },
         { role: 'user', content: prompt },
       ],
