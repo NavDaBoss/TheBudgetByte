@@ -1,5 +1,4 @@
 import {
-  useHomeRedirect,
   useProfileRedirect,
   useDashBoardRedirect,
   useAnalyticsRedirect,
@@ -11,7 +10,6 @@ import '../styles/Navbar.css';
 
 const Navbar = () => {
   const pathname = usePathname();
-  const home = useHomeRedirect();
   const profile = useProfileRedirect();
   const dashboard = useDashBoardRedirect();
   const analytics = useAnalyticsRedirect();
@@ -21,7 +19,11 @@ const Navbar = () => {
 
   return (
     <div className="header-nav-container">
-      <h1 className="header-logo" onClick={home} style={{ cursor: 'pointer' }}>
+      <h1
+        className="header-logo"
+        onClick={dashboard}
+        style={{ cursor: 'pointer' }}
+      >
         Budget Byte
       </h1>
       <nav className="header-nav">

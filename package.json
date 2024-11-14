@@ -25,19 +25,20 @@
     "chart.js": "^4.4.5",
     "firebase": "^10.14.1",
     "next": "14.2.15",
-    "openai": "^4.70.2",
     "next-router-mock": "^0.9.13",
+    "openai": "^4.70.2",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
     "tesseract.js": "^5.1.1",
-    "zod": "^3.23.8",
-    "use-resize-observer": "^9.1.0"
+    "use-resize-observer": "^9.1.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.5.2",
+    "@types/jest": "^29.5.14",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
