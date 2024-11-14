@@ -40,7 +40,7 @@ const ReceiptHead = ({ sortColumn }) => {
       <tr>
         <th
           key="quantity"
-          className="quantity-column"
+          className="receipt-quantity-column"
           onClick={() => handleSortChange('quantity')}
         >
           QTY
@@ -51,7 +51,7 @@ const ReceiptHead = ({ sortColumn }) => {
         </th>
         <th
           key="itemName"
-          className="item-name-column"
+          className="receipt-item-name-column"
           onClick={() => handleSortChange('itemName')}
         >
           ITEM
@@ -73,7 +73,7 @@ const ReceiptHead = ({ sortColumn }) => {
         </th>
         <th
           key="price"
-          className="price-column"
+          className="receipt-price-column"
           onClick={() => handleSortChange('itemPrice')}
         >
           PRICE
@@ -147,7 +147,7 @@ const ReceiptRow = ({ item, onUpdate }) => {
   return (
     <tr onMouseLeave={() => setIsHovered(null)}>
       <td
-        className="quantity-column"
+        className="receipt-quantity-column"
         onMouseEnter={() => setIsHovered('quantity')}
       >
         {isEditing === 'quantity' ? (
@@ -172,7 +172,7 @@ const ReceiptRow = ({ item, onUpdate }) => {
         )}
       </td>
       <td
-        className="item-name-column"
+        className="receipt-item-name-column"
         onMouseEnter={() => setIsHovered('itemName')}
       >
         {isEditing === 'itemName' ? (
@@ -197,7 +197,7 @@ const ReceiptRow = ({ item, onUpdate }) => {
         )}
       </td>
       <td
-        className="food-group-column"
+        className="receipt-food-group-column"
         onMouseEnter={() => setIsHovered('foodGroup')}
       >
         {isEditing === 'foodGroup' ? (
@@ -226,7 +226,7 @@ const ReceiptRow = ({ item, onUpdate }) => {
         )}
       </td>
       <td
-        className="price-column"
+        className="receipt-price-column"
         onMouseEnter={() => setIsHovered('itemPrice')}
       >
         {isEditing === 'itemPrice' ? (
@@ -287,9 +287,9 @@ const ReceiptTable = ({
   });
 
   return (
-    <table className="receipt-table">
+    <table className="receipt-component-table">
       <ReceiptHead sortColumn={sortColumn} />
-      <tbody className="receipt-body">{rows}</tbody>
+      <tbody className="receipt-component-body">{rows}</tbody>
     </table>
   );
 };
@@ -365,8 +365,8 @@ const Receipt = ({ groceries }) => {
   const endItem = Math.min(startItem + itemsPerPage - 1, tableData.length);
 
   return (
-    <div className="receipt-card">
-      <div className="receipt-head">
+    <div className="receipt-component-card">
+      <div className="receipt-component-head">
         <h1>Receipt</h1>
         <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
       </div>

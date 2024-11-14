@@ -21,7 +21,11 @@ const Navbar = () => {
 
   return (
     <div className="header-nav-container">
-      <h1 className="header-logo" onClick={home} style={{ cursor: 'pointer' }}>
+      <h1
+        className="header-logo"
+        onClick={dashboard}
+        style={{ cursor: 'pointer' }}
+      >
         Budget Byte
       </h1>
       <nav className="header-nav">

@@ -129,20 +129,20 @@ input:focus {
   outline: none;
 }
 
-.receipt {
+.landing-receipt {
   width: 100%;
   margin: 10px;
   margin-bottom: 10vh;
 }
 
-.receipt-date {
+.landing-receipt-date {
   font-weight: bold;
   display: flex;
   justify-content: center;
   padding: 1rem 0;
 }
 
-.receipt-head {
+.landing-receipt-head {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -150,7 +150,7 @@ input:focus {
   position: relative;
 }
 
-.receipt-head h1 {
+.landing-receipt-head h1 {
   margin-right: auto;
   font-weight: 700;
 }
@@ -159,34 +159,34 @@ input:focus {
   margin-right: 20px;
 }
 
-.receipt-table {
+.landing-receipt-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.receipt-table tr:first-child td {
+.landing-receipt-table tr:first-child td {
   padding-top: 1rem;
 }
 
-.receipt-table tr:last-child td {
+.landing-receipt-table tr:last-child td {
   padding-bottom: 1rem;
 }
 
-.receipt-table thead {
+.landing-receipt-table thead {
   text-align: left;
   letter-spacing: 0.5px;
 }
 
-.receipt-table-head th {
+.landing-receipt-table-head th {
   padding: 1rem 1.5rem;
 }
 
-.receipt-table th {
+.landing-receipt-table th {
   position: relative;
   padding-right: 5px;
 }
 
-.receipt-table th::after {
+.landing-receipt-table th::after {
   content: '';
   display: inline-block;
   margin-left: 20px;
@@ -195,32 +195,32 @@ input:focus {
   border-top: 10px solid black;
 }
 
-.receipt-table th:hover::after {
+.landing-receipt-table th:hover::after {
   border-top: 10px solid red;
 }
 
-.receipt-table thead th {
+.landing-receipt-table thead th {
   border-top: 2px dashed black;
   border-bottom: 2px dashed black;
 }
 
-.receipt-table th:last-child {
+.landing-receipt-table th:last-child {
   text-align: right;
 }
 
-.receipt-table td:last-child {
+.landing-receipt-table td:last-child {
   letter-spacing: 0.5px;
 }
 
-.receipt-body {
+.landing-receipt-body {
   text-transform: uppercase;
 }
 
-.receipt-body td {
+.landing-receipt-body td {
   padding: 0.5rem 1.5rem;
 }
 
-.receipt-body tr:last-child {
+.landing-receipt-body tr:last-child {
   border-bottom: 2px dashed black;
 }
 

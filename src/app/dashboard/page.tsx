@@ -67,12 +67,12 @@ const Dashboard = () => {
   return (
     <div>
       <Navbar />
-      <div className="section-container">
+      <div className="dashboard-section-container">
         <Summary
           data={SummaryData.foodGroups}
           totalAmount={SummaryData.summary.totalCost}
         />
-        <div className="receipt-container">
+        <div className="receipt-component-container">
           <Receipt groceries={groceries} />
         </div>
       </div>
