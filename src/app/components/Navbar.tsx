@@ -1,5 +1,4 @@
 import {
-  useHomeRedirect,
   useProfileRedirect,
   useDashBoardRedirect,
   useAnalyticsRedirect,
@@ -11,7 +10,6 @@ import '../styles/Navbar.css';
 
 const Navbar = () => {
   const pathname = usePathname();
-  const home = useHomeRedirect();
   const profile = useProfileRedirect();
   const dashboard = useDashBoardRedirect();
   const analytics = useAnalyticsRedirect();
