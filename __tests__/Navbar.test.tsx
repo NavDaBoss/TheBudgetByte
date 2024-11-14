@@ -18,6 +18,10 @@ jest.mock('../src/app/hooks/clientUtils', () => ({
 }));
 
 describe('NavBar Component', () => {
+  afterEach(() => {
+    // Clear all mocks after each test to reset any previous calls or mock implementations
+    jest.clearAllMocks();
+  });
   it('should have Budget Byte', () => {
     render(<NavBar />);
     const myElem = screen.getByText('Budget Byte'); // Make sure this matches the text in your component
