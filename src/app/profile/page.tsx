@@ -61,7 +61,8 @@ export default function Profile() {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [nameErrorMessage, setNameErrorMessage] = useState('');
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,10 +144,10 @@ export default function Profile() {
     if (newName && currentUser !== null) {
       try {
         if (newName.length > 20) {
-          setErrorMessage('Display Name cannot exceed 20 characters');
+          setNameErrorMessage('Display Name cannot exceed 20 characters');
           throw new Error('Display Name cannot exceed 20 characters');
         }
-        setErrorMessage('');
+        setNameErrorMessage('');
         await updateProfile(currentUser, {
           displayName: newName, // Set the new displayName here
         });
@@ -162,12 +163,12 @@ export default function Profile() {
   const handleResetPassword = async () => {
     // Check if new password and confirm password match
     if (newPassword !== confirmPassword) {
-      setErrorMessage('New password and confirmation do not match.');
+      setPasswordErrorMessage('New password and confirmation do not match.');
       return;
     }
 
     if (newPassword.length < 6) {
-      setErrorMessage('Password must be at least 6 characters long.');
+      setPasswordErrorMessage('Password must be at least 6 characters long.');
       return;
     }
 
@@ -176,7 +177,7 @@ export default function Profile() {
       setConfirmPassword('');
       setNewPassword('');
       setSuccessMessage('');
-      setErrorMessage('');
+      setPasswordErrorMessage('');
       // Reauthenticate the user with their current password
       if (currentUser && currentUser.email) {
         await signInWithEmailAndPassword(
@@ -196,7 +197,7 @@ export default function Profile() {
       }
     } catch (error) {
       console.error('Error resetting password:', error);
-      setErrorMessage('Failed to reset password. Please try again.');
+      setPasswordErrorMessage('Failed to reset password. Please try again.');
     }
   };
 
@@ -288,8 +289,8 @@ export default function Profile() {
                     Cancel
                   </button>
                 </div>
-                {errorMessage && (
-                  <p className="error-message">{errorMessage}</p>
+                {nameErrorMessage && (
+                  <p className="error-message">{nameErrorMessage}</p>
                 )}
               </div>
             </div>
@@ -307,9 +308,6 @@ export default function Profile() {
                   <button onClick={handleUpdateProfile}>Save</button>
                   <button onClick={() => setIsEditingPic(false)}>Cancel</button>
                 </div>
-                {errorMessage && (
-                  <p className="error-message">{errorMessage}</p>
-                )}
               </div>
             </div>
           )}
@@ -341,8 +339,8 @@ export default function Profile() {
                     Cancel
                   </button>
                 </div>
-                {errorMessage && (
-                  <p className="error-message">{errorMessage}</p>
+                {passwordErrorMessage && (
+                  <p className="error-message">{passwordErrorMessage}</p>
                 )}
                 {successMessage && (
                   <p className="success-message">{successMessage}</p>
