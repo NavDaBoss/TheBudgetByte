@@ -124,7 +124,7 @@ export default function OcrUploadButton() {
 
         await updateDoc(docRef, { receiptID: docRef.id });
         console.log('OCR result saved to Firestore');
-        console.log('docRef = ', docRef.id)
+        console.log('docRef = ', docRef.id);
 
         // Reference 'groceries' subcollection to main document
         const groceriesSubCollectionRef = collection(docRef, 'groceries');
