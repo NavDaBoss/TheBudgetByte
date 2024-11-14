@@ -64,7 +64,6 @@
   margin: 20px 0;
 }
 
-
 body {
   background-color: var(--background);
 }
@@ -104,12 +103,11 @@ body {
 }
 
 .rightSection {
-  
   width: 51%;
   display: flex;
   flex-direction: column;
   align-items: left;
-  
+
   /* background-color: #f5f7f9; */
   /* padding: 20px;
     border-radius: 8px;
