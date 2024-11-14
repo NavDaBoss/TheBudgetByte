@@ -31,9 +31,6 @@ const SummaryPie = ({ data }) => {
   );
 };
 
-
-
-
 // import '../styles/Summary.css';
 
 const SummaryHead = ({ sortColumn }) => {
@@ -156,7 +153,6 @@ const Summary = ({ data, totalAmount }) => {
     </div>
   );
 };
-
 
 const ReceiptHead = ({ sortColumn }) => {
   const [sortField, setSortField] = useState('');
@@ -519,57 +515,52 @@ const Receipt = ({ groceries }) => {
   );
 };
 
-
-
-
-
 const SummaryData = {
-  "foodGroups": [
+  foodGroups: [
     {
-      "type": "Fruits",
-      "quantity": 5,
-      "totalCost": 3.06,
-      "pricePercentage": 18.3
+      type: 'Fruits',
+      quantity: 5,
+      totalCost: 3.06,
+      pricePercentage: 18.3,
     },
     {
-      "type": "Vegetables",
-      "quantity": 0,
-      "totalCost": 0.0,
-      "pricePercentage": 0
+      type: 'Vegetables',
+      quantity: 0,
+      totalCost: 0.0,
+      pricePercentage: 0,
     },
     {
-      "type": "Grains",
-      "quantity": 1,
-      "totalCost": 2.49,
-      "pricePercentage": 14.9
+      type: 'Grains',
+      quantity: 1,
+      totalCost: 2.49,
+      pricePercentage: 14.9,
     },
     {
-      "type": "Protein",
-      "quantity": 2,
-      "totalCost": 8.58,
-      "pricePercentage": 51.5
+      type: 'Protein',
+      quantity: 2,
+      totalCost: 8.58,
+      pricePercentage: 51.5,
     },
     {
-      "type": "Dairy",
-      "quantity": 1,
-      "totalCost": 2.5,
-      "pricePercentage": 15.0
-    }
+      type: 'Dairy',
+      quantity: 1,
+      totalCost: 2.5,
+      pricePercentage: 15.0,
+    },
   ],
-  "summary": {
-    "totalCount": 6,
-    "totalCost": 16.63
-  }};
+  summary: {
+    totalCount: 6,
+    totalCost: 16.63,
+  },
+};
 
-  const groceries = [
-    { itemName: 'Apple', quantity: 3, foodGroup: 'Fruit', itemPrice: 0.72 },
-    { itemName: 'Banana', quantity: 2, foodGroup: 'Fruit', itemPrice: 0.45 },
-    { itemName: 'Bread', quantity: 1, foodGroup: 'Grains', itemPrice: 2.49 },
-    { itemName: 'Eggs', quantity: 2, foodGroup: 'Protein', itemPrice: 4.49 },
-    { itemName: 'Milk', quantity: 1, foodGroup: 'Dairy', itemPrice: 2.50 } 
-  ];
-  
-
+const groceries = [
+  { itemName: 'Apple', quantity: 3, foodGroup: 'Fruit', itemPrice: 0.72 },
+  { itemName: 'Banana', quantity: 2, foodGroup: 'Fruit', itemPrice: 0.45 },
+  { itemName: 'Bread', quantity: 1, foodGroup: 'Grains', itemPrice: 2.49 },
+  { itemName: 'Eggs', quantity: 2, foodGroup: 'Protein', itemPrice: 4.49 },
+  { itemName: 'Milk', quantity: 1, foodGroup: 'Dairy', itemPrice: 2.5 },
+];
 
 export default function BudgetBytePage() {
   const router = useRouter();
@@ -595,11 +586,22 @@ export default function BudgetBytePage() {
             <h2 className="slogan">Your Website For Health and Wealth</h2>
             {/* <h2> Track Your Spending, Boost Your Health</h2> */}
             <ul className="featuresList">
-              <li><strong>Classify Your Grocieries:</strong> AI automatically sorts items into food foodGroups</li>
-              <li><strong>Understand Your Spending:</strong> Get a breakdown of expenses by food category</li>
-              <li><strong>Monthly Insights:</strong> Create an account for personalized summaries and spending trends.</li>
+              <li>
+                <strong>Classify Your Grocieries:</strong> AI automatically
+                sorts receipt items into food groups
+              </li>
+              <li>
+                <strong>Understand Your Spending:</strong> Get a breakdown of
+                expenses by food category
+              </li>
+              <li>
+                <strong>Monthly Insights:</strong> Create an account for
+                personalized summaries and spending trends.
+              </li>
             </ul>
-            <button className="scanButton" onClick={handleLogin}>UPLOAD RECEIPT</button>
+            <button className="scanButton" onClick={handleLogin}>
+              UPLOAD RECEIPT
+            </button>
           </div>
           <div className="rightSection">
             <Summary
@@ -607,8 +609,8 @@ export default function BudgetBytePage() {
               totalAmount={SummaryData.summary.totalCost}
             />
             <div className="receipt-container">
-            <Receipt groceries={groceries} />
-          </div>
+              <Receipt groceries={groceries} />
+            </div>
           </div>
         </div>
       </div>
