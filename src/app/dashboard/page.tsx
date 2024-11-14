@@ -72,7 +72,7 @@ const Dashboard = () => {
           data={SummaryData.foodGroups}
           totalAmount={SummaryData.summary.totalCost}
         />
-        <div className="receipt-container">
+        <div className="receipt-component-container">
           <Receipt groceries={groceries} />
         </div>
       </div>
