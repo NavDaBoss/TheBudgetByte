@@ -17,6 +17,22 @@ import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import { updateUsersYearlyOverview } from '../analytics/updateYearlyData';
 
+// Specify types
+type GroceryItem = {
+  itemName: string;
+  itemPrice: number;
+  quantity: number;
+  foodGroup: string;
+  totalPrice: number;
+};
+
+type OpenAIResponse = {
+  groceryStore: string;
+  receiptDate: string;
+  groceries: GroceryItem[];
+  receiptBalance: number;
+};
+
 // For my MUI Upload Button
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -37,16 +53,10 @@ export default function OcrUploadButton() {
 
   // For Dialog
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  // For OpenAI API
-  // const [gptPrompt, setPrompt] = useState('');
-  // const [gptResponse, setResponse] = useState(null);
-  // const [gptError, setError] = useState('');
-
   const currentUser = auth.currentUser;
 
-  // SENDS REQUEST TO API AND RECEIVES RESPONSE
-  const openaiTextExtraction = async (promptText: string) => {
+  // Sends request to ../api/openai/route.js to handle prompting
+  const openaiTextExtraction = async (promptText: string): Promise<OpenAIResponse | null> => {
     try {
       const res = await fetch('/api/openai', {
         method: 'POST',
@@ -58,17 +68,13 @@ export default function OcrUploadButton() {
       const data = await res.json();
 
       if (res.ok) {
-        // setResponse(data.response); // response now contains a string
-        console.log('API response received IN CLIENT:', data.response); // Log the response from the server
-        console.log('groceries:', data.response.groceries);
+        console.log('API Response received:', data.response); // Log the response from the server
         return data.response;
       } else {
-        // setError(data.error || 'An error occurred.');
         console.log('API error received:', data.error); // Log the response from the server
         return null;
       }
     } catch (err) {
-      // setError('Failed to fetch response from API.');
       console.log('API error received:', err); // Log the response from the server
       return null;
     }
@@ -106,14 +112,12 @@ export default function OcrUploadButton() {
 
       console.log('Raw OCR Result:', result.data.text);
 
-      // SEND OPENAI REQUEST WITH THE OCR TEXT
-      // setPrompt(result.data.text);
+      // Send the Raw OCR data as a prompt to ChatGPT
+      const apiResponse = await openaiTextExtraction(result.data.text);
 
       // Send the result to Firestore (to 'receiptData' collection)
-      const apiResponse = await openaiTextExtraction(result.data.text);
       if (apiResponse) {
         const docRef = await addDoc(collection(db, 'receiptData'), {
-          // ...apiResponse,
           groceryStore: apiResponse.groceryStore,
           receiptDate: apiResponse.receiptDate,
           receiptBalance: apiResponse.receiptBalance,
@@ -124,13 +128,13 @@ export default function OcrUploadButton() {
 
         await updateDoc(docRef, { receiptID: docRef.id });
         console.log('OCR result saved to Firestore');
-        console.log('docRef = ', docRef.id);
+        console.log('docRef.id = ', docRef.id);
 
         // Reference 'groceries' subcollection to main document
         const groceriesSubCollectionRef = collection(docRef, 'groceries');
 
         // Loop through each dictionary in groceries
-        apiResponse.groceries.forEach(async (item) => {
+        apiResponse.groceries.forEach(async (item: GroceryItem) => {
           await addDoc(groceriesSubCollectionRef, {
             itemName: item.itemName,
             itemPrice: item.itemPrice,
