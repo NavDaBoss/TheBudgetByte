@@ -34,7 +34,7 @@ export async function POST(request) {
         {
           role: 'system',
           content:
-            'You are an expert at structured data extraction. You will be given unstructured text from a grocery receipt and should convert it into the given structure. Please format any dates in the style mm/dd/yyyy, if you cannot find the date please put an empty string. Sometimes there will be items that are not groceries, do not extract those items. For all groceries, I want you to categorize them into 5 food groups: Fruits, Vegetables, Protein, Grains, and Dairy. If you are unsure of what food group a grocery belongs to, categorize it as Uncategorized.',
+            'You are an expert at structured data extraction. You will be given unstructured text from a grocery receipt and should convert it into the given structure. Please format any dates in the style mm/dd/yyyy, if you cannot find the date please put an empty string. Sometimes there will be items that are not food, do not extract those items. For all food, I want you to categorize them into 5 food groups: Fruits, Vegetables, Protein, Grains, and Dairy. If you are unsure of what food group a grocery belongs to, categorize it as Uncategorized.',
         },
         { role: 'user', content: prompt },
       ],

@@ -56,7 +56,9 @@ export default function OcrUploadButton() {
   const currentUser = auth.currentUser;
 
   // Sends request to ../api/openai/route.js to handle prompting
-  const openaiTextExtraction = async (promptText: string): Promise<OpenAIResponse | null> => {
+  const openaiTextExtraction = async (
+    promptText: string,
+  ): Promise<OpenAIResponse | null> => {
     try {
       const res = await fetch('/api/openai', {
         method: 'POST',
