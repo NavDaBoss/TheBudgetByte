@@ -44,13 +44,12 @@ const createOrGetYearlyOverview = async () => {
         return docData;
       }
       // Create a yearly overview for the user
-      const newYearlyOverviewData: YearlyOverviewData = {};
       const overviewRef = collection(db, 'yearlyOverview');
 
       const docRef = await addDoc(overviewRef, {
         yearlyOverviewId: '',
         userID: currentUser.uid,
-        yearlyOverviewData: newYearlyOverviewData,
+        yearlyOverviewData: {},
       });
 
       await updateDoc(docRef, { yearlyOverviewId: docRef.id });
@@ -59,7 +58,7 @@ const createOrGetYearlyOverview = async () => {
       return {
         yearlyOverviewId: docRef.id,
         userID: currentUser.uid,
-        yearlyOverviewData: newYearlyOverviewData,
+        yearlyOverviewData: {},
       };
     } catch (error) {
       console.error('Error fetching or creating yearly overview:', error);
@@ -111,26 +110,32 @@ const createOrGetYearData = (overview: YearlyOverview, year: string) => {
     return overview.yearlyOverviewData[year];
   } else {
     // Create an overview for the given year, then return it.
-    overview.yearlyOverviewData[year] = {};
+    overview.yearlyOverviewData[year] = {
+      totalReceipts: 0,
+      totalSpent: 0,
+      totalQuantity: 0,
+      monthlyData: {},
+    };
     return overview.yearlyOverviewData[year];
   }
 };
 
 // Get the specified month's overview if it exists, else create it.
 const createOrGetMonthData = (
-  yearOverview: { [month: string]: MonthlyData },
+  yearOverview: YearlyOverviewData,
   month: string,
 ) => {
-  if (month in yearOverview) {
-    return yearOverview[month];
+  if (month in yearOverview.monthlyData) {
+    return yearOverview.monthlyData[month];
   } else {
     // Create an overview for the given month with empty values, then return it.
-    yearOverview[month] = {
+    yearOverview.monthlyData[month] = {
+      totalReceipts: 0,
       totalSpent: 0,
       totalQuantity: 0,
       foodGroups: [],
     };
-    return yearOverview[month];
+    return yearOverview.monthlyData[month];
   }
 };
 
@@ -184,7 +189,9 @@ export const updateUsersYearlyOverview = async (
     console.log('could not find an overview, year, or month');
     return;
   }
+  console.log(overview);
   const yearOverview = createOrGetYearData(overview, year);
+  console.log(yearOverview);
   const monthOverview = createOrGetMonthData(yearOverview, month);
   let foodGroupsTotalCost: Record<FoodTypes, number> = {
     [FoodTypes.Vegetables]: 0,
@@ -200,6 +207,7 @@ export const updateUsersYearlyOverview = async (
     [FoodTypes.Protein]: 0,
     [FoodTypes.Dairy]: 0,
   };
+  console.log(groceries);
   for (const grocery of groceries) {
     if (
       grocery.foodGroup === '' ||
@@ -229,17 +237,26 @@ export const updateUsersYearlyOverview = async (
   );
   console.log('total spent' + totalSpent);
   console.log('total quantitity' + totalQuantity);
+  // Update year overview with new totals
+  yearOverview.totalSpent =
+    Math.round((yearOverview.totalSpent + totalSpent) * 100) / 100;
+  yearOverview.totalQuantity += totalQuantity;
+  yearOverview.totalReceipts += 1;
   // Update month overview and food groups with new totals
   monthOverview.totalSpent =
     Math.round((monthOverview.totalSpent + totalSpent) * 100) / 100;
   monthOverview.totalQuantity += totalQuantity;
+  monthOverview.totalReceipts += 1;
   updateFoodGroups(monthOverview, foodGroupsTotalCost, foodGroupsTotalQuantity);
   console.log(yearOverview);
   // Update firestore with the new yearlyoverview changes
   try {
     const overviewRef = doc(db, 'yearlyOverview', overview.yearlyOverviewId); // Get the correct doc reference
     await updateDoc(overviewRef, {
-      [`yearlyOverviewData.${year}.${month}`]: monthOverview, // Use dot notation to update the specific month
+      [`yearlyOverviewData.${year}.totalReceipts`]: yearOverview.totalReceipts,
+      [`yearlyOverviewData.${year}.totalSpent`]: yearOverview.totalSpent,
+      [`yearlyOverviewData.${year}.totalQuantity`]: yearOverview.totalQuantity,
+      [`yearlyOverviewData.${year}.monthlyData.${month}`]: monthOverview, // Use dot notation to update the specific month
     });
     console.log('Yearly overview updated successfully.');
   } catch (error) {

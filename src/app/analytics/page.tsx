@@ -21,19 +21,15 @@ const AnalyticsSummary = ({
   selectedYear: string;
   selectedMonth: string;
 }) => {
+  const selectedYearData = yearlyOverview?.yearlyOverviewData[selectedYear];
+  const monthlyData = selectedYearData?.monthlyData; // Safely access monthlyData
+
   return (
     <div className="summary-container">
-      {yearlyOverview &&
-      yearlyOverview.yearlyOverviewData[selectedYear]?.[selectedMonth] ? (
+      {monthlyData && monthlyData[selectedMonth] ? (
         <Summary
-          data={
-            yearlyOverview.yearlyOverviewData[selectedYear][selectedMonth]
-              .foodGroups
-          }
-          totalAmount={
-            yearlyOverview.yearlyOverviewData[selectedYear][selectedMonth]
-              .totalSpent
-          }
+          data={monthlyData[selectedMonth].foodGroups} // safely access foodGroups
+          totalAmount={monthlyData[selectedMonth].totalSpent} // safely access totalSpent
         />
       ) : (
         <p>
@@ -92,7 +88,7 @@ const Analytics = () => {
       const initialYear = years[0];
       // Sort the keys of monthlyData according to the `months` array order (January -> December).
       const sortedMonths = Object.keys(
-        yearlyOverview.yearlyOverviewData[initialYear],
+        yearlyOverview.yearlyOverviewData[initialYear]?.monthlyData || {}, // Fallback to empty object if monthlyData is undefined
       ).sort((a, b) => monthNames.indexOf(a) - monthNames.indexOf(b));
       if (!sortedMonths || sortedMonths.length === 0) {
         return;
