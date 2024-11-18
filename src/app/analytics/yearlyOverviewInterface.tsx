@@ -30,19 +30,25 @@ interface FoodGroupInfo {
 
 // Define the type for the monthly data
 interface MonthlyData {
+  totalReceipts: number;
   totalSpent: number;
   totalQuantity: number;
   foodGroups: FoodGroupInfo[];
 }
 
 interface YearlyOverviewData {
-  [year: string]: {
+  totalReceipts: number;
+  totalSpent: number;
+  totalQuantity: number;
+  monthlyData: {
     [month: string]: MonthlyData;
   };
 }
 
 interface YearlyOverview {
-  yearlyOverviewData: YearlyOverviewData;
+  yearlyOverviewData: {
+    [year: string]: YearlyOverviewData;
+  };
   yearlyOverviewId: string;
   userID: string;
 }

@@ -46,7 +46,8 @@ const createYearlyMoneySpentGraphParams = (
   setCategoryLegend: React.Dispatch<React.SetStateAction<CategoryLegend>>,
 ) => {
   // get the data for all populated months of the selected year
-  const monthlyData = yearlyOverview.yearlyOverviewData[selectedYear];
+  const monthlyData =
+    yearlyOverview.yearlyOverviewData[selectedYear].monthlyData;
   if (!monthlyData) {
     console.log(`No data available for ${selectedYear}`);
     return null;
