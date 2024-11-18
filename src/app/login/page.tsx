@@ -23,12 +23,13 @@ export default function Login() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const router = useRouter();
+  const currentUser = auth.currentUser;
 
   useEffect(() => {
-    if (auth.currentUser) {
+    if (currentUser) {
       router.push('/dashboard');
     }
-  }, [router, auth.currentUser]);
+  }, [router, currentUser]);
 
   const googleSignIn = async () => {
     try {
@@ -127,9 +128,11 @@ export default function Login() {
       </button>
       <div className="or-separator">Or</div>
       <div className="google-sign-in-container">
-        <img
+        <Image
           src="/assets/continue_with_google.svg"
           alt="Continue with Google"
+          width={236.562}
+          height={50}
           onClick={googleSignIn}
           className="google-sign-in"
         />
