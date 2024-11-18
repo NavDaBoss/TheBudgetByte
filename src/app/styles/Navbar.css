@@ -1,16 +1,31 @@
+/* Default styles for the navbar */
 .header-nav-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  flex-direction: column; /* Stack logo and navbar vertically by default */
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
   padding: 0 var(--columnPaddingNormal);
   overflow: hidden;
 }
 
+.header-top-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0;
+}
+
 .header-logo {
   margin: 10px;
   font-weight: 700;
+}
+
+.hamburger {
+  display: none; /* Hidden by default */
+  font-size: 2rem;
+  cursor: pointer;
 }
 
 .header-nav {
@@ -66,4 +81,67 @@
 
 .header-nav-item-link.active:hover::after {
   transform: scaleX(0);
+}
+
+/* Styles for mobile */
+@media (max-width: 768px) {
+  .header-nav-container {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .header-nav {
+    display: none; /* Default state is hidden */
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hamburger {
+    display: block; /* Show hamburger icon on mobile */
+    cursor: pointer;
+    font-size: 2rem;
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
+  /* Show the vertical navbar when the hamburger is clicked */
+  .header-nav-container.open .header-nav {
+    display: flex;
+  }
+
+  .header-nav-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .header-nav-item {
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  .header-nav-list button {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Hide hamburger on larger screens */
+@media (min-width: 769px) {
+  .hamburger {
+    display: none;
+  }
+
+  /* Navbar remains underneath the logo on desktop */
+  .header-nav-container {
+    flex-direction: column;
+  }
+
+  .header-nav {
+    display: flex;
+  }
 }

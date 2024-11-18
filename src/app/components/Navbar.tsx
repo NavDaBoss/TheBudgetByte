@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   useProfileRedirect,
   useDashBoardRedirect,
@@ -9,6 +10,7 @@ import { usePathname } from 'next/navigation';
 import '../styles/Navbar.css';
 
 const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const profile = useProfileRedirect();
   const dashboard = useDashBoardRedirect();
@@ -17,15 +19,26 @@ const Navbar = () => {
 
   const isActive = (path: string) => pathname === path;
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
-    <div className="header-nav-container">
-      <h1
-        className="header-logo"
-        onClick={dashboard}
-        style={{ cursor: 'pointer' }}
-      >
-        Budget Byte
-      </h1>
+    <div className={`header-nav-container ${isMenuOpen ? 'open' : ''}`}>
+      <div className="header-top-container">
+        <h1
+          className="header-logo"
+          onClick={dashboard}
+          style={{ cursor: 'pointer' }}
+        >
+          Budget Byte
+        </h1>
+
+        <div className="hamburger" onClick={toggleMenu}>
+          ☰
+        </div>
+      </div>
+
       <nav className="header-nav">
         <ul className="header-nav-list">
           <li className="header-nav-item">
