@@ -119,10 +119,14 @@ export default function OcrUploadButton() {
 
       // Send the result to Firestore (to 'receiptData' collection)
       if (apiResponse) {
+        // Calculate receiptBalance based on the groceries array
+        // const receiptBalance = apiResponse.groceries.reduce((sum, item) => sum + item.totalPrice, 0);
+        const receiptBalance = parseFloat(apiResponse.groceries.reduce((sum, item) => sum + item.totalPrice, 0).toFixed(2)); // Rounds
+
         const docRef = await addDoc(collection(db, 'receiptData'), {
           groceryStore: apiResponse.groceryStore,
           receiptDate: apiResponse.receiptDate,
-          receiptBalance: apiResponse.receiptBalance,
+          receiptBalance: receiptBalance,
           submittedTimestamp: new Date(),
           fileName: selectedImage.name,
           userID: currentUser.uid,
