@@ -46,7 +46,7 @@ interface GraphData {
 
 export interface GraphParams {
   categoryLegend: CategoryLegend;
-  setCategoryLegend: (value: CategoryLegend) => void;
+  setCategoryLegend: React.Dispatch<React.SetStateAction<CategoryLegend>>;
   graphData: GraphData;
 }
 
@@ -66,7 +66,7 @@ export const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({
   params,
 }) => {
   // Get the assigned colored for this category
-  const getBorderColor = (category: string) => {
+  const getBorderColor = (category: Category) => {
     const dataset = params.graphData.datasets.find((d) => d.label === category);
     return dataset ? dataset.borderColor : 'rgba(0, 0, 0, 1)';
   };
@@ -94,7 +94,7 @@ export const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({
     },
   };
 
-  const handleCheckboxChange = (category: string) => {
+  const handleCheckboxChange = (category: Category) => {
     params.setCategoryLegend((prevState) => ({
       ...prevState,
       [category]: !prevState[category],
@@ -116,8 +116,8 @@ export const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({
               control={
                 <Checkbox
                   checked={params.categoryLegend[category]}
-                  onChange={() => handleCheckboxChange(category)}
-                  style={{ color: getBorderColor(category) }}
+                  onChange={() => handleCheckboxChange(category as Category)}
+                  style={{ color: getBorderColor(category as Category) }}
                 />
               }
               label={category}
