@@ -191,7 +191,7 @@ export default function OcrUploadButton() {
         ),
         submittedTimestamp: new Date(),
         fileName: selectedImage?.name,
-        userID: currentUser.uid,
+        userID: currentUser?.uid,
       });
 
       await updateDoc(docRef, { receiptID: docRef.id });
@@ -212,7 +212,7 @@ export default function OcrUploadButton() {
         });
       });
 
-      updateUsersYearlyOverview(apiResponse.groceries, apiResponse.receiptDate);
+      updateUsersYearlyOverview(apiResponse.groceries, confirmedDate);
     } catch (error) {
       console.error('Error saving to Firestore:', error);
     } finally {
