@@ -5,14 +5,14 @@ interface DropDownProps {
   selectedValue: string; // Current selected value
   setSelectedValue: (value: string) => void; // Function to update the selected value
   values: string[]; // Array of values to display in the dropdown
-  drop_label: string; // Label for the dropdown
+  label: string; // Label for the dropdown
 }
 
 const DropDown: React.FC<DropDownProps> = ({
   selectedValue,
   setSelectedValue,
   values,
-  drop_label,
+  label,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,7 +27,7 @@ const DropDown: React.FC<DropDownProps> = ({
 
   return (
     <div className="button-container">
-      <label style={{ marginRight: '8px' }}>{drop_label}</label>
+      <label style={{ marginRight: '8px' }}>{label}</label>
       <div className="dropdown-container">
         <div className="dropdown-wrapper" onClick={toggleDropdown}>
           <div className="selected-year">{selectedValue}</div>

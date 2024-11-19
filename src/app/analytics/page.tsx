@@ -21,19 +21,15 @@ const AnalyticsSummary = ({
   selectedYear: string;
   selectedMonth: string;
 }) => {
+  const selectedYearData = yearlyOverview?.yearlyOverviewData[selectedYear];
+  const monthlyData = selectedYearData?.monthlyData; // Safely access monthlyData
+
   return (
     <div className="summary-container">
-      {yearlyOverview &&
-      yearlyOverview.yearlyOverviewData[selectedYear]?.[selectedMonth] ? (
+      {monthlyData && monthlyData[selectedMonth] ? (
         <Summary
-          data={
-            yearlyOverview.yearlyOverviewData[selectedYear][selectedMonth]
-              .foodGroups
-          }
-          totalAmount={
-            yearlyOverview.yearlyOverviewData[selectedYear][selectedMonth]
-              .totalSpent
-          }
+          data={monthlyData[selectedMonth].foodGroups} // safely access foodGroups
+          totalAmount={monthlyData[selectedMonth].totalSpent} // safely access totalSpent
         />
       ) : (
         <p>
@@ -44,6 +40,54 @@ const AnalyticsSummary = ({
   );
 };
 
+const AnalyticsSummaryCard = ({
+  yearlyOverview,
+  selectedYear,
+  selectedMonth,
+}: {
+  yearlyOverview: YearlyOverview | null;
+  selectedYear: string;
+  selectedMonth: string;
+}) => {
+  const selectedYearData = yearlyOverview?.yearlyOverviewData[selectedYear];
+  const selectedMonthData = selectedYearData?.monthlyData[selectedMonth];
+  return (
+    <div className="summary-card-container">
+      <div className="summary-card">
+        <h1 className="summary-card-header">
+          Receipts Scanned in {selectedYear}
+        </h1>
+        {selectedYearData ? <h4>{selectedYearData.totalReceipts}</h4> : 'NA'}
+      </div>
+      <div className="summary-card">
+        <h1 className="summary-card-header">Total Spent in {selectedYear}</h1>
+        {selectedYearData ? <h4>${selectedYearData.totalSpent}</h4> : 'NA'}
+      </div>
+      <div className="summary-card">
+        <h1 className="summary-card-header">
+          Number of Items Bought in {selectedYear}
+        </h1>
+        {selectedYearData ? <h4>{selectedYearData.totalQuantity}</h4> : 'NA'}
+      </div>
+      <div className="summary-card">
+        <h1 className="summary-card-header">
+          Receipts Scanned in {selectedMonth}
+        </h1>
+        {selectedMonthData ? <h4>{selectedMonthData.totalReceipts}</h4> : 'NA'}
+      </div>
+      <div className="summary-card">
+        <h1 className="summary-card-header">Total Spent in {selectedMonth}</h1>
+        {selectedMonthData ? <h4>${selectedMonthData.totalSpent}</h4> : 'NA'}
+      </div>
+      <div className="summary-card">
+        <h1 className="summary-card-header">
+          Number of Items Bought in {selectedMonth}
+        </h1>
+        {selectedMonthData ? <h4>{selectedMonthData.totalQuantity}</h4> : 'NA'}
+      </div>
+    </div>
+  );
+};
 const Analytics = () => {
   const router = useRouter();
   const currentUser = auth.currentUser;
@@ -92,7 +136,7 @@ const Analytics = () => {
       const initialYear = years[0];
       // Sort the keys of monthlyData according to the `months` array order (January -> December).
       const sortedMonths = Object.keys(
-        yearlyOverview.yearlyOverviewData[initialYear],
+        yearlyOverview.yearlyOverviewData[initialYear]?.monthlyData || {}, // Fallback to empty object if monthlyData is undefined
       ).sort((a, b) => monthNames.indexOf(a) - monthNames.indexOf(b));
       if (!sortedMonths || sortedMonths.length === 0) {
         return;
@@ -111,6 +155,11 @@ const Analytics = () => {
       <div>
         <Navbar />
       </div>
+      <AnalyticsSummaryCard
+        yearlyOverview={yearlyOverview}
+        selectedYear={selectedYear}
+        selectedMonth={selectedMonth}
+      />
       <div className="split-container">
         <div className="year-container">
           <div className="section-container">
@@ -118,7 +167,7 @@ const Analytics = () => {
               selectedValue={selectedYear}
               setSelectedValue={setSelectedYear}
               values={yearValues}
-              drop_label="Selected Year:"
+              label="Selected Year:"
             />
             <SpendingInYearGraph
               selectedYear={selectedYear}
@@ -132,7 +181,7 @@ const Analytics = () => {
               selectedValue={selectedMonth}
               setSelectedValue={setSelectedMonth}
               values={monthNames}
-              drop_label="Selected Month:"
+              label="Selected Month:"
             />
             <AnalyticsSummary
               yearlyOverview={yearlyOverview}

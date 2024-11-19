@@ -32,34 +32,30 @@ const createOrGetYearlyOverview = async () => {
   }
   const fetchOrCreateYearlyOverview = async () => {
     try {
-      console.log('trying to query for yearly overview');
       // query for user's yearly overview
       const receiptsRef = collection(db, 'yearlyOverview');
       const q = query(receiptsRef, where('userID', '==', currentUser.uid));
       const querySnapshot = await getDocs(q);
       // Yearly overview exists, so retrieve and return it
       if (!querySnapshot.empty) {
-        console.log('returning an existing yearlyoverview');
         const docData = querySnapshot.docs[0].data() as YearlyOverview;
         return docData;
       }
       // Create a yearly overview for the user
-      const newYearlyOverviewData: YearlyOverviewData = {};
       const overviewRef = collection(db, 'yearlyOverview');
 
       const docRef = await addDoc(overviewRef, {
         yearlyOverviewId: '',
         userID: currentUser.uid,
-        yearlyOverviewData: newYearlyOverviewData,
+        yearlyOverviewData: {},
       });
 
       await updateDoc(docRef, { yearlyOverviewId: docRef.id });
-      console.log('returning a newly created yearlyoverview');
       // Return the new yearly overview
       return {
         yearlyOverviewId: docRef.id,
         userID: currentUser.uid,
-        yearlyOverviewData: newYearlyOverviewData,
+        yearlyOverviewData: {},
       };
     } catch (error) {
       console.error('Error fetching or creating yearly overview:', error);
@@ -111,26 +107,32 @@ const createOrGetYearData = (overview: YearlyOverview, year: string) => {
     return overview.yearlyOverviewData[year];
   } else {
     // Create an overview for the given year, then return it.
-    overview.yearlyOverviewData[year] = {};
+    overview.yearlyOverviewData[year] = {
+      totalReceipts: 0,
+      totalSpent: 0,
+      totalQuantity: 0,
+      monthlyData: {},
+    };
     return overview.yearlyOverviewData[year];
   }
 };
 
 // Get the specified month's overview if it exists, else create it.
 const createOrGetMonthData = (
-  yearOverview: { [month: string]: MonthlyData },
+  yearOverview: YearlyOverviewData,
   month: string,
 ) => {
-  if (month in yearOverview) {
-    return yearOverview[month];
+  if (month in yearOverview.monthlyData) {
+    return yearOverview.monthlyData[month];
   } else {
     // Create an overview for the given month with empty values, then return it.
-    yearOverview[month] = {
+    yearOverview.monthlyData[month] = {
+      totalReceipts: 0,
       totalSpent: 0,
       totalQuantity: 0,
       foodGroups: [],
     };
-    return yearOverview[month];
+    return yearOverview.monthlyData[month];
   }
 };
 
@@ -186,14 +188,14 @@ export const updateUsersYearlyOverview = async (
   }
   const yearOverview = createOrGetYearData(overview, year);
   const monthOverview = createOrGetMonthData(yearOverview, month);
-  let foodGroupsTotalCost: Record<FoodTypes, number> = {
+  const foodGroupsTotalCost: Record<FoodTypes, number> = {
     [FoodTypes.Vegetables]: 0,
     [FoodTypes.Fruits]: 0,
     [FoodTypes.Grains]: 0,
     [FoodTypes.Protein]: 0,
     [FoodTypes.Dairy]: 0,
   };
-  let foodGroupsTotalQuantity: Record<FoodTypes, number> = {
+  const foodGroupsTotalQuantity: Record<FoodTypes, number> = {
     [FoodTypes.Vegetables]: 0,
     [FoodTypes.Fruits]: 0,
     [FoodTypes.Grains]: 0,
@@ -203,9 +205,8 @@ export const updateUsersYearlyOverview = async (
   for (const grocery of groceries) {
     if (
       grocery.foodGroup === '' ||
-      !Object.values(FoodTypes).includes(
-        (grocery.foodGroup as FoodTypes) || grocery.totalPrice < 0,
-      )
+      grocery.totalPrice < 0 ||
+      !Object.values(FoodTypes).includes(grocery.foodGroup as FoodTypes)
     ) {
       continue;
     }
@@ -227,21 +228,26 @@ export const updateUsersYearlyOverview = async (
     (sum, cost) => sum + cost,
     0,
   );
-  console.log('total spent' + totalSpent);
-  console.log('total quantitity' + totalQuantity);
+  // Update year overview with new totals
+  yearOverview.totalSpent =
+    Math.round((yearOverview.totalSpent + totalSpent) * 100) / 100;
+  yearOverview.totalQuantity += totalQuantity;
+  yearOverview.totalReceipts += 1;
   // Update month overview and food groups with new totals
   monthOverview.totalSpent =
     Math.round((monthOverview.totalSpent + totalSpent) * 100) / 100;
   monthOverview.totalQuantity += totalQuantity;
+  monthOverview.totalReceipts += 1;
   updateFoodGroups(monthOverview, foodGroupsTotalCost, foodGroupsTotalQuantity);
-  console.log(yearOverview);
   // Update firestore with the new yearlyoverview changes
   try {
     const overviewRef = doc(db, 'yearlyOverview', overview.yearlyOverviewId); // Get the correct doc reference
     await updateDoc(overviewRef, {
-      [`yearlyOverviewData.${year}.${month}`]: monthOverview, // Use dot notation to update the specific month
+      [`yearlyOverviewData.${year}.totalReceipts`]: yearOverview.totalReceipts,
+      [`yearlyOverviewData.${year}.totalSpent`]: yearOverview.totalSpent,
+      [`yearlyOverviewData.${year}.totalQuantity`]: yearOverview.totalQuantity,
+      [`yearlyOverviewData.${year}.monthlyData.${month}`]: monthOverview, // Use dot notation to update the specific month
     });
-    console.log('Yearly overview updated successfully.');
   } catch (error) {
     console.error('Error updating yearly overview in Firebase:', error);
   }
