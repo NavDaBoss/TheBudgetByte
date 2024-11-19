@@ -40,6 +40,54 @@ const AnalyticsSummary = ({
   );
 };
 
+const AnalyticsSummaryCard = ({
+  yearlyOverview,
+  selectedYear,
+  selectedMonth,
+}: {
+  yearlyOverview: YearlyOverview | null;
+  selectedYear: string;
+  selectedMonth: string;
+}) => {
+  const selectedYearData = yearlyOverview?.yearlyOverviewData[selectedYear];
+  const selectedMonthData = selectedYearData?.monthlyData[selectedMonth];
+  return (
+    <div className="summary-card-container">
+      <div className="summary-card">
+        <h1 className="summary-card-header">
+          Receipts Scanned in {selectedYear}
+        </h1>
+        {selectedYearData ? <h4>{selectedYearData.totalReceipts}</h4> : 'NA'}
+      </div>
+      <div className="summary-card">
+        <h1 className="summary-card-header">Total Spent in {selectedYear}</h1>
+        {selectedYearData ? <h4>${selectedYearData.totalSpent}</h4> : 'NA'}
+      </div>
+      <div className="summary-card">
+        <h1 className="summary-card-header">
+          Number of Items Bought in {selectedYear}
+        </h1>
+        {selectedYearData ? <h4>{selectedYearData.totalQuantity}</h4> : 'NA'}
+      </div>
+      <div className="summary-card">
+        <h1 className="summary-card-header">
+          Receipts Scanned in {selectedMonth}
+        </h1>
+        {selectedMonthData ? <h4>{selectedMonthData.totalReceipts}</h4> : 'NA'}
+      </div>
+      <div className="summary-card">
+        <h1 className="summary-card-header">Total Spent in {selectedMonth}</h1>
+        {selectedMonthData ? <h4>${selectedMonthData.totalSpent}</h4> : 'NA'}
+      </div>
+      <div className="summary-card">
+        <h1 className="summary-card-header">
+          Number of Items Bought in {selectedMonth}
+        </h1>
+        {selectedMonthData ? <h4>{selectedMonthData.totalQuantity}</h4> : 'NA'}
+      </div>
+    </div>
+  );
+};
 const Analytics = () => {
   const router = useRouter();
   const currentUser = auth.currentUser;
@@ -107,6 +155,11 @@ const Analytics = () => {
       <div>
         <Navbar />
       </div>
+      <AnalyticsSummaryCard
+        yearlyOverview={yearlyOverview}
+        selectedYear={selectedYear}
+        selectedMonth={selectedMonth}
+      />
       <div className="split-container">
         <div className="year-container">
           <div className="section-container">
