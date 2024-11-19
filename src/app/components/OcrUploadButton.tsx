@@ -27,7 +27,7 @@ type GroceryItem = {
 };
 
 type OpenAIResponse = {
-  groceryStore: string;
+  // groceryStore: string;
   receiptDate: string;
   groceries: GroceryItem[];
 };
@@ -55,9 +55,9 @@ export default function OcrUploadButton() {
   const currentUser = auth.currentUser;
 
   // API
-  // const [apiResponse, setApiResponse] = useState<OpenAIResponse | null>(null);
-  // const [confirmedDate, setConfirmedDate] = useState<string>('');
-  // const [isConfirmingDate, setIsConfirmingDate] = useState(false);
+  const [apiResponse, setApiResponse] = useState<OpenAIResponse | null>(null);
+  const [confirmedDate, setConfirmedDate] = useState<string>('');
+  const [isConfirmingDate, setIsConfirmingDate] = useState(false);
 
   // Sends request to ../api/openai/route.js to handle prompting
   const openaiTextExtraction = async (
@@ -95,6 +95,8 @@ export default function OcrUploadButton() {
   const handleDialogClose = () => {
     setIsDialogOpen(false);
     setSelectedImage(null);
+    setApiResponse(null);
+    setIsConfirmingDate(false);
   };
 
   // Handle image upload
@@ -119,55 +121,109 @@ export default function OcrUploadButton() {
       console.log('Raw OCR Result:', result.data.text);
 
       // Send the Raw OCR data as a prompt to ChatGPT
-      const apiResponse = await openaiTextExtraction(result.data.text);
+      const response = await openaiTextExtraction(result.data.text);
 
       // Send the result to Firestore (to 'receiptData' collection)
-      if (apiResponse) {
+      if (response) {
+        setApiResponse(response);
+        setConfirmedDate(response.receiptDate)
+        setIsConfirmingDate(true);
+
+
         // Calculate receiptBalance based on the groceries array
         // const receiptBalance = apiResponse.groceries.reduce((sum, item) => sum + item.totalPrice, 0);
-        const receiptBalance = parseFloat(
-          apiResponse.groceries
-            .reduce((sum, item) => sum + item.totalPrice, 0)
-            .toFixed(2),
-        ); // Rounds
+        // const receiptBalance = parseFloat(
+        //   apiResponse.groceries
+        //     .reduce((sum, item) => sum + item.totalPrice, 0)
+        //     .toFixed(2),
+        // ); // Rounds
 
-        const docRef = await addDoc(collection(db, 'receiptData'), {
-          groceryStore: apiResponse.groceryStore,
-          receiptDate: apiResponse.receiptDate,
-          receiptBalance: receiptBalance,
-          submittedTimestamp: new Date(),
-          fileName: selectedImage.name,
-          userID: currentUser.uid,
-        });
+        // const docRef = await addDoc(collection(db, 'receiptData'), {
+        //   groceryStore: apiResponse.groceryStore,
+        //   receiptDate: apiResponse.receiptDate,
+        //   receiptBalance: receiptBalance,
+        //   submittedTimestamp: new Date(),
+        //   fileName: selectedImage.name,
+        //   userID: currentUser.uid,
+        // });
 
-        await updateDoc(docRef, { receiptID: docRef.id });
-        console.log('OCR result saved to Firestore');
-        console.log('docRef.id = ', docRef.id);
+        // await updateDoc(docRef, { receiptID: docRef.id });
+        // console.log('OCR result saved to Firestore');
+        // console.log('docRef.id = ', docRef.id);
 
-        // Reference 'groceries' subcollection to main document
-        const groceriesSubCollectionRef = collection(docRef, 'groceries');
+        // // Reference 'groceries' subcollection to main document
+        // const groceriesSubCollectionRef = collection(docRef, 'groceries');
 
-        // Loop through each dictionary in groceries
-        apiResponse.groceries.forEach(async (item: GroceryItem) => {
-          await addDoc(groceriesSubCollectionRef, {
-            itemName: item.itemName,
-            itemPrice: item.itemPrice,
-            quantity: item.quantity,
-            foodGroup: item.foodGroup,
-            totalPrice: item.totalPrice,
-          });
-        });
+        // // Loop through each dictionary in groceries
+        // apiResponse.groceries.forEach(async (item: GroceryItem) => {
+        //   await addDoc(groceriesSubCollectionRef, {
+        //     itemName: item.itemName,
+        //     itemPrice: item.itemPrice,
+        //     quantity: item.quantity,
+        //     foodGroup: item.foodGroup,
+        //     totalPrice: item.totalPrice,
+        //   });
+        // });
 
-        updateUsersYearlyOverview(
-          apiResponse.groceries,
-          apiResponse.receiptDate,
-        );
+        // updateUsersYearlyOverview(
+        //   apiResponse.groceries,
+        //   apiResponse.receiptDate,
+        // );
       }
     } catch (error) {
       console.error('Error extracting text or saving to Firestore:', error);
     } finally {
       setLoading(false);
-      alert('File extracted and parsed successfully!');
+      // alert('File extracted and parsed successfully!');
+    }
+  };
+
+  const handleSaveToFirestore = async () => {
+    if (!apiResponse || !confirmedDate) return;
+
+    try {
+      const docRef = await addDoc(collection(db, 'receiptData'), {
+        // groceryStore: apiResponse.groceryStore,
+        receiptDate: confirmedDate, // Use the confirmed date
+        receiptBalance: parseFloat(
+          apiResponse.groceries
+            .reduce((sum, item) => sum + item.totalPrice, 0)
+            .toFixed(2),
+        ),
+        submittedTimestamp: new Date(),
+        fileName: selectedImage?.name,
+        userID: currentUser.uid,
+      });
+
+      await updateDoc(docRef, { receiptID: docRef.id });
+      console.log('OCR result saved to Firestore');
+      console.log('docRef.id = ', docRef.id);
+
+      // Reference 'groceries' subcollection to main document
+      const groceriesSubCollectionRef = collection(docRef, 'groceries');
+
+      // Loop through each dictionary in groceries
+      apiResponse.groceries.forEach(async (item: GroceryItem) => {
+        await addDoc(groceriesSubCollectionRef, {
+          itemName: item.itemName,
+          itemPrice: item.itemPrice,
+          quantity: item.quantity,
+          foodGroup: item.foodGroup,
+          totalPrice: item.totalPrice,
+        });
+      });
+
+      updateUsersYearlyOverview(
+        apiResponse.groceries,
+        apiResponse.receiptDate,
+      );
+
+    } catch (error) {
+      console.error('Error saving to Firestore:', error);
+    } finally {
+      setIsConfirmingDate(false);
+      alert('Data saved successfully!');
+      handleDialogClose();
     }
   };
 
@@ -186,58 +242,87 @@ export default function OcrUploadButton() {
       <Dialog open={isDialogOpen} onClose={handleDialogClose}>
         <DialogTitle>Upload and Parse Receipt</DialogTitle>
         <DialogContent>
-          <p className="ocrRequirements">
-            Please ensure the uploaded receipt meets the following requirements
-            for best OCR results:
-          </p>
-          <ul className="listOcrRequirements">
-            <li>
-              Use a plain, single-color background (e.g., solid black or white)
-              with no patterns or textures.
-            </li>
-            <li>
-              Ensure good lighting with minimal shadows for clear text
-              visibility.
-            </li>
-            <li>
-              Position the camera directly above the receipt to avoid skewing or
-              blurriness.
-            </li>
-          </ul>
-          <Button
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-            className="dialogFileButton"
-          >
-            Upload files
-            <VisuallyHiddenInput
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              multiple
-            />
-          </Button>
-          <TextField
-            disabled
-            fullWidth
-            margin="dense"
-            label="Selected File"
-            value={selectedImage ? selectedImage.name : 'No file selected'}
-            variant="outlined"
-          />
+          {!isConfirmingDate ? (
+            <> 
+              <p className="ocrRequirements">
+                Please ensure the uploaded receipt meets the following requirements
+                for best OCR results:
+              </p>
+              <ul className="listOcrRequirements">
+                <li>
+                  Use a plain, single-color background (e.g., solid black or white)
+                  with no patterns or textures.
+                </li>
+                <li>
+                  Ensure good lighting with minimal shadows for clear text
+                  visibility.
+                </li>
+                <li>
+                  Position the camera directly above the receipt to avoid skewing or
+                  blurriness.
+                </li>
+              </ul>
+              <Button
+                component="label"
+                role={undefined}
+                variant="contained"
+                tabIndex={-1}
+                startIcon={<CloudUploadIcon />}
+                className="dialogFileButton"
+              >
+                Upload files
+                <VisuallyHiddenInput
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  multiple
+                />
+              </Button>
+              <TextField
+                disabled
+                fullWidth
+                margin="dense"
+                label="Selected File"
+                value={selectedImage ? selectedImage.name : 'No file selected'}
+                variant="outlined"
+              />
+              <Button
+                onClick={handleParseImage}
+                color="primary"
+                disabled={loading || !selectedImage}
+                className="dialogParseButton"
+              >
+                {loading ? 'Processing...' : 'Upload and Parse'}
+              </Button>
+            </>
+            ) : (
+              <>
+                <TextField
+                  label="Confirm or Enter Receipt Date"
+                  value={confirmedDate}
+                  onChange={(e) => setConfirmedDate(e.target.value)}
+                  fullWidth
+                  margin="dense"
+                />
+                <Button
+                  onClick={handleSaveToFirestore}
+                  color="secondary"
+                  className="dialogConfirmButton"
+                >
+                  Confirm and Save
+                </Button>
+              </>
+            )}
         </DialogContent>
         <DialogActions>
-          <Button
+          {/* <Button
             onClick={handleParseImage}
             color="primary"
             disabled={loading || !selectedImage}
             className="dialogParseButton"
           >
             {loading ? 'Processing...' : 'Upload and Parse'}
-          </Button>
+          </Button> */}
           <Button
             onClick={handleDialogClose}
             color="secondary"
