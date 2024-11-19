@@ -114,7 +114,7 @@ const Analytics = () => {
               selectedValue={selectedYear}
               setSelectedValue={setSelectedYear}
               values={yearValues}
-              drop_label="Selected Year:"
+              label="Selected Year:"
             />
             <SpendingInYearGraph
               selectedYear={selectedYear}
@@ -128,7 +128,7 @@ const Analytics = () => {
               selectedValue={selectedMonth}
               setSelectedValue={setSelectedMonth}
               values={monthNames}
-              drop_label="Selected Month:"
+              label="Selected Month:"
             />
             <AnalyticsSummary
               yearlyOverview={yearlyOverview}

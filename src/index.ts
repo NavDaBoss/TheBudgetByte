@@ -20,7 +20,7 @@ export function doSomeStuff(
   andThat: string,
   andThose: string[],
 ) {
-  //function on one line
+  // function on one line
   if (!andThose.length) {
     return false;
   }
