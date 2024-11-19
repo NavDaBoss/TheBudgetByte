@@ -202,7 +202,6 @@ export const updateUsersYearlyOverview = async (
     [FoodTypes.Protein]: 0,
     [FoodTypes.Dairy]: 0,
   };
-  console.log(monthOverview);
   for (const grocery of groceries) {
     if (
       grocery.foodGroup === '' ||
