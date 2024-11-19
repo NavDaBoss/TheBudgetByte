@@ -1,9 +1,9 @@
 .uploadButton {
-  background-color: #4e8f03; /* Green background */
+  background-color: var(--green); /* Green background */
 }
 
 .dialogFileButton {
-  background-color: #4e8f03; /* Green background */
+  background-color: var(--green); /* Green background */
 }
 
 .dialogParseButton {
@@ -11,6 +11,10 @@
 }
 
 .dialogCloseButton {
+  color: #000000;
+}
+
+.dialogConfirmButton {
   color: #000000;
 }
 

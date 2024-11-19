@@ -15,10 +15,10 @@ export const groceryItemSchema = z.object({
 });
 
 export const groceryReceiptExtraction = z.object({
-  groceryStore: z.string(),
+  // groceryStore: z.string(),
   receiptDate: z.string(),
   groceries: z.array(groceryItemSchema),
-  receiptBalance: z.number(), // this should be calculated dynamically after we scan grocery items
+  // receiptBalance: z.number(), // this should be calculated dynamically after we scan grocery items
 });
 
 export async function POST(request) {
@@ -38,16 +38,14 @@ export async function POST(request) {
         },
         { role: 'user', content: prompt },
       ],
+      temperature: 0.3, // Controls creativity
+      top_p: 0.9, // Focuses output on most probable responses
       response_format: zodResponseFormat(
         groceryReceiptExtraction,
         'grocery_receipt_extraction',
       ),
     });
     console.log('CHATGPT RESPONSE JSON:', completion);
-    // console.log(
-    //     'CHATGPT MESSAGE CONTENT:',
-    //     completion.choices[0].message.content,
-    // );
     // Return only the content of the first choice's message
     return NextResponse.json({
       response: completion.choices[0].message.parsed,
