@@ -126,9 +126,8 @@ export default function OcrUploadButton() {
       // Send the result to Firestore (to 'receiptData' collection)
       if (response) {
         setApiResponse(response);
-        setConfirmedDate(response.receiptDate)
+        setConfirmedDate(response.receiptDate);
         setIsConfirmingDate(true);
-
 
         // Calculate receiptBalance based on the groceries array
         // const receiptBalance = apiResponse.groceries.reduce((sum, item) => sum + item.totalPrice, 0);
@@ -213,11 +212,7 @@ export default function OcrUploadButton() {
         });
       });
 
-      updateUsersYearlyOverview(
-        apiResponse.groceries,
-        apiResponse.receiptDate,
-      );
-
+      updateUsersYearlyOverview(apiResponse.groceries, apiResponse.receiptDate);
     } catch (error) {
       console.error('Error saving to Firestore:', error);
     } finally {
@@ -243,23 +238,23 @@ export default function OcrUploadButton() {
         <DialogTitle>Upload and Parse Receipt</DialogTitle>
         <DialogContent>
           {!isConfirmingDate ? (
-            <> 
+            <>
               <p className="ocrRequirements">
-                Please ensure the uploaded receipt meets the following requirements
-                for best OCR results:
+                Please ensure the uploaded receipt meets the following
+                requirements for best OCR results:
               </p>
               <ul className="listOcrRequirements">
                 <li>
-                  Use a plain, single-color background (e.g., solid black or white)
-                  with no patterns or textures.
+                  Use a plain, single-color background (e.g., solid black or
+                  white) with no patterns or textures.
                 </li>
                 <li>
                   Ensure good lighting with minimal shadows for clear text
                   visibility.
                 </li>
                 <li>
-                  Position the camera directly above the receipt to avoid skewing or
-                  blurriness.
+                  Position the camera directly above the receipt to avoid
+                  skewing or blurriness.
                 </li>
               </ul>
               <Button
@@ -295,24 +290,24 @@ export default function OcrUploadButton() {
                 {loading ? 'Processing...' : 'Upload and Parse'}
               </Button>
             </>
-            ) : (
-              <>
-                <TextField
-                  label="Confirm or Enter Receipt Date"
-                  value={confirmedDate}
-                  onChange={(e) => setConfirmedDate(e.target.value)}
-                  fullWidth
-                  margin="dense"
-                />
-                <Button
-                  onClick={handleSaveToFirestore}
-                  color="secondary"
-                  className="dialogConfirmButton"
-                >
-                  Confirm and Save
-                </Button>
-              </>
-            )}
+          ) : (
+            <>
+              <TextField
+                label="Confirm or Enter Receipt Date"
+                value={confirmedDate}
+                onChange={(e) => setConfirmedDate(e.target.value)}
+                fullWidth
+                margin="dense"
+              />
+              <Button
+                onClick={handleSaveToFirestore}
+                color="secondary"
+                className="dialogConfirmButton"
+              >
+                Confirm and Save
+              </Button>
+            </>
+          )}
         </DialogContent>
         <DialogActions>
           {/* <Button
