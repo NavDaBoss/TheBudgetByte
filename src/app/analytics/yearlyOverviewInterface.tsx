@@ -13,6 +13,7 @@ export const monthNames = [
   'December',
 ];
 
+/* eslint-disable no-unused-vars */
 export enum FoodTypes {
   Vegetables = 'Vegetables',
   Fruits = 'Fruits',
@@ -20,6 +21,8 @@ export enum FoodTypes {
   Protein = 'Protein',
   Dairy = 'Dairy',
 }
+/* eslint-enable no-unused-vars */
+
 // Define the type for the individual food group items
 interface FoodGroupInfo {
   type: FoodTypes;
