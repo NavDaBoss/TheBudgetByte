@@ -30,7 +30,6 @@ type OpenAIResponse = {
   groceryStore: string;
   receiptDate: string;
   groceries: GroceryItem[];
-  receiptBalance: number;
 };
 
 // For my MUI Upload Button
@@ -54,6 +53,11 @@ export default function OcrUploadButton() {
   // For Dialog
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const currentUser = auth.currentUser;
+
+  // API
+  // const [apiResponse, setApiResponse] = useState<OpenAIResponse | null>(null);
+  // const [confirmedDate, setConfirmedDate] = useState<string>('');
+  // const [isConfirmingDate, setIsConfirmingDate] = useState(false);
 
   // Sends request to ../api/openai/route.js to handle prompting
   const openaiTextExtraction = async (
@@ -121,7 +125,11 @@ export default function OcrUploadButton() {
       if (apiResponse) {
         // Calculate receiptBalance based on the groceries array
         // const receiptBalance = apiResponse.groceries.reduce((sum, item) => sum + item.totalPrice, 0);
-        const receiptBalance = parseFloat(apiResponse.groceries.reduce((sum, item) => sum + item.totalPrice, 0).toFixed(2)); // Rounds
+        const receiptBalance = parseFloat(
+          apiResponse.groceries
+            .reduce((sum, item) => sum + item.totalPrice, 0)
+            .toFixed(2),
+        ); // Rounds
 
         const docRef = await addDoc(collection(db, 'receiptData'), {
           groceryStore: apiResponse.groceryStore,
