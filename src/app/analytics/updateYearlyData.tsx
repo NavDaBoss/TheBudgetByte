@@ -188,26 +188,26 @@ export const updateUsersYearlyOverview = async (
   }
   const yearOverview = createOrGetYearData(overview, year);
   const monthOverview = createOrGetMonthData(yearOverview, month);
-  let foodGroupsTotalCost: Record<FoodTypes, number> = {
+  const foodGroupsTotalCost: Record<FoodTypes, number> = {
     [FoodTypes.Vegetables]: 0,
     [FoodTypes.Fruits]: 0,
     [FoodTypes.Grains]: 0,
     [FoodTypes.Protein]: 0,
     [FoodTypes.Dairy]: 0,
   };
-  let foodGroupsTotalQuantity: Record<FoodTypes, number> = {
+  const foodGroupsTotalQuantity: Record<FoodTypes, number> = {
     [FoodTypes.Vegetables]: 0,
     [FoodTypes.Fruits]: 0,
     [FoodTypes.Grains]: 0,
     [FoodTypes.Protein]: 0,
     [FoodTypes.Dairy]: 0,
   };
+  console.log(monthOverview);
   for (const grocery of groceries) {
     if (
       grocery.foodGroup === '' ||
-      !Object.values(FoodTypes).includes(
-        (grocery.foodGroup as FoodTypes) || grocery.totalPrice < 0,
-      )
+      grocery.totalPrice < 0 ||
+      !Object.values(FoodTypes).includes(grocery.foodGroup as FoodTypes)
     ) {
       continue;
     }
