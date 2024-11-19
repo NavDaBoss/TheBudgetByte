@@ -32,19 +32,35 @@ export default function Profile() {
     } else {
       const fetchData = async () => {
         try {
-          const receiptsRef = collection(db, 'receiptData');
-          const q = query(receiptsRef, where('userID', '==', currentUser.uid));
+          const yearlyOverviewRef = collection(db, 'yearlyOverview');
+          const q = query(
+            yearlyOverviewRef,
+            where('userID', '==', currentUser.uid),
+          );
           const querySnapshot = await getDocs(q);
           setReceiptCount(querySnapshot.size);
 
-          let total = 0;
+          let totalSpent = 0;
+          let totalReceipts = 0;
+
           querySnapshot.forEach((doc) => {
             const data = doc.data();
-            if (data.receiptBalance) {
-              total += parseFloat(data.receiptBalance);
+            if (data.yearlyOverviewData) {
+              const yearlyData = data.yearlyOverviewData;
+              Object.keys(yearlyData).forEach((year) => {
+                const yearData = yearlyData[year];
+                if (yearData.totalSpent) {
+                  totalSpent += parseFloat(yearData.totalSpent);
+                }
+                if (yearData.totalReceipts) {
+                  totalReceipts += parseInt(yearData.totalReceipts, 10);
+                }
+              });
             }
           });
-          setTotalAmount(parseFloat(total.toFixed(2)));
+
+          setTotalAmount(parseFloat(totalSpent.toFixed(2)));
+          setReceiptCount(totalReceipts);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
