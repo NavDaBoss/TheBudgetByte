@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { auth, db, storage } from '../firebase/firebaseConfig'; // Adjust the path if necessary
+import { auth, storage } from '../firebase/firebaseConfig'; // Adjust the path if necessary
 import { ref, listAll, getDownloadURL } from 'firebase/storage';
 import { onAuthStateChanged } from 'firebase/auth'; // Import onAuthStateChanged
 
@@ -30,8 +30,8 @@ const Receipts = () => {
 
       setLoading(true);
       try {
-        //gs://budgetbyte-d5bf8.appspot.com
-        const storageRef = ref(storage, `/userReciepts/${currentUser.uid}`); //${currentUser.uid}
+        // gs://budgetbyte-d5bf8.appspot.com
+        const storageRef = ref(storage, `/userReciepts/${currentUser.uid}`); // ${currentUser.uid}
 
         const result = await listAll(storageRef);
 
