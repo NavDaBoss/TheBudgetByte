@@ -1,11 +1,3 @@
-.summary-card {
-  padding: 1.5rem;
-  border-radius: 10px;
-  border: 2px solid var(--light-grey);
-  margin: 2rem;
-  width: 450px;
-}
-
 .chart-legend-container {
   display: flex;
   justify-content: space-between;

@@ -31,12 +31,18 @@ const Dashboard = () => {
     <div>
       <Navbar />
       <div className="dashboard-section-container">
-        <Summary
-          data={SummaryData.foodGroups}
-          totalAmount={SummaryData.summary.totalCost}
-        />
-        <div className="receipt-component-container">
-          {loading ? <p>Loading...</p> : <Receipt groceries={groceries} />}
+        <div className="summary-card">
+          <Summary
+            data={SummaryData.foodGroups}
+            totalAmount={SummaryData.summary.totalCost}
+          />
+        </div>
+        <div className="receipt-card">
+          {loading ? (
+            <p>Loading Receipt...</p>
+          ) : (
+            <Receipt groceries={groceries} />
+          )}
         </div>
       </div>
       {error && <p>Error: {error}</p>}

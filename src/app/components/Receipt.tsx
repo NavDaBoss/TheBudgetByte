@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react';
-// import { getFirestore, doc, updateDoc } from 'firebase/firestore';
 
 import '../styles/Receipt.css';
 
@@ -35,53 +34,37 @@ const ReceiptHead = ({ sortColumn }) => {
     };
   };
 
+  const fields = [
+    { column: 'quantity', className: 'receipt-quantity-column', label: 'QTY' },
+    {
+      column: 'itemName',
+      className: 'receipt-item-name-column',
+      label: 'ITEM',
+    },
+    {
+      column: 'foodGroup',
+      className: 'receipt-food-group-column',
+      label: 'GROUP',
+    },
+    { column: 'itemPrice', className: 'receipt-price-column', label: 'PRICE' },
+  ];
+
   return (
     <thead>
       <tr>
-        <th
-          key="quantity"
-          className="receipt-quantity-column"
-          onClick={() => handleSortChange('quantity')}
-        >
-          QTY
-          <span
-            className="sort-arrow"
-            style={getSortArrowStyle('quantity')}
-          ></span>
-        </th>
-        <th
-          key="itemName"
-          className="receipt-item-name-column"
-          onClick={() => handleSortChange('itemName')}
-        >
-          ITEM
-          <span
-            className="sort-arrow"
-            style={getSortArrowStyle('itemName')}
-          ></span>
-        </th>
-        <th
-          key="group"
-          className="group-column"
-          onClick={() => handleSortChange('foodGroup')}
-        >
-          GROUP
-          <span
-            className="sort-arrow"
-            style={getSortArrowStyle('foodGroup')}
-          ></span>
-        </th>
-        <th
-          key="price"
-          className="receipt-price-column"
-          onClick={() => handleSortChange('itemPrice')}
-        >
-          PRICE
-          <span
-            className="sort-arrow"
-            style={getSortArrowStyle('itemPrice')}
-          ></span>
-        </th>
+        {fields.map(({ column, className, label }) => (
+          <th
+            key={column}
+            className={className}
+            onClick={() => handleSortChange(`${column}`)}
+          >
+            {label}
+            <span
+              className="sort-arrow"
+              style={getSortArrowStyle(`${column}`)}
+            ></span>
+          </th>
+        ))}
       </tr>
     </thead>
   );
@@ -92,7 +75,6 @@ const ReceiptRow = ({ item, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(null);
   const [isHovered, setIsHovered] = useState(null);
   const [tempEditValue, setTempEditValue] = useState(null);
-  const inputRef = useRef(null);
 
   const handleEdit = (field) => {
     setIsEditing(field);
@@ -100,7 +82,7 @@ const ReceiptRow = ({ item, onUpdate }) => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && isEditing) {
       setTempEditValue((prev) => ({
         ...prev,
         [isEditing]: tempEditValue,
@@ -108,20 +90,6 @@ const ReceiptRow = ({ item, onUpdate }) => {
       setIsEditing(null);
     }
   };
-
-  const handleClickOutside = (event) => {
-    if (inputRef.current && !inputRef.current.contains(event.target)) {
-      setTempEditValue(null);
-      setIsEditing(null);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   const handleChange = (field, value) => {
     setEditableItem((prev) => ({
@@ -131,10 +99,16 @@ const ReceiptRow = ({ item, onUpdate }) => {
   };
 
   const handleBlur = async () => {
-    // onUpdate(editableItem);
     setTempEditValue(null);
     setIsEditing(null);
   };
+
+  const fields = [
+    { name: 'quantity', type: 'number' },
+    { name: 'itemName', type: 'type' },
+    { name: 'foodGroup', type: 'select' },
+    { name: 'itemPrice', type: 'number', prefix: '$' },
+  ];
 
   const foodGroupOptions = [
     'Grains',
@@ -146,110 +120,51 @@ const ReceiptRow = ({ item, onUpdate }) => {
 
   return (
     <tr onMouseLeave={() => setIsHovered(null)}>
-      <td
-        className="receipt-quantity-column"
-        onMouseEnter={() => setIsHovered('quantity')}
-      >
-        {isEditing === 'quantity' ? (
-          <input
-            type="number"
-            value={editableItem.quantity}
-            onChange={(e) => handleChange('quantity', e.target.value)}
-            onKeyDown={handleKeyDown}
-            onBlur={handleBlur}
-            className="editable-input"
-          />
-        ) : (
-          <>
-            {editableItem.quantity}
-            {isHovered === 'quantity' && (
-              <EditIcon
-                className="edit-icon"
-                onClick={() => handleEdit('quantity')}
+      {fields.map(({ name, type, prefix }) => (
+        <td
+          key={name}
+          className={`receipt-${name}-column`}
+          onMouseEnter={() => setIsHovered(name)}
+        >
+          {isEditing === name ? (
+            type === 'select' ? (
+              <select
+                value={editableItem[name]}
+                onChange={(e) => handleChange(name, e.target.value)}
+                onBlur={() => handleBlur(name)}
+                className="editable-select"
+              >
+                {foodGroupOptions.map((group) => (
+                  <option key={group} value={group}>
+                    {group}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type={type}
+                value={editableItem[name]}
+                onChange={(e) => handleChange(name, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e, name)}
+                onBlur={() => handleBlur(name)}
+                className="editable-input"
               />
-            )}
-          </>
-        )}
-      </td>
-      <td
-        className="receipt-item-name-column"
-        onMouseEnter={() => setIsHovered('itemName')}
-      >
-        {isEditing === 'itemName' ? (
-          <input
-            type="text"
-            value={editableItem.itemName}
-            onKeyDown={handleKeyDown}
-            onChange={(e) => handleChange('itemName', e.target.value)}
-            onBlur={handleBlur}
-            className="editable-input"
-          />
-        ) : (
-          <>
-            {editableItem.itemName}
-            {isHovered === 'itemName' && (
-              <EditIcon
-                className="edit-icon"
-                onClick={() => handleEdit('itemName')}
-              />
-            )}
-          </>
-        )}
-      </td>
-      <td
-        className="receipt-food-group-column"
-        onMouseEnter={() => setIsHovered('foodGroup')}
-      >
-        {isEditing === 'foodGroup' ? (
-          <select
-            value={editableItem.foodGroup}
-            onChange={(e) => handleChange('foodGroup', e.target.value)}
-            onBlur={handleBlur}
-            className="editable-select"
-          >
-            {foodGroupOptions.map((group) => (
-              <option key={group} value={group}>
-                {group}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <>
-            {editableItem.foodGroup}
-            {isHovered === 'foodGroup' && (
-              <EditIcon
-                className="edit-icon"
-                onClick={() => handleEdit('foodGroup')}
-              />
-            )}
-          </>
-        )}
-      </td>
-      <td
-        className="receipt-price-column"
-        onMouseEnter={() => setIsHovered('itemPrice')}
-      >
-        {isEditing === 'itemPrice' ? (
-          <input
-            type="number"
-            value={editableItem.itemPrice}
-            onChange={(e) => handleChange('itemPrice', e.target.value)}
-            onKeyDown={handleKeyDown}
-            onBlur={handleBlur}
-            className="editable-input"
-          />
-        ) : (
-          <>
-            ${editableItem.itemPrice.toFixed(2)}
-            {isHovered === 'itemPrice' && (
-              <EditIcon
-                className="edit-icon"
-                onClick={() => handleEdit('itemPrice')}
-              />
-            )}
-          </>
-        )}
-      </td>
+            )
+          ) : (
+            <>
+              {prefix && name === 'itemPrice'
+                ? `${prefix}${editableItem[name].toFixed(2)}`
+                : editableItem[name]}
+              {isHovered === name && (
+                <EditIcon
+                  className="edit-icon"
+                  onClick={() => handleEdit(name)}
+                />
+              )}
+            </>
+          )}
+        </td>
+      ))}
     </tr>
   );
 };
@@ -261,18 +176,6 @@ const ReceiptTable = ({
   page,
   itemsPerPage,
 }) => {
-  // const db = getFirestore();
-  //
-  // const updateItemInFirebase = async (updatedItem) => {
-  //   try {
-  //     const itemDocRef = doc(db, 'receiptData', 'groceries', updatedItem.id);
-  //     await updateDoc(itemDocRef, updatedItem);
-  //     console.log('Item updated successfully');
-  //   } catch (error) {
-  //     console.error('Error updating item in Firebase:', error);
-  //   }
-  // };
-
   const startIndex = page * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedGroceries = groceries.slice(startIndex, endIndex);
@@ -312,7 +215,7 @@ const Receipt = ({ groceries }) => {
   const [tableData, setTableData] = useState(groceries);
   const [filterText, setFilterText] = useState('');
   const [page, setPage] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   useEffect(() => {
     setTableData(groceries);
@@ -365,7 +268,7 @@ const Receipt = ({ groceries }) => {
   const endItem = Math.min(startItem + itemsPerPage - 1, tableData.length);
 
   return (
-    <div className="receipt-component-card">
+    <div>
       <div className="receipt-component-head">
         <h1>Receipt</h1>
         <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
