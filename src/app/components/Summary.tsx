@@ -1,63 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import 'chart.js/auto';
 
 import '../styles/Summary.css';
 
-const SummaryHead = ({ sortColumn }) => {
-  const [sortField, setSortField] = useState('');
-  const [order, setOrder] = useState('asc');
-
-  const handleSortChange = (accessor) => {
-    let sortOrder = 'asc';
-    if (accessor === sortField) {
-      sortOrder = order === 'asc' ? 'desc' : 'asc';
-    }
-    setSortField(accessor);
-    setOrder(sortOrder);
-    sortColumn(accessor, sortOrder);
-  };
-
-  return (
-    <thead>
-      <tr>
-        <th
-          key="group"
-          className="group-column"
-          onClick={() => handleSortChange('foodGroup')}
-        >
-          Group
-          <span className="sort-arrow"></span>
-        </th>
-        <th
-          key="quantity"
-          className="quantity-column"
-          onClick={() => handleSortChange('quantity')}
-        >
-          QTY
-          <span className="sort-arrow"></span>
-        </th>
-        <th
-          key="price"
-          className="price-column"
-          onClick={() => handleSortChange('totalCost')}
-        >
-          Price
-          <span className="sort-arrow"></span>
-        </th>
-        <th
-          key="price-percent"
-          className="price-percent-column"
-          onClick={() => handleSortChange('pricePercentage')}
-        >
-          Price %<span className="sort-arrow"></span>
-        </th>
-      </tr>
-    </thead>
-  );
-};
-
-const Summary = ({ data, totalAmount }) => {
+const Summary = ({ data, totalCost }) => {
   const colorMap = {
     Fruits: 'red',
     Vegetables: 'green',
@@ -105,7 +52,7 @@ const Summary = ({ data, totalAmount }) => {
             }}
           />
           <div className="doughnut-center">
-            <h2>${totalAmount}</h2>
+            <h2>${totalCost}</h2>
           </div>
         </div>
         <div className="food-group-legend">

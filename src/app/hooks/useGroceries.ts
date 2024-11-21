@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   getMostRecentReceipt,
   getGroceriesSubcollection,
-  updateGroceryField,
 } from '../firebase/firebaseService';
 
 const useGroceries = (userID: string | null) => {
   const [groceries, setGroceries] = useState<any[]>([]);
+  const [receiptBalance, setReceiptBalance] = useState(0);
   const [receiptID, setReceiptID] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchMostRecentReceipt = async () => {
+  const fetchMostRecentReceipt = useCallback(async () => {
     if (userID) {
       setLoading(true);
       try {
@@ -19,6 +19,9 @@ const useGroceries = (userID: string | null) => {
         if (!querySnapshot.empty) {
           const fetchedReceiptID = querySnapshot.docs[0].id;
           setReceiptID(fetchedReceiptID);
+
+          const receiptData = querySnapshot.docs[0].data();
+          setReceiptBalance(receiptData.receiptBalance || 0);
 
           const groceriesSnapshot =
             await getGroceriesSubcollection(fetchedReceiptID);
@@ -28,7 +31,6 @@ const useGroceries = (userID: string | null) => {
               groceriesSnapshot.docs.map((doc) => ({
                 ...doc.data(),
                 id: doc.id,
-                receiptID,
               })),
             );
           } else {
@@ -43,7 +45,7 @@ const useGroceries = (userID: string | null) => {
         setLoading(false);
       }
     }
-  };
+  }, [userID]);
 
   const updateGroceryItem = (
     groceryID: string,
@@ -64,9 +66,11 @@ const useGroceries = (userID: string | null) => {
   return {
     groceries,
     receiptID,
+    receiptBalance,
     updateGroceryItem,
     loading,
     error,
+    refetch: fetchMostRecentReceipt,
   };
 };
 

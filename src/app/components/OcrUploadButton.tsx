@@ -18,6 +18,10 @@ import TextField from '@mui/material/TextField';
 import { updateUsersYearlyOverview } from '../analytics/updateYearlyData';
 
 // Specify types
+type OcrUploadButtonProps = {
+  onUploadComplete?: () => void;
+};
+
 type GroceryItem = {
   itemName: string;
   itemPrice: number;
@@ -46,7 +50,9 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 // Define the component as a reusable upload button
-export default function OcrUploadButton() {
+export default function OcrUploadButton({
+  onUploadComplete,
+}: OcrUploadButtonProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -213,6 +219,10 @@ export default function OcrUploadButton() {
       });
 
       updateUsersYearlyOverview(apiResponse.groceries, confirmedDate);
+
+      if (onUploadComplete) {
+        onUploadComplete();
+      }
     } catch (error) {
       console.error('Error saving to Firestore:', error);
     } finally {
