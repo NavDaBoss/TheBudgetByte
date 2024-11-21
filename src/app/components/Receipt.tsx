@@ -53,7 +53,7 @@ const ReceiptHead = ({ sortColumn }) => {
     {
       column: 'itemPrice',
       className: 'receipt-item-price-column',
-      label: 'PRICE',
+      label: 'ITEM PRICE',
     },
   ];
 
@@ -112,9 +112,18 @@ const ReceiptRow = ({ item, onUpdate }) => {
     let updatedValue = value;
 
     if (fieldName === 'quantity') {
-      updatedValue = Math.min(99, parseInt(value) || 0);
+      if (value === '') {
+        updatedValue = '';
+      } else {
+        updatedValue = Math.min(99, parseInt(value) || 0);
+      }
     } else if (fieldName === 'itemPrice') {
-      updatedValue = Math.min(999.99, parseFloat(value) || 0).toFixed(2);
+      if (value == '') {
+        updatedValue = '';
+      } else if (/^\d*\.?\d{0,2}$/.test(value)) {
+        const floatValue = parseFloat(value);
+        updatedValue = floatValue > 999.99 ? 999.99 : floatValue;
+      }
     } else if (fieldName === 'itemName') {
       updatedValue = value.slice(0, 50).toUpperCase();
     }
@@ -152,13 +161,25 @@ const ReceiptRow = ({ item, onUpdate }) => {
       if (!allowedKeys.includes(e.key) && !/^\d$/.test(e.key)) {
         e.preventDefault();
       }
+    } else if (fieldName === 'itemPrice') {
+      if (!allowedKeys.includes(e.key, '.') && !/^\d*\.?\d{0,2}$/.test(e.key)) {
+        e.preventDefault();
+      }
     }
 
     if (e.key === 'Enter' && isEditing) {
-      if (editableItem[fieldName] !== item[fieldName]) {
-        await onUpdate(item.id, fieldName, editableItem[fieldName]);
-        handleInput(fieldName, editableItem[fieldName]);
+      let value = editableItem[fieldName];
+      if (fieldName === 'quantity' && value === '') {
+        value = 0;
+      } else if (fieldName === 'itemPrice' && value === '') {
+        value = 0.0;
+      } else if (fieldName === 'itemPrice') {
+        value = parseFloat(value).toFixed(2);
       }
+      if (value !== item[fieldName]) {
+        await onUpdate(item.id, fieldName, value);
+      }
+      handleInput(fieldName, value);
       setIsEditing(null);
     }
   };
@@ -221,7 +242,11 @@ const ReceiptRow = ({ item, onUpdate }) => {
               <input
                 type={type === 'number' ? 'number' : 'text'}
                 value={editableItem[name]}
-                min={name === 'quantity' ? '0' : undefined}
+                min={
+                  name === 'quantity' && editableItem[name] !== ''
+                    ? '0'
+                    : undefined
+                }
                 max={
                   name === 'quantity'
                     ? '99'
