@@ -59,7 +59,7 @@ const Dashboard = () => {
 
     groceries.forEach((item) => {
       const foodGroup = item.foodGroup;
-      const price = parseFloat(item.itemPrice) || 0;
+      const price = parseFloat(item.itemPrice) * item.quantity || 0;
 
       if (!updatedFoodGroups[foodGroup]) {
         updatedFoodGroups[foodGroup] = 0;
@@ -81,6 +81,7 @@ const Dashboard = () => {
     setSummaryData({ foodGroups, totalCost });
 
     try {
+      console.log(receiptBalance, totalCost);
       if (totalCost !== receiptBalance) {
         await updateReceiptBalance(receiptID, totalCost);
       }
