@@ -20,7 +20,7 @@
   padding: 20px;
   margin: 0 10px;
   width: 50%;
-  background-color: #f0f0f0;
+  background-color: var(--white);
   border-radius: 10px;
   border: 2px solid var(--light-grey);
 }
@@ -35,7 +35,7 @@
 .reset-password-btn {
   display: flex;
   align-items: center;
-  color: #ffffff;
+  color: var(--white);
   background-color: var(--green);
   height: 50px;
   width: 260px;
@@ -91,7 +91,7 @@
 }
 
 .modal-content {
-  background: #fff;
+  background-color: var(--white);
   padding: 20px;
   border-radius: 6px;
   width: 90%;
@@ -127,7 +127,7 @@
   margin: 5px;
   cursor: pointer;
   background-color: var(--green);
-  color: #ffffff;
+  color: var(--white);
   border-radius: 6px;
 }
 
