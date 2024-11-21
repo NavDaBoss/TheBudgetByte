@@ -1,17 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  getFirestore,
-  collection,
-  query,
-  orderBy,
-  limit,
-  getDocs,
-  where,
-} from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { auth } from '../firebase/firebaseConfig';
+import useGroceries from '../hooks/useGroceries';
+import { updateGroceryField } from '../firebase/firebaseService';
 
 import './dashboard.css';
 
@@ -24,10 +17,19 @@ import SummaryData from './food_summary.json';
 
 const Dashboard = () => {
   const router = useRouter();
-  const auth = getAuth();
-  const db = getFirestore();
-  const [groceries, setGroceries] = useState([]);
   const currentUser = auth.currentUser;
+
+  const { groceries, receiptID, loading, error, updateGroceryItem } =
+    useGroceries(currentUser?.uid || null);
+
+  const handleUpdate = async (groceryID, fieldName, value) => {
+    try {
+      await updateGroceryField(receiptID, groceryID, fieldName, value);
+      await updateGroceryItem(groceryID, fieldName, value);
+    } catch (error) {
+      console.log('Error updating grocery:', error);
+    }
+  };
 
   useEffect(() => {
     if (!currentUser) {
@@ -35,34 +37,6 @@ const Dashboard = () => {
     }
   }),
     [currentUser, router];
-
-  useEffect(() => {
-    const fetchMostRecentReceipt = async () => {
-      if (currentUser) {
-        try {
-          const receiptRef = collection(db, 'receiptData');
-          const q = query(
-            receiptRef,
-            where('userID', '==', currentUser.uid),
-            orderBy('submittedTimestamp', 'desc'),
-            limit(1),
-          );
-          const querySnapshot = await getDocs(q);
-
-          if (!querySnapshot.empty) {
-            const mostRecentReceipt = querySnapshot.docs[0].data();
-            // console.log('Fetched receipt:', mostRecentReceipt.groceries);
-            setGroceries(mostRecentReceipt.groceries || []);
-          } else {
-            console.log('No recent receipts found');
-          }
-        } catch (error) {
-          console.error('Error fetching the most recent receipt:', error);
-        }
-      }
-    };
-    fetchMostRecentReceipt();
-  }, [currentUser, db]);
 
   return (
     <div>
@@ -72,11 +46,16 @@ const Dashboard = () => {
           data={SummaryData.foodGroups}
           totalAmount={SummaryData.summary.totalCost}
         />
-        <div className="receipt-component-container">
-          <Receipt groceries={groceries} />
+        <OcrUploadButton />
+        <div className="receipt-card">
+          {loading ? (
+            <p>Loading Receipt...</p>
+          ) : (
+            <Receipt groceries={groceries} onUpdate={handleUpdate} />
+          )}
         </div>
       </div>
-      <OcrUploadButton />
+      {error && <p>Error: {error}</p>}
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react';
-// import { getFirestore, doc, updateDoc } from 'firebase/firestore';
 
 import '../styles/Receipt.css';
 
@@ -35,53 +34,45 @@ const ReceiptHead = ({ sortColumn }) => {
     };
   };
 
+  const fields = [
+    {
+      column: 'quantity',
+      className: 'receipt-quantity-column',
+      label: 'QTY',
+    },
+    {
+      column: 'itemName',
+      className: 'receipt-item-name-column',
+      label: 'ITEM',
+    },
+    {
+      column: 'foodGroup',
+      className: 'receipt-food-group-column',
+      label: 'GROUP',
+    },
+    {
+      column: 'itemPrice',
+      className: 'receipt-item-price-column',
+      label: 'PRICE',
+    },
+  ];
+
   return (
     <thead>
       <tr>
-        <th
-          key="quantity"
-          className="receipt-quantity-column"
-          onClick={() => handleSortChange('quantity')}
-        >
-          QTY
-          <span
-            className="sort-arrow"
-            style={getSortArrowStyle('quantity')}
-          ></span>
-        </th>
-        <th
-          key="itemName"
-          className="receipt-item-name-column"
-          onClick={() => handleSortChange('itemName')}
-        >
-          ITEM
-          <span
-            className="sort-arrow"
-            style={getSortArrowStyle('itemName')}
-          ></span>
-        </th>
-        <th
-          key="group"
-          className="group-column"
-          onClick={() => handleSortChange('foodGroup')}
-        >
-          GROUP
-          <span
-            className="sort-arrow"
-            style={getSortArrowStyle('foodGroup')}
-          ></span>
-        </th>
-        <th
-          key="price"
-          className="receipt-price-column"
-          onClick={() => handleSortChange('itemPrice')}
-        >
-          PRICE
-          <span
-            className="sort-arrow"
-            style={getSortArrowStyle('itemPrice')}
-          ></span>
-        </th>
+        {fields.map(({ column, className, label }) => (
+          <th
+            key={column}
+            className={className}
+            onClick={() => handleSortChange(`${column}`)}
+          >
+            {label}
+            <span
+              className="sort-arrow"
+              style={getSortArrowStyle(`${column}`)}
+            ></span>
+          </th>
+        ))}
       </tr>
     </thead>
   );
@@ -91,50 +82,109 @@ const ReceiptRow = ({ item, onUpdate }) => {
   const [editableItem, setEditableItem] = useState(item);
   const [isEditing, setIsEditing] = useState(null);
   const [isHovered, setIsHovered] = useState(null);
-  const [tempEditValue, setTempEditValue] = useState(null);
   const inputRef = useRef(null);
 
-  const handleEdit = (field) => {
-    setIsEditing(field);
-    setTempEditValue(editableItem[field]);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      setTempEditValue((prev) => ({
-        ...prev,
-        [isEditing]: tempEditValue,
-      }));
-      setIsEditing(null);
-    }
-  };
-
-  const handleClickOutside = (event) => {
-    if (inputRef.current && !inputRef.current.contains(event.target)) {
-      setTempEditValue(null);
-      setIsEditing(null);
-    }
-  };
+  useEffect(() => {
+    setEditableItem(item);
+  }, [item]);
 
   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (inputRef.current && !inputRef.current.contains(event.target)) {
+        setEditableItem((prev) => ({
+          ...prev,
+          [isEditing]: item[isEditing],
+        }));
+        setIsEditing(null);
+      }
+    };
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [isEditing]);
 
-  const handleChange = (field, value) => {
+  const handleEdit = (field) => {
+    setIsEditing(field);
+  };
+
+  const handleInput = (fieldName, value) => {
+    let updatedValue = value;
+
+    if (fieldName === 'quantity') {
+      updatedValue = Math.min(99, parseInt(value) || 0);
+    } else if (fieldName === 'itemPrice') {
+      updatedValue = Math.min(999.99, parseFloat(value) || 0).toFixed(2);
+    } else if (fieldName === 'itemName') {
+      updatedValue = value.slice(0, 50).toUpperCase();
+    }
+
     setEditableItem((prev) => ({
       ...prev,
-      [field]: field === 'itemPrice' ? parseFloat(value) || 0 : value,
+      [fieldName]: updatedValue,
     }));
   };
 
-  const handleBlur = async () => {
-    // onUpdate(editableItem);
-    setTempEditValue(null);
-    setIsEditing(null);
+  const handleSelect = async (fieldName, value) => {
+    if (editableItem[fieldName] !== value) {
+      try {
+        await onUpdate(item.id, fieldName, value);
+        setEditableItem((prev) => ({
+          ...prev,
+          [fieldName]: value,
+        }));
+      } catch (error) {
+        console.error(`Failed to update ${fieldName}:`, error);
+      }
+    }
   };
+
+  const handleKeyDown = async (e, fieldName) => {
+    const allowedKeys = [
+      'Backspace',
+      'ArrowLeft',
+      'ArrowRight',
+      'Tab',
+      'Delete',
+    ];
+
+    if (fieldName == 'quantity') {
+      if (!allowedKeys.includes(e.key) && !/^\d$/.test(e.key)) {
+        e.preventDefault();
+      }
+    }
+
+    if (e.key === 'Enter' && isEditing) {
+      if (editableItem[fieldName] !== item[fieldName]) {
+        await onUpdate(item.id, fieldName, editableItem[fieldName]);
+        handleInput(fieldName, editableItem[fieldName]);
+      }
+      setIsEditing(null);
+    }
+  };
+
+  const fields = [
+    {
+      name: 'quantity',
+      className: 'receipt-quantity-column',
+      type: 'number',
+    },
+    {
+      name: 'itemName',
+      className: 'receipt-item-name-column',
+      type: 'type',
+    },
+    {
+      name: 'foodGroup',
+      className: 'receipt-food-group-column',
+      type: 'select',
+    },
+    {
+      name: 'itemPrice',
+      className: 'receipt-item-price-column',
+      type: 'number',
+    },
+  ];
 
   const foodGroupOptions = [
     'Grains',
@@ -146,133 +196,76 @@ const ReceiptRow = ({ item, onUpdate }) => {
 
   return (
     <tr onMouseLeave={() => setIsHovered(null)}>
-      <td
-        className="receipt-quantity-column"
-        onMouseEnter={() => setIsHovered('quantity')}
-      >
-        {isEditing === 'quantity' ? (
-          <input
-            type="number"
-            value={editableItem.quantity}
-            onChange={(e) => handleChange('quantity', e.target.value)}
-            onKeyDown={handleKeyDown}
-            onBlur={handleBlur}
-            className="editable-input"
-          />
-        ) : (
-          <>
-            {editableItem.quantity}
-            {isHovered === 'quantity' && (
-              <EditIcon
-                className="edit-icon"
-                onClick={() => handleEdit('quantity')}
+      {fields.map(({ name, className, type }) => (
+        <td
+          key={name}
+          className={className}
+          title={name === 'itemName' ? editableItem.itemName : undefined}
+          onMouseEnter={() => setIsHovered(name)}
+        >
+          {isEditing === name ? (
+            type === 'select' ? (
+              <select
+                value={editableItem[name]}
+                onChange={(e) => handleSelect(name, e.target.value)}
+                ref={inputRef}
+                className="editable-select"
+              >
+                {foodGroupOptions.map((group) => (
+                  <option key={group} value={group}>
+                    {group}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type={type === 'number' ? 'number' : 'text'}
+                value={editableItem[name]}
+                min={name === 'quantity' ? '0' : undefined}
+                max={
+                  name === 'quantity'
+                    ? '99'
+                    : name === 'itemPrice'
+                      ? '999.99'
+                      : undefined
+                }
+                maxLength={name === 'itemName' ? 50 : undefined}
+                step={name === 'itemPrice' ? '0.01' : undefined}
+                onChange={(e) => handleInput(name, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e, name)}
+                ref={inputRef}
+                className="editable-input"
               />
-            )}
-          </>
-        )}
-      </td>
-      <td
-        className="receipt-item-name-column"
-        onMouseEnter={() => setIsHovered('itemName')}
-      >
-        {isEditing === 'itemName' ? (
-          <input
-            type="text"
-            value={editableItem.itemName}
-            onKeyDown={handleKeyDown}
-            onChange={(e) => handleChange('itemName', e.target.value)}
-            onBlur={handleBlur}
-            className="editable-input"
-          />
-        ) : (
-          <>
-            {editableItem.itemName}
-            {isHovered === 'itemName' && (
-              <EditIcon
-                className="edit-icon"
-                onClick={() => handleEdit('itemName')}
-              />
-            )}
-          </>
-        )}
-      </td>
-      <td
-        className="receipt-food-group-column"
-        onMouseEnter={() => setIsHovered('foodGroup')}
-      >
-        {isEditing === 'foodGroup' ? (
-          <select
-            value={editableItem.foodGroup}
-            onChange={(e) => handleChange('foodGroup', e.target.value)}
-            onBlur={handleBlur}
-            className="editable-select"
-          >
-            {foodGroupOptions.map((group) => (
-              <option key={group} value={group}>
-                {group}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <>
-            {editableItem.foodGroup}
-            {isHovered === 'foodGroup' && (
-              <EditIcon
-                className="edit-icon"
-                onClick={() => handleEdit('foodGroup')}
-              />
-            )}
-          </>
-        )}
-      </td>
-      <td
-        className="receipt-price-column"
-        onMouseEnter={() => setIsHovered('itemPrice')}
-      >
-        {isEditing === 'itemPrice' ? (
-          <input
-            type="number"
-            value={editableItem.itemPrice}
-            onChange={(e) => handleChange('itemPrice', e.target.value)}
-            onKeyDown={handleKeyDown}
-            onBlur={handleBlur}
-            className="editable-input"
-          />
-        ) : (
-          <>
-            ${editableItem.itemPrice.toFixed(2)}
-            {isHovered === 'itemPrice' && (
-              <EditIcon
-                className="edit-icon"
-                onClick={() => handleEdit('itemPrice')}
-              />
-            )}
-          </>
-        )}
-      </td>
+            )
+          ) : (
+            <div className="cell-content">
+              <span className="ellipsis">
+                {name === 'itemPrice'
+                  ? `$${editableItem[name]}`
+                  : editableItem[name]}
+              </span>
+              {isHovered === name && (
+                <EditIcon
+                  className="edit-icon"
+                  onClick={() => handleEdit(name)}
+                />
+              )}
+            </div>
+          )}
+        </td>
+      ))}
     </tr>
   );
 };
 
 const ReceiptTable = ({
   groceries,
+  onUpdate,
   filterText,
   sortColumn,
   page,
   itemsPerPage,
 }) => {
-  // const db = getFirestore();
-  //
-  // const updateItemInFirebase = async (updatedItem) => {
-  //   try {
-  //     const itemDocRef = doc(db, 'receiptData', 'groceries', updatedItem.id);
-  //     await updateDoc(itemDocRef, updatedItem);
-  //     console.log('Item updated successfully');
-  //   } catch (error) {
-  //     console.error('Error updating item in Firebase:', error);
-  //   }
-  // };
-
   const startIndex = page * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedGroceries = groceries.slice(startIndex, endIndex);
@@ -283,7 +276,7 @@ const ReceiptTable = ({
     if (item.itemName.toLowerCase().indexOf(filterText.toLowerCase()) === -1) {
       return;
     }
-    rows.push(<ReceiptRow key={item.itemName} item={item} />);
+    rows.push(<ReceiptRow key={item.id} item={item} onUpdate={onUpdate} />);
   });
 
   return (
@@ -308,11 +301,11 @@ const SearchBar = ({ filterText, onFilterTextChange }) => {
   );
 };
 
-const Receipt = ({ groceries }) => {
+const Receipt = ({ groceries, onUpdate }) => {
   const [tableData, setTableData] = useState(groceries);
   const [filterText, setFilterText] = useState('');
   const [page, setPage] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   useEffect(() => {
     setTableData(groceries);
@@ -365,13 +358,14 @@ const Receipt = ({ groceries }) => {
   const endItem = Math.min(startItem + itemsPerPage - 1, tableData.length);
 
   return (
-    <div className="receipt-component-card">
+    <div>
       <div className="receipt-component-head">
         <h1>Receipt</h1>
         <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
       </div>
       <ReceiptTable
         groceries={tableData}
+        onUpdate={onUpdate}
         filterText={filterText}
         sortColumn={sortColumn}
         page={page}

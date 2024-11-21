@@ -4,6 +4,7 @@
   border: 2px solid var(--light-grey);
   margin: 2rem;
   width: 450px;
+  background-color: var(--white);
 }
 
 .chart-legend-container {

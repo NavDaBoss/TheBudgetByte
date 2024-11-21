@@ -5,3 +5,12 @@
   align-items: center;
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
 }
+
+.receipt-card {
+  padding: 2rem;
+  border-radius: 10px;
+  border: 2px solid var(--light-grey);
+  margin: 2rem;
+  width: 70%;
+  background-color: var(--white);
+}
