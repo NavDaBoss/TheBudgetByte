@@ -69,3 +69,13 @@ export const updateGroceryField = async (
     console.error('Error updating grocery field:', error);
   }
 };
+
+export const updateReceiptBalance = async (receiptID, totalCost) => {
+  try {
+    const receiptDocRef = doc(db, 'receiptData', receiptID);
+    await updateDoc(receiptDocRef, { receiptBalance: totalCost });
+    console.log(`Updated receipt balance: $${totalCost}`);
+  } catch (error) {
+    console.error('Error updating receipt balance:', error);
+  }
+};
