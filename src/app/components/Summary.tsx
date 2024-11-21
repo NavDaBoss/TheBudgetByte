@@ -90,7 +90,7 @@ const Summary = ({ data, totalAmount }) => {
   };
 
   return (
-    <div>
+    <div className="summary-card">
       <h2>Summary</h2>
       <div className="chart-legend-container">
         <div className="doughnut-chart">

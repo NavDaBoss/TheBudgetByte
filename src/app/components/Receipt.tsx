@@ -35,7 +35,11 @@ const ReceiptHead = ({ sortColumn }) => {
   };
 
   const fields = [
-    { column: 'quantity', className: 'receipt-quantity-column', label: 'QTY' },
+    {
+      column: 'quantity',
+      className: 'receipt-quantity-column',
+      label: 'QTY',
+    },
     {
       column: 'itemName',
       className: 'receipt-item-name-column',
@@ -46,7 +50,11 @@ const ReceiptHead = ({ sortColumn }) => {
       className: 'receipt-food-group-column',
       label: 'GROUP',
     },
-    { column: 'itemPrice', className: 'receipt-price-column', label: 'PRICE' },
+    {
+      column: 'itemPrice',
+      className: 'receipt-item-price-column',
+      label: 'PRICE',
+    },
   ];
 
   return (
@@ -74,40 +82,108 @@ const ReceiptRow = ({ item, onUpdate }) => {
   const [editableItem, setEditableItem] = useState(item);
   const [isEditing, setIsEditing] = useState(null);
   const [isHovered, setIsHovered] = useState(null);
-  const [tempEditValue, setTempEditValue] = useState(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    setEditableItem(item);
+  }, [item]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (inputRef.current && !inputRef.current.contains(event.target)) {
+        setEditableItem((prev) => ({
+          ...prev,
+          [isEditing]: item[isEditing],
+        }));
+        setIsEditing(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isEditing]);
 
   const handleEdit = (field) => {
     setIsEditing(field);
-    setTempEditValue(editableItem[field]);
   };
 
-  const handleKeyDown = (e) => {
+  const handleInput = (fieldName, value) => {
+    let updatedValue = value;
+
+    if (fieldName === 'quantity') {
+      updatedValue = Math.min(99, parseInt(value) || 0);
+    } else if (fieldName === 'itemPrice') {
+      updatedValue = Math.min(999.99, parseFloat(value) || 0).toFixed(2);
+    } else if (fieldName === 'itemName') {
+      updatedValue = value.slice(0, 50).toUpperCase();
+    }
+
+    setEditableItem((prev) => ({
+      ...prev,
+      [fieldName]: updatedValue,
+    }));
+  };
+
+  const handleSelect = async (fieldName, value) => {
+    if (editableItem[fieldName] !== value) {
+      try {
+        await onUpdate(item.id, fieldName, value);
+        setEditableItem((prev) => ({
+          ...prev,
+          [fieldName]: value,
+        }));
+      } catch (error) {
+        console.error(`Failed to update ${fieldName}:`, error);
+      }
+    }
+  };
+
+  const handleKeyDown = async (e, fieldName) => {
+    const allowedKeys = [
+      'Backspace',
+      'ArrowLeft',
+      'ArrowRight',
+      'Tab',
+      'Delete',
+    ];
+
+    if (fieldName == 'quantity') {
+      if (!allowedKeys.includes(e.key) && !/^\d$/.test(e.key)) {
+        e.preventDefault();
+      }
+    }
+
     if (e.key === 'Enter' && isEditing) {
-      setTempEditValue((prev) => ({
-        ...prev,
-        [isEditing]: tempEditValue,
-      }));
+      if (editableItem[fieldName] !== item[fieldName]) {
+        await onUpdate(item.id, fieldName, editableItem[fieldName]);
+        handleInput(fieldName, editableItem[fieldName]);
+      }
       setIsEditing(null);
     }
   };
 
-  const handleChange = (field, value) => {
-    setEditableItem((prev) => ({
-      ...prev,
-      [field]: field === 'itemPrice' ? parseFloat(value) || 0 : value,
-    }));
-  };
-
-  const handleBlur = async () => {
-    setTempEditValue(null);
-    setIsEditing(null);
-  };
-
   const fields = [
-    { name: 'quantity', type: 'number' },
-    { name: 'itemName', type: 'type' },
-    { name: 'foodGroup', type: 'select' },
-    { name: 'itemPrice', type: 'number', prefix: '$' },
+    {
+      name: 'quantity',
+      className: 'receipt-quantity-column',
+      type: 'number',
+    },
+    {
+      name: 'itemName',
+      className: 'receipt-item-name-column',
+      type: 'type',
+    },
+    {
+      name: 'foodGroup',
+      className: 'receipt-food-group-column',
+      type: 'select',
+    },
+    {
+      name: 'itemPrice',
+      className: 'receipt-item-price-column',
+      type: 'number',
+    },
   ];
 
   const foodGroupOptions = [
@@ -120,18 +196,19 @@ const ReceiptRow = ({ item, onUpdate }) => {
 
   return (
     <tr onMouseLeave={() => setIsHovered(null)}>
-      {fields.map(({ name, type, prefix }) => (
+      {fields.map(({ name, className, type }) => (
         <td
           key={name}
-          className={`receipt-${name}-column`}
+          className={className}
+          title={name === 'itemName' ? editableItem.itemName : undefined}
           onMouseEnter={() => setIsHovered(name)}
         >
           {isEditing === name ? (
             type === 'select' ? (
               <select
                 value={editableItem[name]}
-                onChange={(e) => handleChange(name, e.target.value)}
-                onBlur={() => handleBlur(name)}
+                onChange={(e) => handleSelect(name, e.target.value)}
+                ref={inputRef}
                 className="editable-select"
               >
                 {foodGroupOptions.map((group) => (
@@ -142,26 +219,38 @@ const ReceiptRow = ({ item, onUpdate }) => {
               </select>
             ) : (
               <input
-                type={type}
+                type={type === 'number' ? 'number' : 'text'}
                 value={editableItem[name]}
-                onChange={(e) => handleChange(name, e.target.value)}
+                min={name === 'quantity' ? '0' : undefined}
+                max={
+                  name === 'quantity'
+                    ? '99'
+                    : name === 'itemPrice'
+                      ? '999.99'
+                      : undefined
+                }
+                maxLength={name === 'itemName' ? 50 : undefined}
+                step={name === 'itemPrice' ? '0.01' : undefined}
+                onChange={(e) => handleInput(name, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e, name)}
-                onBlur={() => handleBlur(name)}
+                ref={inputRef}
                 className="editable-input"
               />
             )
           ) : (
-            <>
-              {prefix && name === 'itemPrice'
-                ? `${prefix}${editableItem[name].toFixed(2)}`
-                : editableItem[name]}
+            <div className="cell-content">
+              <span className="ellipsis">
+                {name === 'itemPrice'
+                  ? `$${editableItem[name]}`
+                  : editableItem[name]}
+              </span>
               {isHovered === name && (
                 <EditIcon
                   className="edit-icon"
                   onClick={() => handleEdit(name)}
                 />
               )}
-            </>
+            </div>
           )}
         </td>
       ))}
@@ -171,6 +260,7 @@ const ReceiptRow = ({ item, onUpdate }) => {
 
 const ReceiptTable = ({
   groceries,
+  onUpdate,
   filterText,
   sortColumn,
   page,
@@ -186,7 +276,7 @@ const ReceiptTable = ({
     if (item.itemName.toLowerCase().indexOf(filterText.toLowerCase()) === -1) {
       return;
     }
-    rows.push(<ReceiptRow key={item.itemName} item={item} />);
+    rows.push(<ReceiptRow key={item.id} item={item} onUpdate={onUpdate} />);
   });
 
   return (
@@ -211,7 +301,7 @@ const SearchBar = ({ filterText, onFilterTextChange }) => {
   );
 };
 
-const Receipt = ({ groceries }) => {
+const Receipt = ({ groceries, onUpdate }) => {
   const [tableData, setTableData] = useState(groceries);
   const [filterText, setFilterText] = useState('');
   const [page, setPage] = useState(0);
@@ -275,6 +365,7 @@ const Receipt = ({ groceries }) => {
       </div>
       <ReceiptTable
         groceries={tableData}
+        onUpdate={onUpdate}
         filterText={filterText}
         sortColumn={sortColumn}
         page={page}

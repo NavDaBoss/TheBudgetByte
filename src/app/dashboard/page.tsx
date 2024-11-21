@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth } from '../firebase/firebaseConfig';
 import useGroceries from '../hooks/useGroceries';
+import { updateGroceryField } from '../firebase/firebaseService';
 
 import './dashboard.css';
 
@@ -18,7 +19,17 @@ const Dashboard = () => {
   const router = useRouter();
   const currentUser = auth.currentUser;
 
-  const { groceries, loading, error } = useGroceries(currentUser?.uid || null);
+  const { groceries, receiptID, loading, error, updateGroceryItem } =
+    useGroceries(currentUser?.uid || null);
+
+  const handleUpdate = async (groceryID, fieldName, value) => {
+    try {
+      await updateGroceryField(receiptID, groceryID, fieldName, value);
+      await updateGroceryItem(groceryID, fieldName, value);
+    } catch (error) {
+      console.log('Error updating grocery:', error);
+    }
+  };
 
   useEffect(() => {
     if (!currentUser) {
@@ -31,22 +42,20 @@ const Dashboard = () => {
     <div>
       <Navbar />
       <div className="dashboard-section-container">
-        <div className="summary-card">
-          <Summary
-            data={SummaryData.foodGroups}
-            totalAmount={SummaryData.summary.totalCost}
-          />
-        </div>
+        <Summary
+          data={SummaryData.foodGroups}
+          totalAmount={SummaryData.summary.totalCost}
+        />
+        <OcrUploadButton />
         <div className="receipt-card">
           {loading ? (
             <p>Loading Receipt...</p>
           ) : (
-            <Receipt groceries={groceries} />
+            <Receipt groceries={groceries} onUpdate={handleUpdate} />
           )}
         </div>
       </div>
       {error && <p>Error: {error}</p>}
-      <OcrUploadButton />
     </div>
   );
 };

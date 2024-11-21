@@ -6,18 +6,11 @@
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
 }
 
-.summary-card {
-  padding: 1.5rem;
-  border-radius: 10px;
-  border: 2px solid var(--light-grey);
-  margin: 2rem;
-  width: 450px;
-}
-
 .receipt-card {
   padding: 2rem;
   border-radius: 10px;
   border: 2px solid var(--light-grey);
   margin: 2rem;
   width: 70%;
+  background-color: var(--white);
 }

@@ -6,7 +6,7 @@
   font-size: 1rem;
   box-shadow: none;
   transition: border-color 0.3s;
-  background-color: var(--background);
+  background-color: transparent;
   color: black;
 }
 
@@ -47,6 +47,7 @@
 
 /* Receipt Table */
 .receipt-component-table {
+  table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
 }
@@ -63,7 +64,7 @@
 }
 
 .receipt-quantity-column,
-.receipt-price-column {
+.receipt-item-price-column {
   text-align: right;
 }
 
@@ -79,12 +80,28 @@
   width: 25%;
 }
 
-.receipt-price-column {
+.receipt-item-price-column {
   width: 25%;
+}
+
+.cell-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-grow: 1;
+  margin-right: 0.5rem;
 }
 
 .edit-icon {
   position: relative;
+  flex-shrink: 0;
   margin-left: 0.5rem;
   cursor: pointer;
   vertical-align: middle;

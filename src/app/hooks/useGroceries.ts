@@ -2,43 +2,72 @@ import { useState, useEffect } from 'react';
 import {
   getMostRecentReceipt,
   getGroceriesSubcollection,
+  updateGroceryField,
 } from '../firebase/firebaseService';
 
-const useGroceries = (userId: string | null) => {
+const useGroceries = (userID: string | null) => {
   const [groceries, setGroceries] = useState<any[]>([]);
+  const [receiptID, setReceiptID] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchMostRecentReceipt = async () => {
-      if (userId) {
-        setLoading(true);
-        try {
-          const querySnapshot = await getMostRecentReceipt(userId);
-          if (!querySnapshot.empty) {
-            const receiptId = querySnapshot.docs[0].id;
-            const groceriesSnapshot =
-              await getGroceriesSubcollection(receiptId);
+  const fetchMostRecentReceipt = async () => {
+    if (userID) {
+      setLoading(true);
+      try {
+        const querySnapshot = await getMostRecentReceipt(userID);
+        if (!querySnapshot.empty) {
+          const fetchedReceiptID = querySnapshot.docs[0].id;
+          setReceiptID(fetchedReceiptID);
 
-            if (!groceriesSnapshot.empty) {
-              setGroceries(groceriesSnapshot.docs.map((doc) => doc.data()));
-            } else {
-              setGroceries([]);
-            }
+          const groceriesSnapshot =
+            await getGroceriesSubcollection(fetchedReceiptID);
+
+          if (!groceriesSnapshot.empty) {
+            setGroceries(
+              groceriesSnapshot.docs.map((doc) => ({
+                ...doc.data(),
+                id: doc.id,
+                receiptID,
+              })),
+            );
           } else {
             setGroceries([]);
           }
-        } catch (error) {
-          setError(error);
-        } finally {
-          setLoading(false);
+        } else {
+          setGroceries([]);
         }
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
       }
-    };
-    fetchMostRecentReceipt();
-  }, [userId]);
+    }
+  };
 
-  return { groceries, loading, error };
+  const updateGroceryItem = (
+    groceryID: string,
+    fieldName: string,
+    value: string,
+  ) => {
+    setGroceries((prev) =>
+      prev.map((item) =>
+        item.id === groceryID ? { ...item, [fieldName]: value } : item,
+      ),
+    );
+  };
+
+  useEffect(() => {
+    fetchMostRecentReceipt();
+  }, [userID]);
+
+  return {
+    groceries,
+    receiptID,
+    updateGroceryItem,
+    loading,
+    error,
+  };
 };
 
 export default useGroceries;
