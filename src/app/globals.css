@@ -78,9 +78,3 @@ h6 {
 p {
   font-size: 1rem;
 }
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}

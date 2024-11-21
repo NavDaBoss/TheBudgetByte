@@ -73,7 +73,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: var(--white);
   background-color: var(--green);
   height: 50px;
   width: 236.562px;
@@ -130,7 +130,7 @@
 }
 
 .modal-content-pwd {
-  background: #fff;
+  background-color: var(--white);
   padding: 20px;
   border-radius: 6px;
   width: 90%;
@@ -164,7 +164,7 @@
   margin: 5px;
   cursor: pointer;
   background-color: var(--green);
-  color: #ffffff;
+  color: var(--white);
   border-radius: 6px;
 }
 
