@@ -1,55 +1,57 @@
-/* Search Bar */
-.search-bar {
-  padding: 10px;
-  border: 2px solid black;
-  border-radius: 4px;
-  font-size: 1rem;
-  box-shadow: none;
-  transition: border-color 0.3s;
-  background-color: transparent;
-  color: black;
+.receipt-card {
+  display: flex;
+  justify-items: stretch;
+  margin: 1rem;
+  padding: 2rem;
+  border-radius: 10px;
+  border: 2px solid var(--light-grey);
+  width: 100%;
+  height: 100%;
+  max-width: 60vw;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(60px);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.3);
 }
 
-.search-bar::placeholder {
-  color: black;
-  opacity: 1;
-}
-
-.search-bar:focus {
-  border-color: blue;
-  outline: none;
-}
-
-/* Receipt Header */
 .receipt-component-head {
   display: flex;
+  justify-content: left;
   align-items: center;
-  justify-content: center;
-  padding: 1rem 0;
-  position: relative;
-  gap: 20px;
+  gap: 2.5rem;
+  margin-bottom: 1rem;
 }
 
 .receipt-component-head h1 {
-  margin-right: auto;
   font-weight: 700;
 }
 
-.rows-per-page label {
-  font-weight: 700;
+.receipt-table-wrapper {
+  overflow-x: auto;
+  max-width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
 }
 
-.rows-per-page select {
-  margin-left: 0.5rem;
-  padding: 0.3rem;
-  font-weight: 700;
-}
-
-/* Receipt Table */
 .receipt-component-table {
   table-layout: fixed;
-  width: 100%;
   border-collapse: collapse;
+  width: 100%;
+  height: 100%;
+  border-bottom: 2px dashed black;
+}
+
+.receipt-component-body {
+  display: block;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.receipt-component-table thead,
+.receipt-component-table tbody tr {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
 }
 
 .receipt-component-table thead {
@@ -60,7 +62,32 @@
   padding: 1rem;
   border-bottom: 2px dashed black;
   text-transform: uppercase;
+  font-size: 1.15rem;
   font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipses;
+}
+
+.receipt-component-table th:hover {
+  cursor: pointer;
+}
+
+.receipt-component-table tr {
+  height: 3rem;
+}
+
+.receipt-component-body tr:hover {
+  font-weight: 700;
+  background-color: var(--green);
+  transition: filter 0.3s ease;
+}
+
+.receipt-component-body td {
+  padding: 0.5rem 1.5rem;
+}
+
+.receipt-component-body tr:hover .edit-icon {
+  visibility: visible;
 }
 
 .receipt-quantity-column,
@@ -84,19 +111,56 @@
   width: 25%;
 }
 
-.cell-content {
+.search-bar {
+  padding: 10px;
+  border: 2px solid var(--light-grey);
+  border-radius: 4px;
+  font-size: 1rem;
+  box-shadow: none;
+  transition: border-color 0.3s;
+  background-color: transparent;
+  color: black;
+}
+
+.search-bar::placeholder {
+  color: black;
+  opacity: 1;
+}
+
+.search-bar:focus {
+  border-color: var(--blue);
+  outline: none;
+}
+
+.table-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.sort-arrow {
+  display: inline-block;
+  margin-left: auto;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid black;
+}
+
+.cell-item-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  overflow: hidden;
 }
 
-.ellipsis {
+.cell-item-name {
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-x: auto;
   flex-grow: 1;
   margin-right: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
 }
 
 .edit-icon {
@@ -129,7 +193,7 @@
 }
 
 .editable-input:focus {
-  border-color: red;
+  border-color: var(--purple);
   outline: none;
 }
 
@@ -138,66 +202,6 @@
   font-size: 1rem;
   border: 2px solid var(--foreground);
   border-radius: 4px;
-  background-color: var(--background);
+  background-color: var(--white);
   color: var(--foreground);
-}
-
-.receipt-component-table tr {
-  height: 3rem;
-}
-
-.receipt-component-body td {
-  padding: 0.5rem 1.5rem;
-}
-
-.receipt-component-body tr:last-child {
-  border-bottom: 2px dashed black;
-}
-
-.sort-arrow {
-  display: inline-block;
-  margin-left: 20px;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-top: 10px solid black;
-}
-
-.receipt-component-body tr:hover {
-  background-color: var(--light-grey);
-  transition: filter 0.3s ease;
-}
-
-.receipt-component-body tr:hover .edit-icon {
-  visibility: visible;
-}
-
-.receipt-component-table th:hover {
-  cursor: pointer;
-}
-
-/* Pagination */
-.pagination-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 1rem;
-}
-
-.pagination-controls button {
-  padding: 0.5rem 1rem;
-  margin: 0 0.5rem;
-  cursor: pointer;
-  background: none;
-  border: none;
-  font-weight: 700;
-  color: var(--foreground);
-}
-
-.pagination-controls button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.pagination-controls span {
-  font-weight: 700;
 }
