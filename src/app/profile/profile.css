@@ -23,6 +23,7 @@
   background-color: var(--white);
   border-radius: 10px;
   border: 2px solid var(--light-grey);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.3);
 }
 
 .profile-pic-container,
@@ -101,6 +102,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.3);
 }
 
 .modal-content input {
