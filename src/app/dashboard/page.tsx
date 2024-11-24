@@ -68,6 +68,8 @@ const Dashboard = () => {
       totalCost += price;
     });
 
+    totalCost = Math.round(totalCost * 100) / 100;
+
     const foodGroups = Object.entries(updatedFoodGroups).map(
       ([type, groupCost]) => {
         const roundedGroupCost = Math.round(groupCost * 100) / 100;

@@ -86,7 +86,7 @@ const Summary = ({ data, totalCost }) => {
         title: {
           display: false,
           text: 'Food Groups',
-        }
+        },
       },
       y: {
         ticks: {
