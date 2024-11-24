@@ -1,9 +1,12 @@
 .summary-card {
+  display: flex;
+  flex-direction: column;
   margin: 1rem;
   padding: 2rem;
   border-radius: 10px;
-  border: 2px solid var(--light-grey);
+  height: 100%;
   width: 500px;
+  border: 2px solid var(--light-grey);
   color: black;
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(60px);
@@ -12,18 +15,17 @@
 
 .chart-legend-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  margin-top: 1rem;
+  gap: 1.5rem;
   width: 100%;
+  margin-top: 2rem;
 }
 
 .doughnut-chart {
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 40%;
   flex-shrink: 0;
-  margin-right: 25px;
 }
 
 .doughnut-center {
@@ -37,16 +39,14 @@
 .food-group-legend {
   display: flex;
   flex-direction: column;
-  padding: 10px;
   gap: 1rem;
+  width: 100%;
 }
 
 .legend-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 700;
-  margin: 0.25rem 0;
   gap: 1rem;
 }
 
@@ -59,17 +59,19 @@
 }
 
 .legend-label {
-  flex-grow: 1;
+  margin-right: auto;
 }
 
 .legend-percentage {
-  padding-left: 3.5rem;
-  margin-left: auto;
+  font-weight: 700;
 }
 
-.summary-container {
+.bar-chart-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 20px 0;
+  flex-direction: column;
+  margin-top: 2.5rem;
+}
+
+.bar-chart-container h2 {
+  margin-bottom: 1.5rem;
 }

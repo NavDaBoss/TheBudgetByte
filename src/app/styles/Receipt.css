@@ -128,7 +128,7 @@
 }
 
 .search-bar:focus {
-  border-color: var(--blue);
+  border-color: var(--foreground);
   outline: none;
 }
 
