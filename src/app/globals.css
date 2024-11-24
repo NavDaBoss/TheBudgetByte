@@ -2,11 +2,11 @@
   --background: #f0f0f0;
   --foreground: #171717;
   --white: #ffffff;
+  --red: #ff3c3c;
+  --yellow: #fdd34e;
   --green: #15be53;
-  --blue: #42cafd;
-  --red: #ed1c24;
-  --yellow: #fcd112;
-  --purple: #9d44b5;
+  --blue: #5bd2ff;
+  --purple: #bb61d3;
   --light-grey: #cccccc;
   --gutterWidth: 16px;
   --windowWidth: 100vw;

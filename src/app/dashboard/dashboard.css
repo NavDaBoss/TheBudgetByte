@@ -5,6 +5,20 @@
   align-items: center;
   height: 100vh;
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
+  background-color: var(--light-grey);
+  background-image: radial-gradient(circle at 0% 50%,
+      hsla(112.49999999999999, 37%, 91%, 1) 0%,
+      transparent 50%),
+    radial-gradient(circle at 40% 20%,
+      hsla(27.999999999999577, 0%, 86%, 1) 0%,
+      transparent 50%),
+    radial-gradient(circle at 80% 0%,
+      hsla(189.00000000000065, 0%, 100%, 1) 0%,
+      transparent 50%),
+    radial-gradient(circle at 80% 50%,
+      hsla(89.69696969696984, 100%, 92%, 1) 0%,
+      transparent 50%);
+  background-blend-mode: normal, normal, normal, normal;
 }
 
 .dashboard-content {
