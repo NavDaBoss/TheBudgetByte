@@ -92,7 +92,7 @@ export default function Profile() {
             return {
               type,
               quantity,
-              totalCost: Math.round(totalCost * 100) / 100,
+              totalCost: Math.round(itemCost * 100) / 100,
               pricePercentage:
                 totalCost > 0
                   ? Math.round((itemCost / totalCost) * 10000) / 100
