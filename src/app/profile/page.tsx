@@ -92,21 +92,21 @@ export default function Profile() {
             return {
               type,
               quantity,
-              totalCost: parseFloat(itemCost.toFixed(2)),
+              totalCost: Math.round(totalCost * 100) / 100,
               pricePercentage:
                 totalCost > 0
-                  ? parseFloat(((itemCost / totalCost) * 100).toFixed(2))
+                  ? Math.round((itemCost / totalCost) * 10000) / 100
                   : 0,
             };
           });
 
           const summary = {
             totalCount: totalQuantity,
-            totalCost: parseFloat(totalCost.toFixed(2)),
+            totalCost: Math.round(totalCost * 100) / 100,
           };
 
           setFoodGroupSummary({ foodGroups: formattedFoodGroups, summary });
-          setTotalAmount(parseFloat(totalSpent.toFixed(2)));
+          setTotalAmount(Math.round(totalSpent * 100) / 100);
           setReceiptCount(totalReceipts);
         } catch (error) {
           console.error('Error fetching data:', error);
