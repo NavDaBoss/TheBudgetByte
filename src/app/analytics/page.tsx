@@ -29,7 +29,7 @@ const AnalyticsSummary = ({
       {monthlyData && monthlyData[selectedMonth] ? (
         <Summary
           data={monthlyData[selectedMonth].foodGroups} // safely access foodGroups
-          totalAmount={monthlyData[selectedMonth].totalSpent} // safely access totalSpent
+          totalCost={monthlyData[selectedMonth].totalSpent} // safely access totalSpent
         />
       ) : (
         <p>
