@@ -27,9 +27,9 @@ jest.mock('firebase/firestore', () => ({
   where: jest.fn(),
 }));
 
-jest.mock('../src/app/analytics/updateYearlyData', () => ({
-  updateUsersYearlyOverview: jest.fn(),
-}));
+// jest.mock('../src/app/analytics/updateYearlyData', () => ({
+//   updateUsersYearlyOverview: jest.fn(),
+// }));
 
 jest.mock('../src/app/api/openai/route.js', () => jest.fn());
 
