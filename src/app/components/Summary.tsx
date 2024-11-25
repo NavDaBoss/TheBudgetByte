@@ -6,11 +6,11 @@ import '../styles/Summary.css';
 
 const Summary = ({ data, totalCost }) => {
   const colorMap = {
-    Fruits: 'red',
-    Vegetables: 'green',
-    Protein: 'purple',
-    Grains: 'orange',
-    Dairy: 'blue',
+    Fruits: '#ed1c24',
+    Vegetables: '#15be53',
+    Protein: '#9d44b5',
+    Grains: '#fcd112',
+    Dairy: '#42cafd',
   };
 
   const pieData = useMemo(
@@ -38,7 +38,7 @@ const Summary = ({ data, totalCost }) => {
 
   return (
     <div className="summary-card">
-      <h2>Summary</h2>
+      <h1>Summary</h1>
       <div className="chart-legend-container">
         <div className="doughnut-chart">
           <Doughnut
