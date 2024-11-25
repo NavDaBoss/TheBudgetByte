@@ -15,10 +15,8 @@ export const groceryItemSchema = z.object({
 });
 
 export const groceryReceiptExtraction = z.object({
-  // groceryStore: z.string(),
   receiptDate: z.string(),
   groceries: z.array(groceryItemSchema),
-  // receiptBalance: z.number(), // this should be calculated dynamically after we scan grocery items
 });
 
 export async function POST(request) {
