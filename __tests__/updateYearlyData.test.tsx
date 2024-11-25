@@ -1,4 +1,4 @@
-import { updateUsersYearlyOverview } from '@/app/analytics/updateYearlyData';
+import { updateUsersYearlyOverview } from '@/app/backend/updateYearlyData';
 import { updateDoc } from 'firebase/firestore';
 import { FoodTypes } from '@/app/backend/yearlyOverviewInterface';
 
@@ -45,9 +45,9 @@ const emptyYearTemplate = {
 };
 
 // Mock dependencies
-jest.mock('../src/app/analytics/updateYearlyData', () => {
+jest.mock('../src/app/backend/updateYearlyData', () => {
   const actualModule = jest.requireActual(
-    '../src/app/analytics/updateYearlyData',
+    '../src/app/backend/updateYearlyData',
   );
   return {
     ...actualModule,
@@ -80,16 +80,16 @@ describe('updateUsersYearlyOverview', () => {
     const mockOverview = JSON.parse(JSON.stringify(emptyOverviewTemplate));
     const emptyMonthOverview = JSON.parse(JSON.stringify(emptyMonthTemplate));
     const emptyYearOverview = JSON.parse(JSON.stringify(emptyYearTemplate));
-    require('../src/app/analytics/updateYearlyData').createOrGetYearlyOverview.mockResolvedValue(
+    require('../src/app/backend/updateYearlyData').createOrGetYearlyOverview.mockResolvedValue(
       mockOverview,
     );
-    require('../src/app/analytics/updateYearlyData').fetchOrCreateYearlyOverview.mockResolvedValue(
+    require('../src/app/backend/updateYearlyData').fetchOrCreateYearlyOverview.mockResolvedValue(
       mockOverview,
     );
-    require('../src/app/analytics/updateYearlyData').createOrGetYearData.mockResolvedValue(
+    require('../src/app/backend/updateYearlyData').createOrGetYearData.mockResolvedValue(
       emptyYearOverview,
     );
-    require('../src/app/analytics/updateYearlyData').createOrGetMonthData.mockResolvedValue(
+    require('../src/app/backend/updateYearlyData').createOrGetMonthData.mockResolvedValue(
       emptyMonthOverview,
     );
   });
