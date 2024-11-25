@@ -124,7 +124,6 @@ describe('OcrUploadButton', () => {
   //         }),
   //     })
   //   );
-    
 
   //   // global.fetch = jest.fn(() =>
   //   //   Promise.resolve({
