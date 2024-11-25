@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import './analytics.css';
 import Navbar from '../components/Navbar';
 import Summary from '../components/Summary';
-import { YearlyOverview, monthNames } from './yearlyOverviewInterface';
+import { YearlyOverview, monthNames } from '../backend/yearlyOverviewInterface';
 import { useRouter } from 'next/navigation';
 import { auth, db } from '../firebase/firebaseConfig';
 import { collection, query, where, getDocs } from 'firebase/firestore';

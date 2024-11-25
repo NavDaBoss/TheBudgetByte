@@ -23,6 +23,7 @@ const Dashboard = () => {
     groceries,
     receiptID,
     receiptBalance,
+    receiptDate,
     loading,
     error,
     updateGroceryItem,
@@ -122,6 +123,7 @@ const Dashboard = () => {
                 groceries={groceries}
                 onUpload={refetch}
                 onUpdate={handleUpdate}
+                receiptDate={receiptDate}
               />
             )}
           </div>

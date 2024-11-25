@@ -1,6 +1,6 @@
 import { updateUsersYearlyOverview } from '@/app/analytics/updateYearlyData';
 import { updateDoc } from 'firebase/firestore';
-import { FoodTypes } from '@/app/analytics/yearlyOverviewInterface';
+import { FoodTypes } from '@/app/backend/yearlyOverviewInterface';
 
 const mockValidGroceries = [
   {
