@@ -8,10 +8,6 @@
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
   width: 100%;
   padding: 0 var(--columnPaddingNormal);
-  overflow: hidden;
-  position: fixed;
-  top: 0;
-  z-index: 1;
   background: transparent;
 }
 

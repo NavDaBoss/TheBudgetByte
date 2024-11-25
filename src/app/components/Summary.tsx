@@ -104,30 +104,32 @@ const Summary = ({ data, totalCost }) => {
   return (
     <div className="summary-card">
       <h1>Summary</h1>
-      <div className="chart-legend-container">
-        <div className="doughnut-chart">
-          <Doughnut data={donutChartData} options={donutChartOptions} />
-          <div className="doughnut-center">
-            <p>Total Cost</p>
-            <h2>${totalCost}</h2>
+      <div className="summary-card-content">
+        <div className="chart-legend-container">
+          <div className="doughnut-chart">
+            <Doughnut data={donutChartData} options={donutChartOptions} />
+            <div className="doughnut-center">
+              <p>Total Cost</p>
+              <h2>${totalCost}</h2>
+            </div>
+          </div>
+          <div className="food-group-legend">
+            {pieData.map((item) => (
+              <div key={item.label} className="legend-item">
+                <span
+                  className="legend-color"
+                  style={{ backgroundColor: item.color }}
+                ></span>
+                <span className="legend-label">{item.label}</span>
+                <span className="legend-percentage">{item.value}%</span>
+              </div>
+            ))}
           </div>
         </div>
-        <div className="food-group-legend">
-          {pieData.map((item) => (
-            <div key={item.label} className="legend-item">
-              <span
-                className="legend-color"
-                style={{ backgroundColor: item.color }}
-              ></span>
-              <span className="legend-label">{item.label}</span>
-              <span className="legend-percentage">{item.value}%</span>
-            </div>
-          ))}
+        <div className="bar-chart-container">
+          <h2>Spendings</h2>
+          <Bar data={barChartData} options={barChartOptions} />
         </div>
-      </div>
-      <div className="bar-chart-container">
-        <h2>Spendings</h2>
-        <Bar data={barChartData} options={barChartOptions} />
       </div>
     </div>
   );

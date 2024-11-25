@@ -6,11 +6,17 @@
   height: 100%;
   width: 500px;
   background: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 8px 32px 0 rgba(240, 240, 240, 0.37);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.summary-card-content {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  height: 100%;
 }
 
 .chart-legend-container {
@@ -19,7 +25,6 @@
   align-items: center;
   gap: 1.5rem;
   width: 100%;
-  margin-top: 2rem;
 }
 
 .doughnut-chart {

@@ -105,29 +105,31 @@ const Dashboard = () => {
   }, [groceries]);
 
   return (
-    <div className="dashboard-section-container">
+    <div className="page">
       <Navbar />
-      <div className="dashboard-content">
-        <div className="left-section">
-          <Summary
-            data={summaryData.foodGroups}
-            totalCost={summaryData.totalCost}
-          />
-        </div>
-        <div className="right-section">
-          <div className="receipt-card">
-            {loading ? (
-              <div className="receipt-component-head">
-                <h1>Receipt</h1>
-                <p>Loading Receipt...</p>
-              </div>
-            ) : (
-              <Receipt
-                groceries={groceries}
-                onUpload={refetch}
-                onUpdate={handleUpdate}
-              />
-            )}
+      <div className="dashboard-section-container">
+        <div className="dashboard-content">
+          <div className="left-section">
+            <Summary
+              data={summaryData.foodGroups}
+              totalCost={summaryData.totalCost}
+            />
+          </div>
+          <div className="right-section">
+            <div className="receipt-card">
+              {loading ? (
+                <div className="receipt-component-head">
+                  <h1>Receipt</h1>
+                  <p>Loading Receipt...</p>
+                </div>
+              ) : (
+                <Receipt
+                  groceries={groceries}
+                  onUpload={refetch}
+                  onUpdate={handleUpdate}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
