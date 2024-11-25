@@ -7,6 +7,7 @@ import {
 const useGroceries = (userID: string | null) => {
   const [groceries, setGroceries] = useState<any[]>([]);
   const [receiptBalance, setReceiptBalance] = useState(0);
+  const [receiptDate, setReceiptDate] = useState(0);
   const [receiptID, setReceiptID] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,7 +23,7 @@ const useGroceries = (userID: string | null) => {
 
           const receiptData = querySnapshot.docs[0].data();
           setReceiptBalance(receiptData.receiptBalance || 0);
-
+          setReceiptDate(receiptData.receiptDate || 0);
           const groceriesSnapshot =
             await getGroceriesSubcollection(fetchedReceiptID);
 
@@ -67,6 +68,7 @@ const useGroceries = (userID: string | null) => {
     groceries,
     receiptID,
     receiptBalance,
+    receiptDate,
     updateGroceryItem,
     loading,
     error,

@@ -14,7 +14,6 @@ import './dashboard.css';
 import Navbar from '../components/Navbar';
 import Summary from '../components/Summary';
 import Receipt from '../components/Receipt';
-import OcrUploadButton from '../components/OcrUploadButton';
 
 const Dashboard = () => {
   const router = useRouter();
@@ -24,6 +23,7 @@ const Dashboard = () => {
     groceries,
     receiptID,
     receiptBalance,
+    receiptDate,
     loading,
     error,
     updateGroceryItem,
@@ -105,17 +105,28 @@ const Dashboard = () => {
     <div>
       <Navbar />
       <div className="dashboard-section-container">
-        <Summary
-          data={summaryData.foodGroups}
-          totalCost={summaryData.totalCost}
-        />
-        <OcrUploadButton onUploadComplete={refetch} />
-        <div className="receipt-card">
-          {loading ? (
-            <p>Loading Receipt...</p>
-          ) : (
-            <Receipt groceries={groceries} onUpdate={handleUpdate} />
-          )}
+        <div className="left-section">
+          <Summary
+            data={summaryData.foodGroups}
+            totalCost={summaryData.totalCost}
+          />
+        </div>
+        <div className="right-section">
+          <div className="receipt-card">
+            {loading ? (
+              <div className="receipt-component-head">
+                <h1>Receipt</h1>
+                <p>Loading Receipt...</p>
+              </div>
+            ) : (
+              <Receipt
+                groceries={groceries}
+                onUpload={refetch}
+                onUpdate={handleUpdate}
+                receiptDate={receiptDate}
+              />
+            )}
+          </div>
         </div>
       </div>
       {error && <p>Error: {error}</p>}

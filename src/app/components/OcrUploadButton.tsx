@@ -15,7 +15,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
-import { updateUsersYearlyOverview } from '../analytics/updateYearlyData';
+import { updateUsersYearlyOverview } from '@/app/backend/updateYearlyData';
 
 // Specify types
 type OcrUploadButtonProps = {

@@ -19,7 +19,7 @@ import {
   MonthlyData,
   YearlyOverview,
   YearlyOverviewData,
-} from './yearlyOverviewInterface';
+} from '../backend/yearlyOverviewInterface';
 
 type GroceryItem = z.infer<typeof groceryItemSchema>;
 type ReceiptDate = z.infer<typeof groceryReceiptExtraction>['receiptDate'];
@@ -252,3 +252,5 @@ export const updateUsersYearlyOverview = async (
     console.error('Error updating yearly overview in Firebase:', error);
   }
 };
+
+// export const editFoodGroupInMonth()

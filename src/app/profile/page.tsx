@@ -18,19 +18,30 @@ import Image from 'next/image';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { updatePassword } from '@firebase/auth';
 import Summary from '../components/Summary';
-import SummaryData from './food_summary.json';
+import {
+  FoodGroup,
+  FoodGroupSummary,
+  AggregatedFoodGroupData,
+} from '../profile/summaryInterfaces';
 
 export default function Profile() {
   const router = useRouter();
   const currentUser = auth.currentUser;
   const [receiptCount, setReceiptCount] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [foodGroupSummary, setFoodGroupSummary] = useState<FoodGroupSummary>({
+    foodGroups: [],
+    summary: {
+      totalCount: 0,
+      totalCost: 0.0,
+    },
+  });
 
   useEffect(() => {
     if (!currentUser) {
       router.push('/login');
     } else {
-      const fetchData = async () => {
+      const fetchYearlyOverviewData = async () => {
         try {
           const yearlyOverviewRef = collection(db, 'yearlyOverview');
           const q = query(
@@ -38,10 +49,12 @@ export default function Profile() {
             where('userID', '==', currentUser.uid),
           );
           const querySnapshot = await getDocs(q);
-          setReceiptCount(querySnapshot.size);
 
           let totalSpent = 0;
           let totalReceipts = 0;
+          let totalQuantity = 0;
+          let totalCost = 0;
+          const foodGroupData: AggregatedFoodGroupData = {};
 
           querySnapshot.forEach((doc) => {
             const data = doc.data();
@@ -55,17 +68,51 @@ export default function Profile() {
                 if (yearData.totalReceipts) {
                   totalReceipts += parseInt(yearData.totalReceipts, 10);
                 }
+                Object.keys(yearData.monthlyData || {}).forEach((month) => {
+                  const monthData = yearData.monthlyData[month];
+                  if (monthData.foodGroups) {
+                    monthData.foodGroups.forEach((foodGroup: FoodGroup) => {
+                      const { type, quantity, totalCost: itemCost } = foodGroup;
+                      if (!foodGroupData[type]) {
+                        foodGroupData[type] = { quantity: 0, totalCost: 0 };
+                      }
+                      foodGroupData[type].quantity += quantity;
+                      foodGroupData[type].totalCost += itemCost;
+                      totalQuantity += quantity;
+                      totalCost += itemCost;
+                    });
+                  }
+                });
               });
             }
           });
 
-          setTotalAmount(parseFloat(totalSpent.toFixed(2)));
+          const formattedFoodGroups = Object.keys(foodGroupData).map((type) => {
+            const { quantity, totalCost: itemCost } = foodGroupData[type];
+            return {
+              type,
+              quantity,
+              totalCost: Math.round(itemCost * 100) / 100,
+              pricePercentage:
+                totalCost > 0
+                  ? Math.round((itemCost / totalCost) * 10000) / 100
+                  : 0,
+            };
+          });
+
+          const summary = {
+            totalCount: totalQuantity,
+            totalCost: Math.round(totalCost * 100) / 100,
+          };
+
+          setFoodGroupSummary({ foodGroups: formattedFoodGroups, summary });
+          setTotalAmount(Math.round(totalSpent * 100) / 100);
           setReceiptCount(totalReceipts);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
       };
-      fetchData();
+      fetchYearlyOverviewData();
     }
   }, [currentUser, router]);
 
@@ -369,7 +416,10 @@ export default function Profile() {
           <h1 className="lifetime-stats-header">Lifetime Stats</h1>
           <h4>Number of Receipts Scanned: {receiptCount}</h4>
           <div className="summary-pie-container">
-            <Summary data={SummaryData.foodGroups} totalAmount={totalAmount} />
+            <Summary
+              data={foodGroupSummary.foodGroups}
+              totalCost={totalAmount}
+            />
           </div>
         </div>
       </div>

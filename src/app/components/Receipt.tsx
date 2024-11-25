@@ -1,10 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
 
+import OcrUploadButton from '../components/OcrUploadButton';
 import '../styles/Receipt.css';
 
 import EditIcon from '@mui/icons-material/EditSharp';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 const ReceiptHead = ({ sortColumn }) => {
   const [sortField, setSortField] = useState('');
@@ -66,11 +65,13 @@ const ReceiptHead = ({ sortColumn }) => {
             className={className}
             onClick={() => handleSortChange(`${column}`)}
           >
-            {label}
-            <span
-              className="sort-arrow"
-              style={getSortArrowStyle(`${column}`)}
-            ></span>
+            <div className="table-header-content">
+              {label}
+              <span
+                className="sort-arrow"
+                style={getSortArrowStyle(`${column}`)}
+              ></span>
+            </div>
           </th>
         ))}
       </tr>
@@ -78,7 +79,7 @@ const ReceiptHead = ({ sortColumn }) => {
   );
 };
 
-const ReceiptRow = ({ item, onUpdate }) => {
+const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
   const [editableItem, setEditableItem] = useState(item);
   const [isEditing, setIsEditing] = useState(null);
   const [isHovered, setIsHovered] = useState(null);
@@ -138,6 +139,11 @@ const ReceiptRow = ({ item, onUpdate }) => {
     if (editableItem[fieldName] !== value) {
       try {
         await onUpdate(item.id, fieldName, value);
+        console.log('item: ' + fieldName);
+        console.log('prev value ' + item.foodGroup);
+        console.log('new value ' + value);
+        console.log('price : ' + item.itemPrice * item.quantity);
+        console.log('date: ' + receiptDate);
         setEditableItem((prev) => ({
           ...prev,
           [fieldName]: value,
@@ -249,9 +255,9 @@ const ReceiptRow = ({ item, onUpdate }) => {
                 }
                 max={
                   name === 'quantity'
-                    ? '99'
+                    ? 99
                     : name === 'itemPrice'
-                      ? '999.99'
+                      ? 999.99
                       : undefined
                 }
                 maxLength={name === 'itemName' ? 50 : undefined}
@@ -263,8 +269,8 @@ const ReceiptRow = ({ item, onUpdate }) => {
               />
             )
           ) : (
-            <div className="cell-content">
-              <span className="ellipsis">
+            <div className="cell-item-content">
+              <span className="cell-item-name">
                 {name === 'itemPrice'
                   ? `$${editableItem[name]}`
                   : editableItem[name]}
@@ -283,35 +289,6 @@ const ReceiptRow = ({ item, onUpdate }) => {
   );
 };
 
-const ReceiptTable = ({
-  groceries,
-  onUpdate,
-  filterText,
-  sortColumn,
-  page,
-  itemsPerPage,
-}) => {
-  const startIndex = page * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedGroceries = groceries.slice(startIndex, endIndex);
-
-  const rows = [];
-
-  paginatedGroceries.forEach((item) => {
-    if (item.itemName.toLowerCase().indexOf(filterText.toLowerCase()) === -1) {
-      return;
-    }
-    rows.push(<ReceiptRow key={item.id} item={item} onUpdate={onUpdate} />);
-  });
-
-  return (
-    <table className="receipt-component-table">
-      <ReceiptHead sortColumn={sortColumn} />
-      <tbody className="receipt-component-body">{rows}</tbody>
-    </table>
-  );
-};
-
 const SearchBar = ({ filterText, onFilterTextChange }) => {
   return (
     <div className="search-bar-container">
@@ -326,11 +303,9 @@ const SearchBar = ({ filterText, onFilterTextChange }) => {
   );
 };
 
-const Receipt = ({ groceries, onUpdate }) => {
+const Receipt = ({ groceries, onUpload, onUpdate, receiptDate }) => {
   const [tableData, setTableData] = useState(groceries);
   const [filterText, setFilterText] = useState('');
-  const [page, setPage] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   useEffect(() => {
     setTableData(groceries);
@@ -344,8 +319,9 @@ const Receipt = ({ groceries, onUpdate }) => {
 
     if (sortField) {
       const sorted = [...groceries].sort((a, b) => {
-        if (typeof a[sortField] === 'number') {
-          return (a[sortField] - b[sortField]) * (sortOrder === 'asc' ? 1 : -1);
+        console.log(typeof a[sortField], typeof b[sortField]);
+        if (typeof b[sortField] === 'number') {
+          return (b[sortField] - a[sortField]) * (sortOrder === 'asc' ? 1 : -1);
         }
         a = a[sortField].toLowerCase();
         b = b[sortField].toLowerCase();
@@ -360,64 +336,31 @@ const Receipt = ({ groceries, onUpdate }) => {
     }
   };
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-
-  const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
-    }
-  };
-
-  const handleItemsPerPageChange = (event) => {
-    setItemsPerPage(Number(event.target.value));
-    setPage(0);
-  };
-
-  const startItem = page * itemsPerPage + 1;
-  const endItem = Math.min(startItem + itemsPerPage - 1, tableData.length);
-
   return (
     <div>
       <div className="receipt-component-head">
         <h1>Receipt</h1>
+        <OcrUploadButton onUploadComplete={onUpload} />
         <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
       </div>
-      <ReceiptTable
-        groceries={tableData}
-        onUpdate={onUpdate}
-        filterText={filterText}
-        sortColumn={sortColumn}
-        page={page}
-        itemsPerPage={itemsPerPage}
-      />
-      <div className="pagination-controls">
-        <div className="rows-per-page">
-          <label htmlFor="rowsPerPage">Rows per page:</label>
-          <select
-            id="rowsPerPage"
-            value={itemsPerPage}
-            onChange={handleItemsPerPageChange}
-          >
-            <option value={5}>5</option>
-            <option value={10}>10</option>
-            <option value={20}>20</option>
-          </select>
-        </div>
-        <button onClick={handlePreviousPage} disabled={page === 0}>
-          <KeyboardArrowLeftIcon fontSize="large" />
-        </button>
-        <span>
-          {startItem}-{endItem} of {tableData.length} items
-        </span>
-        <button onClick={handleNextPage} disabled={page === totalPages - 1}>
-          <KeyboardArrowRightIcon fontSize="large" />
-        </button>
+      <div className="receipt-table-wrapper">
+        <table className="receipt-component-table">
+          <ReceiptHead sortColumn={sortColumn} />
+          <tbody className="receipt-component-body">
+            {tableData
+              .filter((item) =>
+                item.itemName.toLowerCase().includes(filterText.toLowerCase()),
+              )
+              .map((item) => (
+                <ReceiptRow
+                  key={item.id}
+                  item={item}
+                  onUpdate={onUpdate}
+                  receiptDate={receiptDate}
+                />
+              ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
