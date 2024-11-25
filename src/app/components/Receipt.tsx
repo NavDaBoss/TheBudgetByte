@@ -79,7 +79,7 @@ const ReceiptHead = ({ sortColumn }) => {
   );
 };
 
-const ReceiptRow = ({ item, onUpdate }) => {
+const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
   const [editableItem, setEditableItem] = useState(item);
   const [isEditing, setIsEditing] = useState(null);
   const [isHovered, setIsHovered] = useState(null);
@@ -139,6 +139,11 @@ const ReceiptRow = ({ item, onUpdate }) => {
     if (editableItem[fieldName] !== value) {
       try {
         await onUpdate(item.id, fieldName, value);
+        console.log('item: ' + fieldName);
+        console.log('prev value ' + item.foodGroup);
+        console.log('new value ' + value);
+        console.log('price : ' + item.itemPrice * item.quantity);
+        console.log('date: ' + receiptDate);
         setEditableItem((prev) => ({
           ...prev,
           [fieldName]: value,
@@ -298,7 +303,7 @@ const SearchBar = ({ filterText, onFilterTextChange }) => {
   );
 };
 
-const Receipt = ({ groceries, onUpload, onUpdate }) => {
+const Receipt = ({ groceries, onUpload, onUpdate, receiptDate }) => {
   const [tableData, setTableData] = useState(groceries);
   const [filterText, setFilterText] = useState('');
 
@@ -347,7 +352,12 @@ const Receipt = ({ groceries, onUpload, onUpdate }) => {
                 item.itemName.toLowerCase().includes(filterText.toLowerCase()),
               )
               .map((item) => (
-                <ReceiptRow key={item.id} item={item} onUpdate={onUpdate} />
+                <ReceiptRow
+                  key={item.id}
+                  item={item}
+                  onUpdate={onUpdate}
+                  receiptDate={receiptDate}
+                />
               ))}
           </tbody>
         </table>
