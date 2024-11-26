@@ -3,8 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import './analytics.css';
 
+import InventoryIcon from '@mui/icons-material/Inventory';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import PaidIcon from '@mui/icons-material/Paid';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 
 import Navbar from '../components/Navbar';
@@ -63,7 +65,7 @@ const AnalyticsSummaryCard = ({
       {
         label: 'Receipts',
         value: selectedYearData?.totalReceipts || '0',
-        icon: <ReceiptIcon fontSize="large" />,
+        icon: <InventoryIcon fontSize="large" />,
       },
       {
         label: 'Total Spent',
@@ -73,7 +75,7 @@ const AnalyticsSummaryCard = ({
       {
         label: 'Items Bought',
         value: selectedYearData?.totalQuantity || 'No Data',
-        icon: <ShoppingBasketIcon fontSize="large" />,
+        icon: <ReceiptLongIcon fontSize="large" />,
       },
     ],
   };
