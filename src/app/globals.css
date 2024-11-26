@@ -7,6 +7,9 @@
   --green: #15be53;
   --blue: #5bd2ff;
   --purple: #bb61d3;
+  --grey: #8e8e93;
+  --grey2: #636366;
+  --grey3: #48484A;
   --light-grey: #cccccc;
   --gutterWidth: 16px;
   --windowWidth: 100vw;
@@ -106,8 +109,8 @@ p {
 
 .page {
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
 }

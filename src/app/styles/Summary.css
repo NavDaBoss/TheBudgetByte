@@ -9,13 +9,14 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(72, 72, 74, 0.18);
 }
 
 .summary-card-content {
   display: flex;
   justify-content: space-evenly;
   flex-direction: column;
+  margin-top: 1.5rem;
   height: 100%;
 }
 
