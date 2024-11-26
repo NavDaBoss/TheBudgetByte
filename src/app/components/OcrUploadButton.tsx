@@ -211,10 +211,10 @@ export default function OcrUploadButton({
       apiResponse.groceries.forEach(async (item: GroceryItem) => {
         await addDoc(groceriesSubCollectionRef, {
           itemName: item.itemName,
-          itemPrice: item.itemPrice,
+          itemPrice: item.itemPrice.toFixed(2),
           quantity: item.quantity,
           foodGroup: item.foodGroup,
-          totalPrice: item.totalPrice,
+          totalPrice: item.totalPrice.toFixed(2),
         });
       });
 

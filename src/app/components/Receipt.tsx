@@ -272,7 +272,7 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
             <div className="cell-item-content">
               <span className="cell-item-name">
                 {name === 'itemPrice'
-                  ? `$${editableItem[name].toFixed(2)}`
+                  ? `$${editableItem[name]}`
                   : editableItem[name]}
               </span>
               {isHovered === name && (
