@@ -19,7 +19,7 @@
   justify-content: left;
   align-items: center;
   gap: 2.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .receipt-component-head h1 {
@@ -41,6 +41,8 @@
 }
 
 .receipt-component-body {
+  display: block;
+  max-height: 50vh;
   overflow-y: auto;
 }
 
