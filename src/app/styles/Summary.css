@@ -94,7 +94,7 @@
 
   .chart-legend-container {
     flex-direction: column;
-    gap: 1rem;
+    gap: 2rem;
   }
 
   .food-group-legend {
