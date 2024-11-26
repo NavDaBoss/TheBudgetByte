@@ -3,10 +3,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column; /* Stack logo and navbar vertically by default */
+  flex-direction: column;
+  /* Stack logo and navbar vertically by default */
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
+  width: 100%;
   padding: 0 var(--columnPaddingNormal);
-  overflow: hidden;
+  background: transparent;
 }
 
 .header-top-container {
@@ -14,16 +16,16 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 10px 0;
+  margin-top: 0.5rem;
 }
 
 .header-logo {
-  margin: 10px;
   font-weight: 700;
 }
 
 .hamburger {
-  display: none; /* Hidden by default */
+  display: none;
+  /* Hidden by default */
   font-size: 2rem;
   cursor: pointer;
 }
@@ -49,9 +51,9 @@
   outline: none;
   font-size: 1rem;
   font-weight: 700;
-  padding: 10px 20px;
+  padding: 0.5rem 1rem;
   margin: 0 10px;
-  background-color: var(--background);
+  background-color: transparent;
   color: var(--foreground);
   cursor: pointer;
 }
@@ -92,13 +94,15 @@
   }
 
   .header-nav {
-    display: none; /* Default state is hidden */
+    display: none;
+    /* Default state is hidden */
     flex-direction: column;
     width: 100%;
   }
 
   .hamburger {
-    display: block; /* Show hamburger icon on mobile */
+    display: block;
+    /* Show hamburger icon on mobile */
     cursor: pointer;
     font-size: 2rem;
     margin-left: auto;

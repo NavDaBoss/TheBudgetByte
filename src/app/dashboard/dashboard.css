@@ -1,18 +1,28 @@
 .dashboard-section-container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: stretch;
-  margin: 16px 0;
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
+  height: 100%;
+  position: relative;
+  top: 1rem;
+}
+
+.dashboard-content {
+  display: flex;
+  justify-content: center;
+  height: 90%;
 }
 
 .left-section {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .right-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100%;
 }
