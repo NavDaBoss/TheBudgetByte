@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import './analytics.css';
 import Navbar from '../components/Navbar';
 import Summary from '../components/Summary';
-import { YearlyOverview, monthNames } from './yearlyOverviewInterface';
+import { YearlyOverview, monthNames } from '../backend/yearlyOverviewInterface';
 import { useRouter } from 'next/navigation';
 import { auth, db } from '../firebase/firebaseConfig';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -29,7 +29,7 @@ const AnalyticsSummary = ({
       {monthlyData && monthlyData[selectedMonth] ? (
         <Summary
           data={monthlyData[selectedMonth].foodGroups} // safely access foodGroups
-          totalAmount={monthlyData[selectedMonth].totalSpent} // safely access totalSpent
+          totalCost={monthlyData[selectedMonth].totalSpent} // safely access totalSpent
         />
       ) : (
         <p>

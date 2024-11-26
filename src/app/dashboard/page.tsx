@@ -23,6 +23,7 @@ const Dashboard = () => {
     groceries,
     receiptID,
     receiptBalance,
+    receiptDate,
     loading,
     error,
     updateGroceryItem,
