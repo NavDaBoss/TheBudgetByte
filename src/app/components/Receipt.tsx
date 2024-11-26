@@ -188,7 +188,10 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
       if (value !== item[fieldName]) {
         await onUpdate(item.id, fieldName, value);
       }
+      console.log('item price: ', item.itemPrice);
       handleInput(fieldName, value);
+      console.log('fieldname : ', fieldName);
+      console.log('new price: ', value);
       setIsEditing(null);
     }
   };

@@ -142,11 +142,6 @@ const updateFoodGroups = (
   foodGroupsTotalCost: Record<FoodTypes, number>,
   foodGroupsTotalQuantity: Record<FoodTypes, number>,
 ) => {
-  // No need to update when there is no spending.
-  if (monthOverview.totalSpent <= 0) {
-    console.log('Monthly data was not updated since the total spent <= 0.');
-    return;
-  }
   for (const foodType of Object.values(FoodTypes)) {
     const existingGroup = monthOverview.foodGroups.find(
       (group) => group.type === foodType,
@@ -334,6 +329,63 @@ export const updateOverviewWhenFoodGroupChanged = async (
     await updateDoc(overviewRef, {
       [`yearlyOverviewData.${year}.totalSpent`]: yearOverview.totalSpent,
       [`yearlyOverviewData.${year}.totalQuantity`]: yearOverview.totalQuantity,
+      [`yearlyOverviewData.${year}.monthlyData.${month}`]: monthOverview, // Use dot notation to update the specific month
+    });
+  } catch (error) {
+    console.error('Error updating yearly overview in Firebase:', error);
+  }
+};
+
+export const updateOverviewWhenPriceChanged = async (
+  receiptDate: ReceiptDate,
+  foodGroup: FoodTypes,
+  newPrice: number,
+  oldPrice: number,
+  quantity: number,
+) => {
+  const year = getYearFromReceiptDate(receiptDate);
+  const month = getMonthFromReceiptDate(receiptDate);
+  const overview = await createOrGetYearlyOverview();
+  if (!overview || !year || !month) {
+    console.log('could not find an overview, year, or month');
+    return;
+  }
+  const yearOverview = createOrGetYearData(overview, year);
+  const monthOverview = createOrGetMonthData(yearOverview, month);
+  // const copyofoverviewtoprint = JSON.parse(JSON.stringify(monthOverview));
+  const foodGroupsTotalCost: Record<FoodTypes, number> = {
+    [FoodTypes.Vegetables]: 0,
+    [FoodTypes.Fruits]: 0,
+    [FoodTypes.Grains]: 0,
+    [FoodTypes.Protein]: 0,
+    [FoodTypes.Dairy]: 0,
+  };
+  const foodGroupsTotalQuantity: Record<FoodTypes, number> = {
+    [FoodTypes.Vegetables]: 0,
+    [FoodTypes.Fruits]: 0,
+    [FoodTypes.Grains]: 0,
+    [FoodTypes.Protein]: 0,
+    [FoodTypes.Dairy]: 0,
+  };
+  // If the foodGroup is not a food type , then it is uncategorized. Overview does not track uncategorized food types.
+  if (!(foodGroup in foodGroupsTotalCost)) {
+    console.log(
+      'attemped to edit the price of an item that is an invalid food type',
+    );
+    return;
+  }
+  const spending = (newPrice - oldPrice) * quantity;
+  foodGroupsTotalCost[foodGroup] = spending;
+  yearOverview.totalSpent =
+    Math.round((yearOverview.totalSpent + spending) * 100) / 100;
+  monthOverview.totalSpent =
+    Math.round((monthOverview.totalSpent + spending) * 100) / 100;
+  updateFoodGroups(monthOverview, foodGroupsTotalCost, foodGroupsTotalQuantity);
+  // Update firestore with the new yearlyoverview changes
+  try {
+    const overviewRef = doc(db, 'yearlyOverview', overview.yearlyOverviewId); // Get the correct doc reference
+    await updateDoc(overviewRef, {
+      [`yearlyOverviewData.${year}.totalSpent`]: yearOverview.totalSpent,
       [`yearlyOverviewData.${year}.monthlyData.${month}`]: monthOverview, // Use dot notation to update the specific month
     });
   } catch (error) {
