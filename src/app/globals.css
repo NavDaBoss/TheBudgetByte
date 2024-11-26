@@ -2,11 +2,11 @@
   --background: #f0f0f0;
   --foreground: #171717;
   --white: #ffffff;
+  --red: #ff3c3c;
+  --yellow: #fdd34e;
   --green: #15be53;
-  --blue: #42cafd;
-  --red: #ed1c24;
-  --yellow: #fcd112;
-  --purple: #9d44b5;
+  --blue: #5bd2ff;
+  --purple: #bb61d3;
   --light-grey: #cccccc;
   --gutterWidth: 16px;
   --windowWidth: 100vw;
@@ -36,8 +36,29 @@ body {
 }
 
 body {
+  background-color: var(--light-grey);
+  background-image: radial-gradient(
+      circle at 0% 50%,
+      hsla(112.49999999999999, 37%, 91%, 1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 20%,
+      hsla(27.999999999999577, 0%, 86%, 1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 0%,
+      hsla(189.00000000000065, 0%, 100%, 1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 50%,
+      hsla(89.69696969696984, 100%, 92%, 1) 0%,
+      transparent 50%
+    );
+  background-blend-mode: normal, normal, normal, normal;
   color: var(--foreground);
-  background: var(--background);
   font-size: 16px;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -81,4 +102,12 @@ h6 {
 
 p {
   font-size: 1rem;
+}
+
+.page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
 }

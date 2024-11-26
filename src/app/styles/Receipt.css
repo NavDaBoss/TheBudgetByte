@@ -1,17 +1,17 @@
 .receipt-card {
   display: flex;
-  justify-items: stretch;
+  justify-items: column;
   margin: 1rem;
   padding: 2rem;
-  border-radius: 10px;
-  border: 2px solid var(--light-grey);
   width: 100%;
   height: 100%;
   max-width: 60vw;
   overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(60px);
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .receipt-component-head {
@@ -19,7 +19,7 @@
   justify-content: left;
   align-items: center;
   gap: 2.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .receipt-component-head h1 {
@@ -37,7 +37,6 @@
   table-layout: fixed;
   border-collapse: collapse;
   width: 100%;
-  height: 100%;
   border-bottom: 2px dashed black;
 }
 
@@ -78,7 +77,7 @@
 
 .receipt-component-body tr:hover {
   font-weight: 700;
-  background-color: var(--green);
+  background-color: rgba(21, 190, 83, 0.8);
   transition: filter 0.3s ease;
 }
 
@@ -128,7 +127,7 @@
 }
 
 .search-bar:focus {
-  border-color: var(--blue);
+  border-color: var(--foreground);
   outline: none;
 }
 
