@@ -31,7 +31,7 @@
 }
 
 .header-nav {
-  display: flex;
+  display: non;
   justify-content: center;
 }
 
