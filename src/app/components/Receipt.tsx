@@ -4,6 +4,7 @@ import OcrUploadButton from '../components/OcrUploadButton';
 import '../styles/Receipt.css';
 
 import EditIcon from '@mui/icons-material/EditSharp';
+import { updateOverviewWhenFoodGroupChanged } from '../backend/updateYearlyData';
 
 const ReceiptHead = ({ sortColumn }) => {
   const [sortField, setSortField] = useState('');
@@ -139,11 +140,13 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
     if (editableItem[fieldName] !== value) {
       try {
         await onUpdate(item.id, fieldName, value);
-        console.log('item: ' + fieldName);
-        console.log('prev value ' + item.foodGroup);
-        console.log('new value ' + value);
-        console.log('price : ' + item.itemPrice * item.quantity);
-        console.log('date: ' + receiptDate);
+        updateOverviewWhenFoodGroupChanged(
+          receiptDate,
+          item.foodGroup,
+          value,
+          item.itemPrice * item.quantity,
+          item.quantity,
+        );
         setEditableItem((prev) => ({
           ...prev,
           [fieldName]: value,

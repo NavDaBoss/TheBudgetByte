@@ -152,8 +152,17 @@ const updateFoodGroups = (
       (group) => group.type === foodType,
     );
     if (existingGroup) {
-      existingGroup.totalCost += foodGroupsTotalCost[foodType];
-      existingGroup.quantity += foodGroupsTotalQuantity[foodType];
+      // Don't decrement the cost to negative
+      if (
+        !(existingGroup.totalCost === 0 && foodGroupsTotalCost[foodType] < 0)
+      ) {
+        existingGroup.totalCost += foodGroupsTotalCost[foodType];
+      }
+      if (
+        !(existingGroup.quantity === 0 && foodGroupsTotalQuantity[foodType] < 0)
+      ) {
+        existingGroup.quantity += foodGroupsTotalQuantity[foodType];
+      }
       existingGroup.pricePercentage = Number(
         ((existingGroup.totalCost / monthOverview.totalSpent) * 100).toFixed(2),
       );
@@ -253,4 +262,81 @@ export const updateUsersYearlyOverview = async (
   }
 };
 
-// export const editFoodGroupInMonth()
+export const updateOverviewWhenFoodGroupChanged = async (
+  receiptDate: ReceiptDate,
+  oldFoodGroup: FoodTypes,
+  newFoodGroup: FoodTypes,
+  price: number,
+  quantity: number,
+) => {
+  const year = getYearFromReceiptDate(receiptDate);
+  const month = getMonthFromReceiptDate(receiptDate);
+  const overview = await createOrGetYearlyOverview();
+  if (!overview || !year || !month) {
+    console.log('could not find an overview, year, or month');
+    return;
+  }
+  const yearOverview = createOrGetYearData(overview, year);
+  const monthOverview = createOrGetMonthData(yearOverview, month);
+  // const copyofoverviewtoprint = JSON.parse(JSON.stringify(monthOverview));
+  const foodGroupsTotalCost: Record<FoodTypes, number> = {
+    [FoodTypes.Vegetables]: 0,
+    [FoodTypes.Fruits]: 0,
+    [FoodTypes.Grains]: 0,
+    [FoodTypes.Protein]: 0,
+    [FoodTypes.Dairy]: 0,
+  };
+  const foodGroupsTotalQuantity: Record<FoodTypes, number> = {
+    [FoodTypes.Vegetables]: 0,
+    [FoodTypes.Fruits]: 0,
+    [FoodTypes.Grains]: 0,
+    [FoodTypes.Protein]: 0,
+    [FoodTypes.Dairy]: 0,
+  };
+  // If the oldFoodGroup is not a food type , then it is initially uncategorized.
+  if (!(oldFoodGroup in foodGroupsTotalCost)) {
+    foodGroupsTotalCost[newFoodGroup] = price;
+    foodGroupsTotalQuantity[newFoodGroup] = quantity;
+    yearOverview.totalSpent =
+      Math.round((yearOverview.totalSpent + price) * 100) / 100;
+    yearOverview.totalQuantity += quantity;
+    monthOverview.totalSpent =
+      Math.round((monthOverview.totalSpent + price) * 100) / 100;
+    monthOverview.totalQuantity += quantity;
+  }
+  // If the newFoodGroup is not a food type, then is categorizing to uncategorized
+  else if (!(newFoodGroup in foodGroupsTotalCost)) {
+    foodGroupsTotalCost[oldFoodGroup] = price * -1;
+    foodGroupsTotalQuantity[oldFoodGroup] = quantity * -1;
+    yearOverview.totalSpent =
+      Math.round((yearOverview.totalSpent - price) * 100) / 100;
+    yearOverview.totalQuantity -= quantity;
+    monthOverview.totalSpent =
+      Math.round((monthOverview.totalSpent - price) * 100) / 100;
+    monthOverview.totalQuantity -= quantity;
+  }
+  // Since we are just swapping the food group of a grocery item, the yearly quantity and price does not change
+  // Instead the following are changed:
+  // * the total cost of the newly selected food group is incremented by item price
+  // * the total cost of the old food group is decremented by item price
+  // * the total quantity of the newly selected food group is incremented by the item's quantity
+  // * the total quantity of the old food group is decremented by the item's quantity
+  else {
+    foodGroupsTotalCost[oldFoodGroup] = price * -1;
+    foodGroupsTotalCost[newFoodGroup] = price;
+    foodGroupsTotalQuantity[oldFoodGroup] = quantity * -1;
+    foodGroupsTotalQuantity[newFoodGroup] = quantity;
+  }
+  updateFoodGroups(monthOverview, foodGroupsTotalCost, foodGroupsTotalQuantity);
+  // Update firestore with the new yearlyoverview changes
+  try {
+    const overviewRef = doc(db, 'yearlyOverview', overview.yearlyOverviewId); // Get the correct doc reference
+    await updateDoc(overviewRef, {
+      [`yearlyOverviewData.${year}.totalSpent`]: yearOverview.totalSpent,
+      [`yearlyOverviewData.${year}.totalQuantity`]: yearOverview.totalQuantity,
+      [`yearlyOverviewData.${year}.monthlyData.${month}`]: monthOverview, // Use dot notation to update the specific month
+    });
+  } catch (error) {
+    console.error('Error updating yearly overview in Firebase:', error);
+  }
+};
