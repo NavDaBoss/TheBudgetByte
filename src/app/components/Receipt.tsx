@@ -340,8 +340,13 @@ const Receipt = ({ groceries, onUpload, onUpdate, receiptDate }) => {
     <div>
       <div className="receipt-component-head">
         <h1>Receipt</h1>
-        <OcrUploadButton onUploadComplete={onUpload} />
-        <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
+        <div className="receipt-options">
+          <OcrUploadButton onUploadComplete={onUpload} />
+          <SearchBar
+            filterText={filterText}
+            onFilterTextChange={setFilterText}
+          />
+        </div>
       </div>
       <div className="receipt-table-wrapper">
         <table className="receipt-component-table">

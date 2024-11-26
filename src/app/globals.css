@@ -34,6 +34,7 @@
 
 html,
 body {
+  height: 100vh;
   max-width: 100vw;
   overflow-x: hidden;
 }
@@ -112,5 +113,4 @@ p {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 }

@@ -10,6 +10,7 @@
   -webkit-backdrop-filter: blur(8px);
   border-radius: 10px;
   border: 1px solid rgba(72, 72, 74, 0.18);
+  overflow-x: auto;
 }
 
 .summary-card-content {
@@ -22,16 +23,20 @@
 
 .chart-legend-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 1.5rem;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .doughnut-chart {
   position: relative;
-  width: 40%;
   flex-shrink: 0;
+  width: 40%;
+  height: 40%;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
 }
 
 .doughnut-center {
@@ -46,7 +51,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  width: 100%;
+  flex: 1;
 }
 
 .legend-item {
@@ -80,4 +85,23 @@
 
 .bar-chart-container h2 {
   margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .summary-card {
+    width: 100%;
+  }
+
+  .chart-legend-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .food-group-legend {
+    width: 100%;
+  }
+
+  .doughnut-chart {
+    width: 45%;
+  }
 }

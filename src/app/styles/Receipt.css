@@ -1,24 +1,21 @@
 .receipt-card {
   display: flex;
-  justify-items: column;
   margin: 1rem;
   padding: 2rem;
-  width: 100%;
   height: 100%;
-  max-width: 60vw;
-  overflow: hidden;
+  width: 100%;
   background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 10px;
   border: 1px solid rgba(72, 72, 74, 0.18);
+  overflow-x: auto;
 }
 
 .receipt-component-head {
   display: flex;
-  justify-content: left;
-  align-items: center;
-  gap: 2.5rem;
+  flex-direction: column;
+  gap: 1rem;
   margin-bottom: 1.5rem;
 }
 
@@ -26,9 +23,15 @@
   font-weight: 700;
 }
 
+.receipt-options {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .receipt-table-wrapper {
   overflow-x: auto;
-  max-width: 100%;
+  width: 100%;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
 }
@@ -36,14 +39,22 @@
 .receipt-component-table {
   table-layout: fixed;
   border-collapse: collapse;
-  width: 100%;
   border-bottom: 2px dashed black;
+  width: 100%;
+}
+
+.receipt-component-table th,
+.receipt-component-table td {
+  text-overflow: ellipsis;
+  white-space: no-wrap;
+  overflow: hidden;
 }
 
 .receipt-component-body {
   display: block;
   max-height: 50vh;
-  overflow-y: auto;
+  overflow: auto;
+  width: 100%;
 }
 
 .receipt-component-table thead,
@@ -203,4 +214,21 @@
   border-radius: 4px;
   background-color: var(--white);
   color: var(--foreground);
+}
+
+@media (max-width: 768px) {
+  .receipt-card {
+    width: 100%;
+  }
+
+  .receipt-component-head {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .receipt-component-table {
+    min-width: 768px;
+    overflow: auto;
+  }
 }
