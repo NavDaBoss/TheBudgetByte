@@ -1,6 +1,7 @@
 import {
   updateOverviewWhenFoodGroupChanged,
   updateOverviewWhenPriceChanged,
+  updateOverviewWhenQuantityChanged,
   updateUsersYearlyOverview,
 } from '@/app/backend/updateYearlyData';
 import { updateDoc } from 'firebase/firestore';
@@ -682,6 +683,206 @@ describe('updateOverviewWhenPriceChanged', () => {
   it('should stop if there is invalid date', async () => {
     const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
     await updateOverviewWhenPriceChanged(
+      'NA/NA/2024',
+      FoodTypes.Protein,
+      4,
+      2,
+      2,
+    );
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'could not find an overview, year, or month',
+    );
+    consoleSpy.mockRestore();
+  });
+});
+
+describe('updateOverviewWhenQuantityChanged', () => {
+  beforeEach(() => {
+    // Reset mocks before each test
+    jest.clearAllMocks();
+    // returns a mocked overview
+    require('firebase/firestore').getDocs.mockResolvedValue({
+      empty: false,
+      docs: [
+        { data: () => JSON.parse(JSON.stringify(populatedOverviewTemplate)) },
+      ],
+    });
+  });
+
+  it('should edit the overview price and quantity when quantity of an item is decremented', async () => {
+    const updatedMonthOverview = {
+      totalReceipts: 1,
+      totalSpent: 18,
+      totalQuantity: 9,
+      foodGroups: [
+        {
+          type: FoodTypes.Vegetables,
+          totalCost: 4,
+          quantity: 2,
+          pricePercentage: 22.22,
+        },
+        {
+          type: FoodTypes.Fruits,
+          totalCost: 4,
+          quantity: 2,
+          pricePercentage: 22.22,
+        },
+        {
+          type: FoodTypes.Grains,
+          totalCost: 4,
+          quantity: 2,
+          pricePercentage: 22.22,
+        },
+        {
+          type: FoodTypes.Protein,
+          totalCost: 2,
+          quantity: 1,
+          pricePercentage: 11.11,
+        },
+        {
+          type: FoodTypes.Dairy,
+          totalCost: 4,
+          quantity: 2,
+          pricePercentage: 22.22,
+        },
+      ],
+    };
+    await updateOverviewWhenQuantityChanged(
+      '01/01/2024',
+      FoodTypes.Protein,
+      /* new quantity = */ 1,
+      /* old quantity = */ 2,
+      /* price = */ 2,
+    );
+    expect(updateDoc).toHaveBeenCalledWith(undefined, {
+      'yearlyOverviewData.2024.totalSpent': 18,
+      'yearlyOverviewData.2024.totalQuantity': 9,
+      'yearlyOverviewData.2024.monthlyData.January': updatedMonthOverview,
+    });
+  });
+
+  it('should edit the overview price and quantity when quantity of an item is incremented', async () => {
+    const updatedMonthOverview = {
+      totalReceipts: 1,
+      totalSpent: 22,
+      totalQuantity: 11,
+      foodGroups: [
+        {
+          type: FoodTypes.Vegetables,
+          totalCost: 4,
+          quantity: 2,
+          pricePercentage: 18.18,
+        },
+        {
+          type: FoodTypes.Fruits,
+          totalCost: 4,
+          quantity: 2,
+          pricePercentage: 18.18,
+        },
+        {
+          type: FoodTypes.Grains,
+          totalCost: 4,
+          quantity: 2,
+          pricePercentage: 18.18,
+        },
+        {
+          type: FoodTypes.Protein,
+          totalCost: 6,
+          quantity: 3,
+          pricePercentage: 27.27,
+        },
+        {
+          type: FoodTypes.Dairy,
+          totalCost: 4,
+          quantity: 2,
+          pricePercentage: 18.18,
+        },
+      ],
+    };
+    await updateOverviewWhenQuantityChanged(
+      '01/01/2024',
+      FoodTypes.Protein,
+      /* new quantity = */ 3,
+      /* old quantity = */ 2,
+      /* price = */ 2,
+    );
+    expect(updateDoc).toHaveBeenCalledWith(undefined, {
+      'yearlyOverviewData.2024.totalSpent': 22,
+      'yearlyOverviewData.2024.totalQuantity': 11,
+      'yearlyOverviewData.2024.monthlyData.January': updatedMonthOverview,
+    });
+  });
+
+  it('should edit the overview price and quantity when quantity of an item is 0', async () => {
+    const updatedMonthOverview = {
+      totalReceipts: 1,
+      totalSpent: 16,
+      totalQuantity: 8,
+      foodGroups: [
+        {
+          type: FoodTypes.Vegetables,
+          totalCost: 4,
+          quantity: 2,
+          pricePercentage: 25,
+        },
+        {
+          type: FoodTypes.Fruits,
+          totalCost: 4,
+          quantity: 2,
+          pricePercentage: 25,
+        },
+        {
+          type: FoodTypes.Grains,
+          totalCost: 4,
+          quantity: 2,
+          pricePercentage: 25,
+        },
+        {
+          type: FoodTypes.Protein,
+          totalCost: 0,
+          quantity: 0,
+          pricePercentage: 0,
+        },
+        {
+          type: FoodTypes.Dairy,
+          totalCost: 4,
+          quantity: 2,
+          pricePercentage: 25,
+        },
+      ],
+    };
+    await updateOverviewWhenQuantityChanged(
+      '01/01/2024',
+      FoodTypes.Protein,
+      /* new quantity = */ 0,
+      /* old quantity = */ 2,
+      /* price = */ 2,
+    );
+    expect(updateDoc).toHaveBeenCalledWith(undefined, {
+      'yearlyOverviewData.2024.totalSpent': 16,
+      'yearlyOverviewData.2024.totalQuantity': 8,
+      'yearlyOverviewData.2024.monthlyData.January': updatedMonthOverview,
+    });
+  });
+
+  it('should stop if there is invalid food type', async () => {
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+    await updateOverviewWhenQuantityChanged(
+      '01/01/2024',
+      'Uncategorized' as FoodTypes,
+      4,
+      2,
+      2,
+    );
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'attemped to edit the price of an item that is an invalid food type',
+    );
+    consoleSpy.mockRestore();
+  });
+
+  it('should stop if there is invalid date', async () => {
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+    await updateOverviewWhenQuantityChanged(
       'NA/NA/2024',
       FoodTypes.Protein,
       4,
