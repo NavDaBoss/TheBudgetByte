@@ -52,7 +52,12 @@
 }
 
 .error-message {
-  color: #ff0000;
+  color: var(--red);
+  margin-bottom: 5px;
+}
+
+.success-message {
+  color: var(--green);
   margin-bottom: 5px;
 }
 
