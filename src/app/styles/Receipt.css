@@ -223,7 +223,6 @@
 
   .receipt-component-head {
     display: flex;
-    align-items: start;
     flex-direction: column;
   }
 
