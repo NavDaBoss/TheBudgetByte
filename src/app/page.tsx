@@ -12,9 +12,13 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>   {/*  Might change this later on */}
+      <header className={styles.header}>
+        {' '}
+        {/*  Might change this later on */}
         <h1 className={styles.logo}>BUDGET BYTE</h1>
-        <button className={styles.loginBtn} onClick={navigateToLogin}>Login</button>
+        <button className={styles.loginBtn} onClick={navigateToLogin}>
+          Login
+        </button>
       </header>
 
       <main className={styles.main}>
@@ -22,12 +26,14 @@ export default function Home() {
         <section className={styles.section}>
           <div className={styles.textBlock}>
             <p>
-              <strong>Smart Receipt Parsing</strong> | Upload your grocery receipts, and our AI will automatically parse
-              and categorize the items into food groups like fruits, vegetables,
-              grains, protein, and others. Easily edit items to ensure accurate
-              tracking.
+              <strong>Smart Receipt Parsing</strong> | Upload your grocery
+              receipts, and our AI will automatically parse and categorize the
+              items into food groups like fruits, vegetables, grains, protein,
+              and others. Easily edit items to ensure accurate tracking.
             </p>
-            <button className={styles.scanBtn} onClick={navigateToLogin}>Scan Receipt</button>
+            <button className={styles.scanBtn} onClick={navigateToLogin}>
+              Scan Receipt
+            </button>
           </div>
           <img
             src="/images/reciept.png"
@@ -45,9 +51,10 @@ export default function Home() {
           />
           <div className={styles.textBlock}>
             <p>
-              <strong>Monthly Spending Analytics</strong> | Visualize your grocery expenses over time with detailed
-              breakdowns by food group. Track trends in your spending habits and
-              see where your budget is going.
+              <strong>Monthly Spending Analytics</strong> | Visualize your
+              grocery expenses over time with detailed breakdowns by food group.
+              Track trends in your spending habits and see where your budget is
+              going.
             </p>
           </div>
         </section>
@@ -56,9 +63,10 @@ export default function Home() {
         <section className={styles.section}>
           <div className={styles.textBlock}>
             <p>
-              <strong>Lifetime Stats</strong> | Get a comprehensive summary of your grocery spending, including
-              total receipts scanned and lifetime spending in each food
-              category. Gain a deeper understanding of your purchasing habits.
+              <strong>Lifetime Stats</strong> | Get a comprehensive summary of
+              your grocery spending, including total receipts scanned and
+              lifetime spending in each food category. Gain a deeper
+              understanding of your purchasing habits.
             </p>
           </div>
           <img

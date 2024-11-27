@@ -84,7 +84,9 @@ describe('Home Page', () => {
     render(<Home />);
 
     const footerText = screen.getByText(/© 2024 BudgetByte/i);
-    const contactText = screen.getByText(/Contact Us: BudgetByte@budgetbyte.com/i);
+    const contactText = screen.getByText(
+      /Contact Us: BudgetByte@budgetbyte.com/i,
+    );
 
     expect(footerText).toBeInTheDocument();
     expect(contactText).toBeInTheDocument();
