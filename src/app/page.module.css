@@ -16,7 +16,7 @@
   border-bottom: 2px solid #000; */
 }
 
-.header h1 { 
+.header h1 {
   font-size: 50px;
   margin-top: 10px;
 }
@@ -57,13 +57,12 @@
 
 .section:nth-child(even) .image {
   margin-left: 40px;
-} 
+}
 
 .textBlock {
   flex: 1;
   margin: 20px;
 }
-
 
 .textBlock p {
   font-size: 36px;
@@ -92,8 +91,9 @@
   max-width: 45%;
   height: auto;
   border-radius: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
-              0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   margin-right: 40px;
 }
@@ -122,10 +122,9 @@
     align-items: center;
     justify-content: center;
     padding-bottom: 0;
-
   }
 
-  .header h1 { 
+  .header h1 {
     margin-bottom: 20px;
     font-size: 20px;
     padding: 6px 16px;
@@ -146,7 +145,6 @@
     padding-top: 0px;
     padding-bottom: 0px;
   }
-
 
   .section {
     flex-direction: column; /* Stack elements vertically */
@@ -179,7 +177,7 @@
 
   .section:nth-child(even) .image {
     margin-left: 0px;
-  } 
+  }
 
   .footer {
     flex-direction: column;
