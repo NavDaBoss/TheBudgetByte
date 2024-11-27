@@ -7,6 +7,7 @@ import EditIcon from '@mui/icons-material/EditSharp';
 import {
   updateOverviewWhenFoodGroupChanged,
   updateOverviewWhenPriceChanged,
+  updateOverviewWhenQuantityChanged,
 } from '../backend/updateYearlyData';
 
 const ReceiptHead = ({ sortColumn }) => {
@@ -191,17 +192,22 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
       if (value !== item[fieldName]) {
         await onUpdate(item.id, fieldName, value);
       }
-      console.log('item price: ', item.itemPrice);
       handleInput(fieldName, value);
-      console.log('fieldname : ', fieldName);
-      console.log('new price: ', value);
       if (fieldName === 'itemPrice') {
         updateOverviewWhenPriceChanged(
           receiptDate,
           item.foodGroup,
-          value,
-          item.itemPrice,
+          /*new item price = */ value,
+          /*old item price = */ item.itemPrice,
           item.quantity,
+        );
+      } else if (fieldName === 'quantity') {
+        updateOverviewWhenQuantityChanged(
+          receiptDate,
+          item.foodGroup,
+          /*new quantity price = */ value,
+          /*old quantity price = */ item.quantity,
+          item.itemPrice,
         );
       }
       setIsEditing(null);
