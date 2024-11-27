@@ -104,7 +104,6 @@ const Dashboard = () => {
   useEffect(() => {
     recalculateSummary();
   }, [groceries]);
-  console.log('inside page receiptDate: ', receiptDate);
   return (
     <div className="page">
       <Navbar />

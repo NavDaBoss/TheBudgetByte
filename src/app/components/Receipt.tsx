@@ -4,7 +4,10 @@ import OcrUploadButton from '../components/OcrUploadButton';
 import '../styles/Receipt.css';
 
 import EditIcon from '@mui/icons-material/EditSharp';
-import { updateOverviewWhenFoodGroupChanged } from '../backend/updateYearlyData';
+import {
+  updateOverviewWhenFoodGroupChanged,
+  updateOverviewWhenPriceChanged,
+} from '../backend/updateYearlyData';
 
 const ReceiptHead = ({ sortColumn }) => {
   const [sortField, setSortField] = useState('');
@@ -192,6 +195,15 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
       handleInput(fieldName, value);
       console.log('fieldname : ', fieldName);
       console.log('new price: ', value);
+      if (fieldName === 'itemPrice') {
+        updateOverviewWhenPriceChanged(
+          receiptDate,
+          item.foodGroup,
+          value,
+          item.itemPrice,
+          item.quantity,
+        );
+      }
       setIsEditing(null);
     }
   };
