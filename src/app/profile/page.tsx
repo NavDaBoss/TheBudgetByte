@@ -18,6 +18,7 @@ import {
 export default function Profile() {
   const router = useRouter();
   const currentUser = auth.currentUser;
+  const creationTimestamp = currentUser?.metadata?.creationTime;
   const [receiptCount, setReceiptCount] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [foodGroupSummary, setFoodGroupSummary] = useState<FoodGroupSummary>({
@@ -51,6 +52,22 @@ export default function Profile() {
   const [nameErrorMessage, setNameErrorMessage] = useState('');
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+
+    const day = date.getDate();
+    const month = date.toLocaleDateString('en-US', { month: 'long' });
+    const year = date.getFullYear();
+
+    return `${month} ${day}, ${year}`;
+  };
+
+  const handleCreationDate = () => {
+    return creationTimestamp
+      ? formatDate(creationTimestamp)
+      : 'Date not available';
+  };
 
   const handleClearNane = () => {
     setNewName('');
@@ -187,7 +204,9 @@ export default function Profile() {
             />
             Reset Password
           </button>
-
+          <h1 className="lifetime-stats-header">Lifetime Stats</h1>
+          <h4>Number of Receipts Scanned: {receiptCount}</h4>
+          <h4>Account Created: {handleCreationDate()}</h4>
           {isEditingName && (
             <div className="modal-overlay">
               <div className="modal-content">
@@ -212,6 +231,7 @@ export default function Profile() {
               </div>
             </div>
           )}
+
           {isEditingPic && (
             <div className="modal-overlay">
               <div className="modal-content">
@@ -267,8 +287,6 @@ export default function Profile() {
           )}
         </div>
         <div className="column">
-          <h1 className="lifetime-stats-header">Lifetime Stats</h1>
-          <h4>Number of Receipts Scanned: {receiptCount}</h4>
           <div className="summary-pie-container">
             <Summary
               data={foodGroupSummary.foodGroups}

@@ -46,6 +46,7 @@ describe('Renders Profile Page', () => {
     expect(screen.getByText(/Edit Name/i)).toBeInTheDocument();
     expect(screen.getByText(/Reset Password/i)).toBeInTheDocument();
     expect(screen.getByText(/Upload Image/i)).toBeInTheDocument();
+    expect(screen.getByText(/Account Created:/i)).toBeInTheDocument();
   });
 
   test('Correct User Information Is Displayed', async () => {
