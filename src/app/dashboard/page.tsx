@@ -112,6 +112,7 @@ const Dashboard = () => {
           <div className="left-section">
             <Summary
               data={summaryData.foodGroups}
+              summaryDate={receiptDate}
               totalCost={summaryData.totalCost}
             />
           </div>

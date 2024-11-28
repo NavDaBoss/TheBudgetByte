@@ -27,13 +27,14 @@
   align-items: center;
   gap: 1.5rem;
   width: 100%;
+  flex-grow: 1;
 }
 
 .doughnut-chart {
   position: relative;
   flex-shrink: 0;
   width: 40%;
-  height: 40%;
+  height: auto;
   overflow: hidden;
   aspect-ratio: 1 / 1;
 }

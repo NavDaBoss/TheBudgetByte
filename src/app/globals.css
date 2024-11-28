@@ -19,17 +19,10 @@
 }
 
 @font-face {
-  font-family: 'Helvetica Neue';
-  src: url('./fonts/HelveticaNeueRoman.otf') format('opentype');
-  font-weight: 400;
-  style: normal;
-}
-
-@font-face {
-  font-family: 'Helvetica Neue';
-  src: url('./fonts/HelveticaNeueBold.otf') format('opentype');
-  font-weight: 700;
-  style: normal;
+  font-family: 'Inter';
+  src: url('./fonts/Inter/Inter-VariableFont_opsz\,wght.ttf') format('truetype');
+  font-weight: 300 700;
+  font-style: normal;
 }
 
 html,
@@ -40,31 +33,11 @@ body {
 }
 
 body {
-  background-color: var(--light-grey);
-  background-image: radial-gradient(
-      circle at 0% 50%,
-      hsla(112.49999999999999, 37%, 91%, 1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 40% 20%,
-      hsla(27.999999999999577, 0%, 86%, 1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 0%,
-      hsla(189.00000000000065, 0%, 100%, 1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 50%,
-      hsla(89.69696969696984, 100%, 92%, 1) 0%,
-      transparent 50%
-    );
-  background-blend-mode: normal, normal, normal, normal;
+  background-image: url('styles/gradient_bkg.png');
+  background-size: cover;
   color: var(--foreground);
   font-size: 16px;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Inter', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

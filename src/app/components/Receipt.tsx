@@ -88,6 +88,7 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
   const [editableItem, setEditableItem] = useState(item);
   const [isEditing, setIsEditing] = useState(null);
   const [isHovered, setIsHovered] = useState(null);
+  const [activeField, setActiveField] = useState(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -96,7 +97,12 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (inputRef.current && !inputRef.current.contains(event.target)) {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target) &&
+        document.activeElement !== inputRef.current
+      ) {
+        setActiveField(null);
         setEditableItem((prev) => ({
           ...prev,
           [isEditing]: item[isEditing],
@@ -109,6 +115,17 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isEditing]);
+
+  const handleBlur = (fieldName, value) => {
+    setIsEditing(null);
+    if (editableItem[fieldName] !== value) {
+      handleSelect(fieldName, value);
+    }
+  };
+
+  const handleFieldClick = (field) => {
+    setActiveField((prev) => (prev === field ? null : field));
+  };
 
   const handleEdit = (field) => {
     setIsEditing(field);
@@ -253,12 +270,14 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
           className={className}
           title={name === 'itemName' ? editableItem.itemName : undefined}
           onMouseEnter={() => setIsHovered(name)}
+          onClick={() => handleFieldClick(name)}
         >
           {isEditing === name ? (
             type === 'select' ? (
               <select
                 value={editableItem[name]}
                 onChange={(e) => handleSelect(name, e.target.value)}
+                onBlur={(e) => handleBlur(name, e.target.value)}
                 ref={inputRef}
                 className="editable-select"
               >
@@ -298,13 +317,13 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
                 {name === 'itemPrice'
                   ? `$${editableItem[name]}`
                   : editableItem[name]}
+                {(isHovered === name || activeField == name) && (
+                  <EditIcon
+                    className="edit-icon"
+                    onClick={() => handleEdit(name)}
+                  />
+                )}
               </span>
-              {isHovered === name && (
-                <EditIcon
-                  className="edit-icon"
-                  onClick={() => handleEdit(name)}
-                />
-              )}
             </div>
           )}
         </td>

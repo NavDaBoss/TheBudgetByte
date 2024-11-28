@@ -5,12 +5,13 @@
   max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
   position: relative;
   top: 1rem;
+  overflow: auto;
 }
 
 .dashboard-content {
   display: flex;
   justify-content: center;
-  height: 90%;
+  height: auto;
 }
 
 .left-section {
@@ -28,11 +29,12 @@
   width: 60vw;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   .dashboard-content {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    height: 100%;
     width: 100%;
   }
   .left-section {

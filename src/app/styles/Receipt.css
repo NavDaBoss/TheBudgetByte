@@ -86,17 +86,18 @@
   height: 3rem;
 }
 
-.receipt-component-body tr:hover {
+.receipt-component-body tr:hover:not(:has(.editable-input:focus)) {
   font-weight: 700;
-  background-color: rgba(21, 190, 83, 0.8);
+  background-color: rgba(21, 190, 83, 0.7);
   transition: filter 0.3s ease;
 }
 
 .receipt-component-body td {
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 1.5re7;
 }
 
-.receipt-component-body tr:hover .edit-icon {
+.receipt-component-body tr:hover .edit-icon,
+.cell-item-content .edit-icon {
   visibility: visible;
 }
 
@@ -123,22 +124,22 @@
 
 .search-bar {
   padding: 10px;
-  border: 2px solid var(--light-grey);
+  border: 2px solid var(--grey);
   border-radius: 4px;
   font-size: 1rem;
   box-shadow: none;
   transition: border-color 0.3s;
   background-color: transparent;
-  color: black;
+  color: var(--foreground);
 }
 
 .search-bar::placeholder {
-  color: black;
+  color: var(--grey2);
   opacity: 1;
 }
 
 .search-bar:focus {
-  border-color: var(--foreground);
+  border-color: var(--green);
   outline: none;
 }
 
@@ -165,10 +166,11 @@
 }
 
 .cell-item-name {
+  max-width: calc(100% - 1.25rem);
+  padding-left: 1rem;
   white-space: nowrap;
   overflow-x: auto;
   flex-grow: 1;
-  margin-right: 0.5rem;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
 }
@@ -184,8 +186,12 @@
   visibility: hidden;
 }
 
+.edit-icon:hover {
+  color: var(--background);
+}
+
 .editable-input {
-  width: 100%;
+  max-width: calc(100% - 1.25rem);
   padding: 0.5rem 0.5rem;
   border: none;
   border-bottom: 2px solid black;
@@ -197,13 +203,17 @@
   transition: border-color 0.3s;
 }
 
+.editable-input[type='number'] {
+  width: 50%;
+}
+
 .editable-input::placeholder {
   color: black;
   outline: none;
 }
 
 .editable-input:focus {
-  border-color: var(--purple);
+  border-color: var(--red);
   outline: none;
 }
 
