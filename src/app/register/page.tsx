@@ -16,6 +16,7 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
+  const [successRegisterMessage, setSuccessRegisterMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [displayName, setDisplayName] = useState('');
   const router = useRouter();
@@ -46,7 +47,11 @@ export default function Register() {
       });
 
       await saveUserToFirestore(result.user); // Save user to Firestore
-      router.push('/login'); // Redirect to login page
+      setSuccessRegisterMessage('New User Created!');
+      setTimeout(() => {
+        setSuccessRegisterMessage('');
+        router.push('/login');
+      }, 2000);
     } catch (error) {
       if (displayName.length > 20) {
         setErrorMessage('The Display Name cannot exceed 20 characters.');
@@ -142,6 +147,9 @@ export default function Register() {
         Register
       </button>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {successRegisterMessage && (
+        <p className="success-message">{successRegisterMessage}</p>
+      )}
       <div className="title-line"></div>
       <div className="login-container">
         <p>Already have an account?</p>

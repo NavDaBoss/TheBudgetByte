@@ -31,7 +31,7 @@
 }
 
 .header-nav {
-  display: flex;
+  display: non;
   justify-content: center;
 }
 
@@ -59,8 +59,12 @@
 }
 
 .header-nav-list button:hover {
-  background-color: var(--foreground);
-  color: var(--background);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 3px;
+  color: var(--foreground);
+  transition: 0.3s;
 }
 
 .header-nav-item-link {

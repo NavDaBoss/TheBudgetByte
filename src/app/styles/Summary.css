@@ -9,28 +9,34 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(72, 72, 74, 0.18);
+  overflow-x: auto;
 }
 
 .summary-card-content {
   display: flex;
   justify-content: space-evenly;
   flex-direction: column;
+  margin-top: 1.5rem;
   height: 100%;
 }
 
 .chart-legend-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 1.5rem;
   width: 100%;
+  flex-grow: 1;
 }
 
 .doughnut-chart {
   position: relative;
-  width: 40%;
   flex-shrink: 0;
+  width: 40%;
+  height: auto;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
 }
 
 .doughnut-center {
@@ -39,13 +45,15 @@
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+  text-wrap: nowrap;
 }
 
 .food-group-legend {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  width: 100%;
+  width: auto;
+  flex: 1;
 }
 
 .legend-item {
@@ -79,4 +87,23 @@
 
 .bar-chart-container h2 {
   margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .summary-card {
+    width: 100%;
+  }
+
+  .chart-legend-container {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .food-group-legend {
+    width: 100%;
+  }
+
+  .doughnut-chart {
+    width: 60%;
+  }
 }

@@ -2,6 +2,13 @@
 
 import React, { useEffect, useState } from 'react';
 import './analytics.css';
+
+import InventoryIcon from '@mui/icons-material/Inventory';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import PaidIcon from '@mui/icons-material/Paid';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+
 import Navbar from '../components/Navbar';
 import Summary from '../components/Summary';
 import { YearlyOverview, monthNames } from '../backend/yearlyOverviewInterface';
@@ -51,43 +58,75 @@ const AnalyticsSummaryCard = ({
 }) => {
   const selectedYearData = yearlyOverview?.yearlyOverviewData[selectedYear];
   const selectedMonthData = selectedYearData?.monthlyData[selectedMonth];
+
+  const yearCard = {
+    title: `Year: ${selectedYear}`,
+    data: [
+      {
+        label: 'Receipts',
+        value: selectedYearData?.totalReceipts || '0',
+        icon: <InventoryIcon fontSize="large" />,
+      },
+      {
+        label: 'Total Spent',
+        value: selectedYearData ? `$${selectedYearData.totalSpent}` : 'No Data',
+        icon: <PaidIcon fontSize="large" />,
+      },
+      {
+        label: 'Items Bought',
+        value: selectedYearData?.totalQuantity || 'No Data',
+        icon: <ReceiptLongIcon fontSize="large" />,
+      },
+    ],
+  };
+
+  const monthCard = {
+    title: `Month: ${selectedMonth}`,
+    data: [
+      {
+        label: 'Receipts',
+        value: selectedMonthData?.totalReceipts || 'No Data',
+        icon: <ReceiptIcon fontSize="large" />,
+      },
+      {
+        label: 'Spent',
+        value: selectedMonthData
+          ? `$${selectedMonthData.totalSpent}`
+          : 'No Data',
+        icon: <PaidIcon fontSize="large" />,
+      },
+      {
+        label: 'Items Bought',
+        value: selectedMonthData?.totalQuantity || 'No Data',
+        icon: <ShoppingBasketIcon fontSize="large" />,
+      },
+    ],
+  };
+
   return (
-    <div className="summary-card-container">
-      <div className="summary-card">
-        <h1 className="summary-card-header">
-          Receipts Scanned in {selectedYear}
-        </h1>
-        {selectedYearData ? <h4>{selectedYearData.totalReceipts}</h4> : 'NA'}
-      </div>
-      <div className="summary-card">
-        <h1 className="summary-card-header">Total Spent in {selectedYear}</h1>
-        {selectedYearData ? <h4>${selectedYearData.totalSpent}</h4> : 'NA'}
-      </div>
-      <div className="summary-card">
-        <h1 className="summary-card-header">
-          Number of Items Bought in {selectedYear}
-        </h1>
-        {selectedYearData ? <h4>{selectedYearData.totalQuantity}</h4> : 'NA'}
-      </div>
-      <div className="summary-card">
-        <h1 className="summary-card-header">
-          Receipts Scanned in {selectedMonth}
-        </h1>
-        {selectedMonthData ? <h4>{selectedMonthData.totalReceipts}</h4> : 'NA'}
-      </div>
-      <div className="summary-card">
-        <h1 className="summary-card-header">Total Spent in {selectedMonth}</h1>
-        {selectedMonthData ? <h4>${selectedMonthData.totalSpent}</h4> : 'NA'}
-      </div>
-      <div className="summary-card">
-        <h1 className="summary-card-header">
-          Number of Items Bought in {selectedMonth}
-        </h1>
-        {selectedMonthData ? <h4>{selectedMonthData.totalQuantity}</h4> : 'NA'}
-      </div>
+    <div className="analytics-card-row">
+      {[yearCard, monthCard].map((card, index) => (
+        <div className="analytics-card-container" key={index}>
+          <h2 className="analytics-card-title">{card.title}</h2>
+          <div className="analytics-stats-card-container">
+            {card.data.map((item, idx) => (
+              <div className="analytics-stats-card">
+                <div className="analytics-stats-content" key={idx}>
+                  <div className="analytics-stats-label">
+                    <p>{item.label}</p>
+                    <h3>{item.value}</h3>
+                  </div>
+                  {item.icon}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
+
 const Analytics = () => {
   const router = useRouter();
   const currentUser = auth.currentUser;
@@ -152,9 +191,7 @@ const Analytics = () => {
 
   return (
     <div className="page">
-      <div>
-        <Navbar />
-      </div>
+      <Navbar />
       <AnalyticsSummaryCard
         yearlyOverview={yearlyOverview}
         selectedYear={selectedYear}
