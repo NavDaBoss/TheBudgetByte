@@ -265,42 +265,6 @@ export default function OcrUploadButton({
               </Button>
             </>
           ) : (
-
-            // <>
-            //   <TextField
-            //     label="Confirm or Enter Receipt Date"
-            //     value={confirmedDate}
-            //     onChange={(e) => setConfirmedDate(e.target.value)}
-            //     fullWidth
-            //     margin="dense"
-            //   />
-            //   <Button
-            //     onClick={handleSaveToFirestore}
-            //     color="secondary"
-            //     className="dialogConfirmButton"
-            //   >
-            //     Confirm and Save
-            //   </Button>
-            // </>
-            // <>
-            //   <LocalizationProvider dateAdapter={AdapterDayjs}>
-            //     <DatePicker
-            //       label="Confirm or Enter Receipt Date"
-            //       value={confirmedDate}
-            //       onChange={(newValue) => setConfirmedDate(newValue)}
-            //       renderInput={(params) => (
-            //         <TextField {...params} fullWidth margin="dense" />
-            //       )}
-            //     />
-            //   </LocalizationProvider>
-            //   <Button
-            //     onClick={handleSaveToFirestore}
-            //     color="secondary"
-            //     className="dialogConfirmButton"
-            //   >
-            //     Confirm and Save
-            //   </Button>
-            // </>
             <>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -308,11 +272,16 @@ export default function OcrUploadButton({
                   value={confirmedDate ? dayjs(confirmedDate) : null} // Convert string to Day.js object
                   onChange={(newValue) => {
                     // Convert Day.js object to string when updating confirmedDate
-                    setConfirmedDate(newValue ? newValue.format('MM/DD/YYYY') : '');
+                    setConfirmedDate(
+                      newValue ? newValue.format('MM/DD/YYYY') : '',
+                    );
                   }}
-                  renderInput={(params) => (
-                    <TextField {...params} fullWidth margin="dense" />
-                  )}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      margin: 'dense',
+                    },
+                  }}
                 />
               </LocalizationProvider>
               <Button
