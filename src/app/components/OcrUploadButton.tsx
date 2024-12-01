@@ -17,6 +17,12 @@ import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import { updateUsersYearlyOverview } from '@/app/backend/updateYearlyData';
 
+// MUI Date Picker
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+
 // Specify types
 type OcrUploadButtonProps = {
   onUploadComplete?: () => void;
@@ -259,14 +265,56 @@ export default function OcrUploadButton({
               </Button>
             </>
           ) : (
+
+            // <>
+            //   <TextField
+            //     label="Confirm or Enter Receipt Date"
+            //     value={confirmedDate}
+            //     onChange={(e) => setConfirmedDate(e.target.value)}
+            //     fullWidth
+            //     margin="dense"
+            //   />
+            //   <Button
+            //     onClick={handleSaveToFirestore}
+            //     color="secondary"
+            //     className="dialogConfirmButton"
+            //   >
+            //     Confirm and Save
+            //   </Button>
+            // </>
+            // <>
+            //   <LocalizationProvider dateAdapter={AdapterDayjs}>
+            //     <DatePicker
+            //       label="Confirm or Enter Receipt Date"
+            //       value={confirmedDate}
+            //       onChange={(newValue) => setConfirmedDate(newValue)}
+            //       renderInput={(params) => (
+            //         <TextField {...params} fullWidth margin="dense" />
+            //       )}
+            //     />
+            //   </LocalizationProvider>
+            //   <Button
+            //     onClick={handleSaveToFirestore}
+            //     color="secondary"
+            //     className="dialogConfirmButton"
+            //   >
+            //     Confirm and Save
+            //   </Button>
+            // </>
             <>
-              <TextField
-                label="Confirm or Enter Receipt Date"
-                value={confirmedDate}
-                onChange={(e) => setConfirmedDate(e.target.value)}
-                fullWidth
-                margin="dense"
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Confirm or Enter Receipt Date"
+                  value={confirmedDate ? dayjs(confirmedDate) : null} // Convert string to Day.js object
+                  onChange={(newValue) => {
+                    // Convert Day.js object to string when updating confirmedDate
+                    setConfirmedDate(newValue ? newValue.format('MM/DD/YYYY') : '');
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} fullWidth margin="dense" />
+                  )}
+                />
+              </LocalizationProvider>
               <Button
                 onClick={handleSaveToFirestore}
                 color="secondary"
