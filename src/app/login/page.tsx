@@ -15,6 +15,12 @@ import { FirebaseError } from '@firebase/app';
 import './login.css';
 import Image from 'next/image';
 
+/**
+ * Login Page:
+ * This page handles the user login process, including Google sign-in,
+ *  forgot password reset email, and navigation to the dashboard page.
+ * @return {React.JSX.Element} The rendered login form page.
+ */
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,22 +31,32 @@ export default function Login() {
   const router = useRouter();
   const currentUser = auth.currentUser;
 
+  // Redirect to dashboard if the user is already logged in
   useEffect(() => {
     if (currentUser) {
       router.push('/dashboard');
     }
   }, [router, currentUser]);
 
+  /**
+   * Handles Google sign-in using Firebase Authentication.
+   * - On successful login, saves the user to Firestore and redirects to the dashboard.
+   */
   const googleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      await saveUserToFirestore(result.user); // Save user to Firestore
+      await saveUserToFirestore(result.user);
       router.push('/dashboard');
     } catch (error) {
       console.error(error);
     }
   };
 
+  /**
+   * Handles email and password login using Firebase Authentication.
+   * - On successful login, redirects the user to the dashboard.
+   * - Otherwise, displays an error message informing the user that their credentials are invalid.
+   */
   const login = async () => {
     try {
       setErrorMessage('');
@@ -53,6 +69,10 @@ export default function Login() {
     }
   };
 
+  /**
+   * Sends a password reset email to the provided address using Firebase Authentication.
+   * - Displays a success or error message based on the operation result.
+   */
   const forgotPassword = async () => {
     try {
       if (resetEmail !== null) {

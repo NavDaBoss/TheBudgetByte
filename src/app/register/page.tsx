@@ -12,6 +12,12 @@ import Link from 'next/link';
 import './register.css';
 import Image from 'next/image';
 
+/**
+ * Register Page:
+ * This page handles the user registration process, including form input,
+ * validation, Firebase user creation, and navigation to the login page.
+ *  @return {React.JSX.Element} The rendered registration form page.
+ */
 export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,6 +27,15 @@ export default function Register() {
   const [displayName, setDisplayName] = useState('');
   const router = useRouter();
 
+  /**
+   * Handles user registration.
+   * - Validates whether the password matches the confirm password, length, and display name constraints.
+   * - Creates a new user in Firebase Authentication.
+   * - Saves the user to Firestore with a display name.
+   * - Redirects to the login page and into BudgetByte after a successful registration.
+   * - Displays useful error messages informing the user exactly why the registration fails.
+   * - Displays a success message once the registration goes through.
+   */
   const register = async () => {
     try {
       if (password !== confirmPassword) {
@@ -43,10 +58,10 @@ export default function Register() {
         password,
       );
       await updateProfile(result.user, {
-        displayName: displayName, // Set the displayName here
+        displayName: displayName,
       });
 
-      await saveUserToFirestore(result.user); // Save user to Firestore
+      await saveUserToFirestore(result.user);
       setSuccessRegisterMessage('New User Created!');
       setTimeout(() => {
         setSuccessRegisterMessage('');
