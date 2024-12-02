@@ -110,8 +110,10 @@ const AnalyticsSummaryCard = ({
           <h2 className="analytics-card-title">{card.title}</h2>
           <div className="analytics-stats-card-container">
             {card.data.map((item, idx) => (
-              <div className="analytics-stats-card">
-                <div className="analytics-stats-content" key={idx}>
+              // <div className="analytics-stats-card">
+              <div className="analytics-stats-card" key={item.label || idx}>
+                {/* <div className="analytics-stats-content" key={idx}> */}
+                <div className="analytics-stats-content">
                   <div className="analytics-stats-label">
                     <p>{item.label}</p>
                     <h3>{item.value}</h3>
