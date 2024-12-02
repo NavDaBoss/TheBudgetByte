@@ -1,6 +1,5 @@
 'use client';
 
-
 import styles from './page.module.css'; // Importing the CSS module for styling
 import { useRouter } from 'next/navigation'; // Importing useRouter from Next.js to handle routing
 

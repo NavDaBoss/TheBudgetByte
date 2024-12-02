@@ -1,4 +1,3 @@
-
 /* General container styles */
 .container {
   font-family: Arial, sans-serif; /* Set font to Arial for a clean, modern look */
@@ -103,7 +102,9 @@
   max-width: 45%; /* Limit max width to 45% of the parent container */
   height: auto; /* Maintain aspect ratio */
   border-radius: 15px; /* Rounded corners for the image */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08); /* Soft shadow around the image */
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.08); /* Soft shadow around the image */
   overflow: hidden; /* Hide any overflow */
   margin-right: 40px; /* Add space between the image and text */
 }
