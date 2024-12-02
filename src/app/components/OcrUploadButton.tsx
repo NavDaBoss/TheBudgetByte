@@ -17,6 +17,12 @@ import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import { updateUsersYearlyOverview } from '@/app/backend/updateYearlyData';
 
+// MUI Date Picker
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+
 // Specify types
 type OcrUploadButtonProps = {
   onUploadComplete?: () => void;
@@ -129,57 +135,15 @@ export default function OcrUploadButton({
       // Send the Raw OCR data as a prompt to ChatGPT
       const response = await openaiTextExtraction(result.data.text);
 
-      // Send the result to Firestore (to 'receiptData' collection)
       if (response) {
         setApiResponse(response);
         setConfirmedDate(response.receiptDate);
         setIsConfirmingDate(true);
-
-        // Calculate receiptBalance based on the groceries array
-        // const receiptBalance = apiResponse.groceries.reduce((sum, item) => sum + item.totalPrice, 0);
-        // const receiptBalance = parseFloat(
-        //   apiResponse.groceries
-        //     .reduce((sum, item) => sum + item.totalPrice, 0)
-        //     .toFixed(2),
-        // ); // Rounds
-
-        // const docRef = await addDoc(collection(db, 'receiptData'), {
-        //   groceryStore: apiResponse.groceryStore,
-        //   receiptDate: apiResponse.receiptDate,
-        //   receiptBalance: receiptBalance,
-        //   submittedTimestamp: new Date(),
-        //   fileName: selectedImage.name,
-        //   userID: currentUser.uid,
-        // });
-
-        // await updateDoc(docRef, { receiptID: docRef.id });
-        // console.log('OCR result saved to Firestore');
-        // console.log('docRef.id = ', docRef.id);
-
-        // // Reference 'groceries' subcollection to main document
-        // const groceriesSubCollectionRef = collection(docRef, 'groceries');
-
-        // // Loop through each dictionary in groceries
-        // apiResponse.groceries.forEach(async (item: GroceryItem) => {
-        //   await addDoc(groceriesSubCollectionRef, {
-        //     itemName: item.itemName,
-        //     itemPrice: item.itemPrice,
-        //     quantity: item.quantity,
-        //     foodGroup: item.foodGroup,
-        //     totalPrice: item.totalPrice,
-        //   });
-        // });
-
-        // updateUsersYearlyOverview(
-        //   apiResponse.groceries,
-        //   apiResponse.receiptDate,
-        // );
       }
     } catch (error) {
       console.error('Error extracting text or saving to Firestore:', error);
     } finally {
       setLoading(false);
-      // alert('File extracted and parsed successfully!');
     }
   };
 
@@ -302,13 +266,24 @@ export default function OcrUploadButton({
             </>
           ) : (
             <>
-              <TextField
-                label="Confirm or Enter Receipt Date"
-                value={confirmedDate}
-                onChange={(e) => setConfirmedDate(e.target.value)}
-                fullWidth
-                margin="dense"
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Confirm or Enter Receipt Date"
+                  value={confirmedDate ? dayjs(confirmedDate) : null} // Convert string to Day.js object
+                  onChange={(newValue) => {
+                    // Convert Day.js object to string when updating confirmedDate
+                    setConfirmedDate(
+                      newValue ? newValue.format('MM/DD/YYYY') : '',
+                    );
+                  }}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      margin: 'dense',
+                    },
+                  }}
+                />
+              </LocalizationProvider>
               <Button
                 onClick={handleSaveToFirestore}
                 color="secondary"
@@ -320,14 +295,6 @@ export default function OcrUploadButton({
           )}
         </DialogContent>
         <DialogActions>
-          {/* <Button
-            onClick={handleParseImage}
-            color="primary"
-            disabled={loading || !selectedImage}
-            className="dialogParseButton"
-          >
-            {loading ? 'Processing...' : 'Upload and Parse'}
-          </Button> */}
           <Button
             onClick={handleDialogClose}
             color="secondary"
