@@ -20,28 +20,31 @@ The **BudgetByte Landing Page** serves as the first touchpoint for users visitin
 
 ## Structure of the Landing Page
 
-1. **Header Section**  
+1. **Header Section**
+
    - Contains the **BudgetByte logo** and a **Login button**, which directs users to sign in and start using the platform. This creates a clear entry point for users to engage with the service right away.
-  
-2. **Smart Receipt Parsing Section**  
+
+2. **Smart Receipt Parsing Section**
+
    - This section explains how users can **upload and scan receipts**. Our AI will automatically categorize groceries into food groups like fruits, vegetables, grains, protein, and more. The call to action, **Scan Receipt**, is placed prominently to lead users into the core functionality of the site.
    - **Image**: Screenshot of a receipt parsing example to visually demonstrate how the feature works.
 
-3. **Monthly Spending Analytics Section**  
+3. **Monthly Spending Analytics Section**
+
    - This section highlights the **spending analytics** feature. Users can visualize their grocery expenses over time with breakdowns by food group. It emphasizes how the platform helps users track trends and monitor their spending habits.
    - **Image**: Monthly spending graph to provide a visual representation of how expenses are tracked.
 
-4. **Lifetime Stats Section**  
+4. **Lifetime Stats Section**
+
    - The **Lifetime Stats** section showcases a comprehensive summary of users' spending over time. It helps users understand their overall purchasing habits by providing insights into total spending across categories, based on receipts scanned.
    - **Image**: A pie chart showing lifetime stats to help users visualize their data in a digestible format.
 
-5. **Footer Section**  
+5. **Footer Section**
    - Includes **contact information** (email) and **legal disclaimers**, creating a sense of professionalism and transparency for users.
 
 ## Why This Landing Page Is Important
 
 - **User Onboarding**: The landing page introduces users to the core value of BudgetByte and serves as a guide for what they can expect from the product. It is critical for onboarding new users in a way that feels intuitive and engaging.
-  
 - **Feature Awareness**: The page is designed to quickly explain the most important features of the platform without overwhelming the user. By providing screenshots and concise explanations, we ensure that users can grasp the functionality at a glance.
 
 - **Conversion Funnel**: This landing page serves as a key component in the user journey, designed to drive conversions. By including clear calls to action (such as "Scan Receipt" and "Login"), we provide an easy path for users to start interacting with the platform and engage with the product's features.
@@ -49,6 +52,7 @@ The **BudgetByte Landing Page** serves as the first touchpoint for users visitin
 ## Next Steps
 
 Once users are familiar with the features and benefits of BudgetByte via the landing page, they can:
+
 1. **Create an account** or **Log in** to begin uploading their grocery receipts.
 2. **Access the full functionality** of the site, including receipt scanning, spending analytics, and lifetime stats.
 
