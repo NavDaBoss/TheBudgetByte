@@ -1,201 +1,216 @@
+
+/* General container styles */
 .container {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  font-family: Arial, sans-serif; /* Set font to Arial for a clean, modern look */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+  box-sizing: border-box; /* Ensure padding and borders are included in element's total width/height */
 }
 
+/* Header styles: Contains logo and login button */
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 40px;
-  position: relative;
-  margin-top: 20px;
-  /* background-color: #ffffff;
-  border-bottom: 2px solid #000; */
+  display: flex; /* Use flexbox for layout */
+  justify-content: space-between; /* Space between logo and login button */
+  align-items: center; /* Vertically align items */
+  padding: 20px 40px; /* Padding for spacing */
+  position: relative; /* Position relative to place elements inside */
+  margin-top: 20px; /* Margin from the top */
 }
 
+/* Logo styling inside header */
 .header h1 {
-  font-size: 50px;
-  margin-top: 10px;
+  font-size: 50px; /* Set large font size for logo text */
+  margin-top: 10px; /* Add top margin to the logo */
 }
 
+/* Center logo text and make it responsive */
 .logo {
-  font-size: 28px;
-  font-weight: bold;
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%);
+  font-size: 28px; /* Font size for the logo */
+  font-weight: bold; /* Bold text for emphasis */
+  position: absolute; /* Absolute positioning to center the logo */
+  left: 50%; /* Move the logo to the center horizontally */
+  transform: translate(-50%); /* Adjust for exact centering */
 }
 
+/* Login button styling */
 .loginBtn {
-  background-color: #000;
-  color: #fff;
-  border: none;
-  padding: 8px 24px;
-  font-size: 25px;
-  cursor: pointer;
-  border-radius: 5px;
-  position: absolute;
-  right: 80px;
-  top: 0;
+  background-color: #000; /* Black background for the button */
+  color: #fff; /* White text */
+  border: none; /* No border */
+  padding: 8px 24px; /* Button padding */
+  font-size: 25px; /* Larger font for the button */
+  cursor: pointer; /* Change cursor on hover to indicate it's clickable */
+  border-radius: 5px; /* Rounded corners */
+  position: absolute; /* Absolute positioning for placement */
+  right: 80px; /* Position 80px from the right */
+  top: 0; /* Position at the top */
 }
 
+/* Main content area styling */
 .main {
-  padding: 40px;
-  /* background-color: #f5f5f5; */
+  padding: 40px; /* Padding around the main content */
 }
 
+/* Section styling: Defines how each section of the page is structured */
 .section {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 40px;
-  gap: 10px;
+  display: flex; /* Flexbox for layout */
+  flex-direction: row; /* Align items horizontally */
+  align-items: center; /* Vertically align items */
+  margin-bottom: 40px; /* Space between sections */
+  gap: 10px; /* Space between text and images */
 }
 
+/* Adjust image position for even-numbered sections */
 .section:nth-child(even) .image {
-  margin-left: 40px;
+  margin-left: 40px; /* Move the image 40px to the left */
 }
 
+/* Text block styling within each section */
 .textBlock {
-  flex: 1;
-  /* margin: 20px; */
-  margin: 1vw;
+  flex: 1; /* Allow text block to take up available space */
+  margin: 1vw; /* Margin for spacing */
 }
 
+/* Paragraph text inside text block */
 .textBlock p {
-  /* font-size: 36px; */
-  font-size: 1.8vw;
-  margin: 10px 0;
-  padding: 40px;
-  text-align: left;
+  font-size: 1.8vw; /* Font size relative to viewport width for responsiveness */
+  margin: 10px 0; /* Margin between paragraphs */
+  padding: 40px; /* Padding around the text */
+  text-align: left; /* Align text to the left */
 }
 
+/* Scan Receipt button styling */
 .scanBtn {
-  background-color: #00c853;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  font-size: 24px;
-  cursor: pointer;
-  margin-top: 10px;
-  border-radius: 5px;
-  margin-left: 40px;
+  background-color: #00c853; /* Green background for scan button */
+  color: #fff; /* White text */
+  border: none; /* No border */
+  padding: 10px 20px; /* Button padding */
+  font-size: 24px; /* Font size */
+  cursor: pointer; /* Change cursor on hover */
+  margin-top: 10px; /* Add top margin */
+  border-radius: 5px; /* Rounded corners */
+  margin-left: 40px; /* Add left margin */
 }
 
+/* Hover effect for scan button */
 .scanBtn:hover {
-  background-color: #008c3a;
+  background-color: #008c3a; /* Darker green on hover */
 }
 
+/* Image styling */
 .image {
-  flex: 1;
-  max-width: 45%;
-  height: auto;
-  border-radius: 15px;
-  box-shadow:
-    0 4px 6px rgba(0, 0, 0, 0.1),
-    0 1px 3px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  margin-right: 40px;
+  flex: 1; /* Allow image to take up remaining space */
+  max-width: 45%; /* Limit max width to 45% of the parent container */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 15px; /* Rounded corners for the image */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08); /* Soft shadow around the image */
+  overflow: hidden; /* Hide any overflow */
+  margin-right: 40px; /* Add space between the image and text */
 }
 
+/* Footer styling */
 .footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 40px;
-  /* background-color: #ffffff;
-  border-top: 2px solid #000; */
+  display: flex; /* Flexbox layout */
+  justify-content: space-between; /* Space between footer items */
+  align-items: center; /* Vertically align items */
+  padding: 20px 40px; /* Padding around footer */
 }
 
+/* Social media icons styling (currently commented out) */
 .socials span {
-  margin-left: 10px;
-  font-size: 16px;
-  cursor: pointer;
+  margin-left: 10px; /* Space between icons */
+  font-size: 16px; /* Icon size */
+  cursor: pointer; /* Pointer cursor on hover */
 }
 
-/* Responsive Design for Mobile */
-
-/* @media (max-width: 768px) { */
+/* Responsive design for mobile */
 @media (max-width: 1000px) {
+  /* Header adjustments for mobile */
   .header {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-bottom: 0;
-  }
-
-  .header h1 {
-    margin-bottom: 20px;
-    /* font-size: 20px; */
-    font-size: 4vw;
-    padding: 6px 16px;
-  }
-
-  .loginBtn {
-    margin-left: 0px;
-    margin-top: 0px;
-    /* font-size: 16px; */
-    font-size: 2.8vw;
-    padding: 6px 16px;
-    border-radius: 3px;
-    margin-bottom: 15px;
-    right: 20px;
-  }
-
-  .main {
-    padding: 20px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-  }
-
-  .section {
     flex-direction: column; /* Stack elements vertically */
-    text-align: center; /* Center align text */
-    margin-bottom: 20px;
+    align-items: center; /* Center align the items */
+    justify-content: center; /* Center the content */
+    padding-bottom: 0; /* Remove bottom padding */
   }
 
+  /* Logo adjustments for mobile */
+  .header h1 {
+    margin-bottom: 20px; /* Add space below the logo */
+    font-size: 4vw; /* Scale font size relative to viewport width */
+    padding: 6px 16px; /* Adjust padding */
+  }
+
+  /* Login button adjustments for mobile */
+  .loginBtn {
+    margin-left: 0; /* Remove left margin */
+    margin-top: 0; /* Remove top margin */
+    font-size: 2.8vw; /* Scale font size */
+    padding: 6px 16px; /* Adjust padding */
+    border-radius: 3px; /* Smaller border radius */
+    margin-bottom: 15px; /* Add bottom margin */
+    right: 20px; /* Adjust right position */
+  }
+
+  /* Main content adjustments for mobile */
+  .main {
+    padding: 20px; /* Adjust padding */
+    padding-top: 0; /* Remove top padding */
+    padding-bottom: 0; /* Remove bottom padding */
+  }
+
+  /* Section layout adjustments for mobile */
+  .section {
+    flex-direction: column; /* Stack sections vertically */
+    text-align: center; /* Center-align text */
+    margin-bottom: 20px; /* Add bottom margin */
+  }
+
+  /* Adjust text block margins for mobile */
   .textBlock {
-    margin: 5px 0;
-    margin-left: 1%;
-    margin-right: 1%;
+    margin: 5px 0; /* Adjust margins */
+    margin-left: 1%; /* Adjust left margin */
+    margin-right: 1%; /* Adjust right margin */
   }
 
+  /* Paragraph font size adjustments for mobile */
   .textBlock p {
-    /* font-size: 16px; */
-    font-size: 3.5vw;
-    padding: 4vw;
-
+    font-size: 3.5vw; /* Scale font size */
+    padding: 4vw; /* Adjust padding */
   }
 
+  /* Reversed order for even sections on mobile */
   .section:nth-child(even) {
-    flex-direction: column-reverse;
-  }
-  .scanBtn {
-    padding: 2%;
-    font-size: 14px;
-    border-radius: 3px;
-    display: none;
+    flex-direction: column-reverse; /* Reverse layout */
   }
 
+  /* Hide scan button on mobile */
+  .scanBtn {
+    padding: 2%; /* Adjust padding */
+    font-size: 14px; /* Smaller font size */
+    border-radius: 3px; /* Smaller border radius */
+    display: none; /* Hide button on mobile */
+  }
+
+  /* Image adjustments for mobile */
   .image {
     max-width: 90%; /* Full width for images */
-    margin-right: 0px;
-    border-radius: 10px;
+    margin-right: 0px; /* Remove right margin */
+    border-radius: 10px; /* Smaller border radius */
   }
 
+  /* Adjustments for even section image positioning on mobile */
   .section:nth-child(even) .image {
-    margin-left: 0px;
+    margin-left: 0; /* Remove left margin */
   }
 
+  /* Footer adjustments for mobile */
   .footer {
-    flex-direction: column;
-    text-align: center;
+    flex-direction: column; /* Stack footer items vertically */
+    text-align: center; /* Center-align text */
   }
 
+  /* Footer text adjustments for mobile */
   .footer p {
-    margin: 5px 0;
+    margin: 5px 0; /* Adjust margins */
   }
 }
