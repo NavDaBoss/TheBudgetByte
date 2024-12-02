@@ -114,7 +114,7 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isEditing]);
+  }, [isEditing, item]);
 
   const handleBlur = (fieldName, value) => {
     setIsEditing(null);
@@ -214,16 +214,16 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
         updateOverviewWhenPriceChanged(
           receiptDate,
           item.foodGroup,
-          /*new item price = */ value,
-          /*old item price = */ item.itemPrice,
+          /* new item price = */ value,
+          /* old item price = */ item.itemPrice,
           item.quantity,
         );
       } else if (fieldName === 'quantity') {
         updateOverviewWhenQuantityChanged(
           receiptDate,
           item.foodGroup,
-          /*new quantity price = */ value,
-          /*old quantity price = */ item.quantity,
+          /* new quantity price = */ value,
+          /* old quantity price = */ item.quantity,
           item.itemPrice,
         );
       }
