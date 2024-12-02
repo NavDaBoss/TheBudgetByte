@@ -51,9 +51,53 @@ export async function POST(request) {
   } catch (error) {
     // Handle errors and return a meaningful message to the client
     console.log('OPENAI ROUTE.JS ERROR', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch completion from OpenAI.' },
-      { status: 500 },
-    );
+    // Enhanced error handling based on OpenAI error codes
+    if (error.response) {
+      // OpenAI API responded with an error
+      const { status, data } = error.response;
+
+      switch (status) {
+        case 400:
+          return NextResponse.json(
+            { error: 'Bad Request: Check the prompt structure or API request.' },
+            { status: 400 }
+          );
+        case 401:
+          return NextResponse.json(
+            { error: 'Unauthorized: Invalid API key or insufficient permissions.' },
+            { status: 401 }
+          );
+        case 403:
+          return NextResponse.json(
+            { error: 'Forbidden: You lack access to this resource.' },
+            { status: 403 }
+          );
+        case 404:
+          return NextResponse.json(
+            { error: 'Not Found: The requested resource could not be found.' },
+            { status: 404 }
+          );
+        case 429:
+          return NextResponse.json(
+            { error: 'Rate Limit Exceeded: Too many requests. Try again later.' },
+            { status: 429 }
+          );
+        case 500:
+          return NextResponse.json(
+            { error: 'Internal Server Error: A problem occurred on OpenAI\'s end.' },
+            { status: 500 }
+          );
+        case 503:
+          return NextResponse.json(
+            { error: 'Service Unavailable: OpenAI is temporarily down.' },
+            { status: 503 }
+          );
+        default:
+          return NextResponse.json(
+            { error: `Unexpected Error: ${data?.error?.message || 'Unknown error.'}` },
+            { status }
+          );
+      }
+    }
   }
 }
