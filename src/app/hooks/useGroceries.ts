@@ -62,7 +62,7 @@ const useGroceries = (userID: string | null) => {
 
   useEffect(() => {
     fetchMostRecentReceipt();
-  }, [userID]);
+  }, [userID, fetchMostRecentReceipt]);
 
   return {
     groceries,
