@@ -17,6 +17,15 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { updatePassword } from '@firebase/auth';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
+/**
+ * Fetches yearly overview data for the authenticated user.
+ * Aggregates total spending, receipt count, and food group data, then updates state accordingly.
+ *
+ * @param {function} setFoodGroupSummary - Function to update the food group summary state.
+ * @param {function} setTotalAmount - Function to update the total amount spent state.
+ * @param {function} setReceiptCount - Function to update the receipt count state.
+ */
+
 export const fetchYearlyOverviewData = async (
   setFoodGroupSummary: (data: FoodGroupSummary) => void,
   setTotalAmount: (amount: number) => void,
@@ -24,7 +33,7 @@ export const fetchYearlyOverviewData = async (
 ) => {
   const currentUser = auth.currentUser;
   if (!currentUser) {
-    return;
+    return; // Exit if the user is not authenticated
   }
   try {
     const yearlyOverviewRef = collection(db, 'yearlyOverview');
@@ -37,6 +46,7 @@ export const fetchYearlyOverviewData = async (
     let totalCost = 0;
     const foodGroupData: AggregatedFoodGroupData = {};
 
+    // Process each document in the query result
     querySnapshot.forEach((doc) => {
       const data = doc.data();
       if (data.yearlyOverviewData) {
@@ -49,6 +59,7 @@ export const fetchYearlyOverviewData = async (
           if (yearData.totalReceipts) {
             totalReceipts += parseInt(yearData.totalReceipts, 10);
           }
+          // Aggregate food group data by month
           Object.keys(yearData.monthlyData || {}).forEach((month) => {
             const monthData = yearData.monthlyData[month];
             if (monthData.foodGroups) {
@@ -68,6 +79,7 @@ export const fetchYearlyOverviewData = async (
       }
     });
 
+    // Format the aggregated food group data by rounding to 2 decimal places
     const formattedFoodGroups = Object.keys(foodGroupData).map((type) => {
       const { quantity, totalCost: itemCost } = foodGroupData[type];
       return {
@@ -79,6 +91,7 @@ export const fetchYearlyOverviewData = async (
       };
     });
 
+    // Update states with aggregated data
     const summary = {
       totalCount: totalQuantity,
       totalCost: Math.round(totalCost * 100) / 100,
@@ -92,6 +105,13 @@ export const fetchYearlyOverviewData = async (
   }
 };
 
+/**
+ * Updates the user's profile picture in Firebase Storage and Firestore.
+ *
+ * @param {File | null} newProfilePic - The new profile picture file to upload.
+ * @param {string | null} newName - The new display name for the user.
+ * @param {Function} setIsEditingPic - Function to toggle the profile picture editing state.
+ */
 export const updateProfilePicture = async (
   newProfilePic: File | null,
   newName: string | null,
@@ -105,13 +125,13 @@ export const updateProfilePicture = async (
       await uploadBytes(picRef, newProfilePic);
       const imageUrl = await getDownloadURL(picRef);
 
-      // Update the user's profile
+      // Update the user's profile in Firebase Authentication
       await updateProfile(currentUser, {
         displayName: newName || currentUser.displayName,
-        photoURL: imageUrl, // Update profile with image URL
+        photoURL: imageUrl,
       });
 
-      // Save data to Firestore
+      // Update user's profile to Firestore
       const userDocRef = doc(db, 'users', currentUser.uid);
       await setDoc(
         userDocRef,
@@ -126,6 +146,13 @@ export const updateProfilePicture = async (
   }
 };
 
+/**
+ * Updates the user's display name in Firebase Authentication and Firestore.
+ *
+ * @param {string} newName - The new display name to set.
+ * @param {Function} setIsEditingName - Function to toggle the name editing state.
+ * @param {Function} setNameErrorMessage - Function to display error messages for the name input.
+ */
 export const updateDisplayName = async (
   newName: string,
   setIsEditingName: (state: boolean) => void,
@@ -134,23 +161,35 @@ export const updateDisplayName = async (
   const currentUser = auth.currentUser;
   if (newName && currentUser !== null) {
     try {
+      // Validate the display name length
       if (newName.length > 20) {
         setNameErrorMessage('Display Name cannot exceed 20 characters');
         throw new Error('Display Name cannot exceed 20 characters');
       }
       setNameErrorMessage('');
       await updateProfile(currentUser, {
-        displayName: newName, // Set the new displayName here
+        displayName: newName,
       });
+      // Update the display name in Firestore
       const userDocRef = doc(db, 'users', currentUser.uid);
       await setDoc(userDocRef, { displayName: newName }, { merge: true });
-      setIsEditingName(false); // Hide the pop-up after updating
+      setIsEditingName(false);
     } catch (error) {
       console.error('Error updating profile:', error);
     }
   }
 };
 
+/**
+ * Resets the user's password after verifying the current password.
+ *
+ * @param {string} currentPassword - The user's current password for reauthentication.
+ * @param {string} newPassword - The new password to set.
+ * @param {string} confirmPassword - Confirmation of the new password.
+ * @param {Function} setPasswordErrorMessage - Function to display password error messages.
+ * @param {Function} setSuccessMessage - Function to display a success message upon completion.
+ * @param {AppRouterInstance} router - Next.js router instance for navigation.
+ */
 export const resetUserPassword = async (
   currentPassword: string,
   newPassword: string,
@@ -159,7 +198,7 @@ export const resetUserPassword = async (
   setSuccessMessage: (msg: string) => void,
   router: AppRouterInstance,
 ) => {
-  // Check if new password and confirm password match
+  // Validate new password and confirmation
   const currentUser = auth.currentUser;
   if (newPassword !== confirmPassword) {
     setPasswordErrorMessage('New password and confirmation do not match.');
@@ -186,6 +225,7 @@ export const resetUserPassword = async (
       await updatePassword(currentUser, newPassword);
 
       setSuccessMessage('Your password has been updated successfully.');
+      // Redirect to login after a delay
       setTimeout(() => {
         setSuccessMessage('');
         router.push('/login');

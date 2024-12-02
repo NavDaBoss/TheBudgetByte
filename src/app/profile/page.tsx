@@ -15,9 +15,16 @@ import {
   resetUserPassword,
 } from '../backend/fetchProfileData';
 
+/**
+ * Profile Page:
+ * Manages user profile settings, including viewing and updating user information,
+ * managing profile pictures, resetting passwords, and displaying lifetime stats.
+ * @return {React.JSX.Element} The rendered user profile page.
+ */
 export default function Profile() {
   const router = useRouter();
   const currentUser = auth.currentUser;
+  const creationTimestamp = currentUser?.metadata?.creationTime;
   const [receiptCount, setReceiptCount] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [foodGroupSummary, setFoodGroupSummary] = useState<FoodGroupSummary>({
@@ -28,10 +35,12 @@ export default function Profile() {
     },
   });
 
+  // Redirects to the login page if the user is not authenticated
   useEffect(() => {
     if (!currentUser) {
       router.push('/login');
     } else {
+      // Fetches yearly overview data for the authenticated user
       fetchYearlyOverviewData(
         setFoodGroupSummary,
         setTotalAmount,
@@ -52,14 +61,48 @@ export default function Profile() {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
+  /**
+   * Formats the account creation timestamp into a readable date string.
+   *
+   * @param {string} dateString - The timestamp string.
+   * @return {string} - The formatted date string.
+   */
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+
+    const day = date.getDate();
+    const month = date.toLocaleDateString('en-US', { month: 'long' });
+    const year = date.getFullYear();
+
+    return `${month} ${day}, ${year}`;
+  };
+
+  /**
+   * Handles the formatted display of the account creation date.
+   *
+   * @return {string} - Formatted creation date or a fallback message.
+   */
+  const handleCreationDate = () => {
+    return creationTimestamp
+      ? formatDate(creationTimestamp)
+      : 'Date not available';
+  };
+
+  /** Clears the input field for the new display name */
   const handleClearNane = () => {
     setNewName('');
   };
 
+  /** Updates the new display name state as the input changes
+   * @param {React.ChangeEvent<HTMLInputElement>} event - The input change event containing the new display name.
+   */
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewName(event.target.value);
   };
 
+  /**  Handles profile picture file selection
+   * @param {React.ChangeEvent<HTMLInputElement>} event - The file input change event containing the selected profile picture file.
+   */
   const handleProfilePicChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -68,44 +111,65 @@ export default function Profile() {
     }
   };
 
+  /** Updates the current password input fields as the user types
+   * @param {React.ChangeEvent<HTMLInputElement>} event - The input change event containing the current password.
+   */
   const handleCurrentPasswordChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setCurrentPassword(event.target.value);
   };
 
+  /** Updates the new password input fields as the user types
+   * @param {React.ChangeEvent<HTMLInputElement>} event - The input change event containing the new password.
+   */
   const handleNewPasswordChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setNewPassword(event.target.value);
   };
 
+  /** Updates the confirm password input fields as the user types
+   * @param {React.ChangeEvent<HTMLInputElement>} event - The input change event containing the confirmation password.
+   */
   const handleConfirmPasswordChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setConfirmPassword(event.target.value);
   };
 
+  /** Opens the edit name modal */
   const handleEditNamePopup = () => {
     setIsEditingName(true);
   };
 
+  /** Opens the reset password modal */
   const handleEditResetPasswordPopup = () => {
     setIsResettingPassword(true);
   };
 
+  /** Opens the edit profile picture modal */
   const handleEditProliePicPopup = () => {
     setIsEditingPic(true);
   };
 
+  /**
+   * Handles updating the user's profile picture.
+   */
   const handleUpdateProfile = async () => {
     await updateProfilePicture(newProfilePic, newName, setIsEditingPic);
   };
 
+  /**
+   * Handles updating the user's display name.
+   */
   const handleUpdateName = async () => {
     await updateDisplayName(newName, setIsEditingName, setNameErrorMessage);
   };
 
+  /**
+   * Handles resetting the user's password.
+   */
   const handleResetPassword = async () => {
     await resetUserPassword(
       currentPassword,
@@ -187,7 +251,9 @@ export default function Profile() {
             />
             Reset Password
           </button>
-
+          <h1 className="lifetime-stats-header">Lifetime Stats</h1>
+          <h4>Number of Receipts Scanned: {receiptCount}</h4>
+          <h4>Account Created: {handleCreationDate()}</h4>
           {isEditingName && (
             <div className="modal-overlay">
               <div className="modal-content">
@@ -212,6 +278,7 @@ export default function Profile() {
               </div>
             </div>
           )}
+
           {isEditingPic && (
             <div className="modal-overlay">
               <div className="modal-content">
@@ -267,8 +334,6 @@ export default function Profile() {
           )}
         </div>
         <div className="column">
-          <h1 className="lifetime-stats-header">Lifetime Stats</h1>
-          <h4>Number of Receipts Scanned: {receiptCount}</h4>
           <div className="summary-pie-container">
             <Summary
               data={foodGroupSummary.foodGroups}

@@ -10,7 +10,7 @@
   width: 80%;
   max-width: 70rem;
   padding-bottom: 10px;
-  max-height: 75vh;
+  max-height: 100vh;
 }
 
 .column {
@@ -19,11 +19,11 @@
   align-items: center;
   padding: 20px;
   margin: 0 10px;
-  width: 50%;
-  background-color: var(--white);
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 10px;
   border: 2px solid var(--light-grey);
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.3);
 }
 
 .profile-pic-container,
@@ -31,6 +31,7 @@
   margin-bottom: 10px;
   margin-top: 10px;
 }
+
 .edit-name-btn,
 .upload-image-btn,
 .reset-password-btn {
@@ -74,7 +75,7 @@
 
 .lifetime-stats-header,
 .user-settings-header {
-  margin-top: 10px;
+  margin-top: 28px;
   margin-bottom: 10px;
 }
 
@@ -102,7 +103,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.3);
 }
 
 .modal-content input {
@@ -143,7 +143,7 @@
   margin-bottom: 5px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .column-container {
     flex-direction: column;
     width: 90%;
@@ -151,6 +151,5 @@
 
   .column {
     width: 100%;
-    margin: 10px 0;
   }
 }

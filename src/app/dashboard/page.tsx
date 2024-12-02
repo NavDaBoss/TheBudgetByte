@@ -104,7 +104,6 @@ const Dashboard = () => {
   useEffect(() => {
     recalculateSummary();
   }, [groceries]);
-
   return (
     <div className="page">
       <Navbar />
@@ -113,6 +112,7 @@ const Dashboard = () => {
           <div className="left-section">
             <Summary
               data={summaryData.foodGroups}
+              summaryDate={receiptDate}
               totalCost={summaryData.totalCost}
             />
           </div>
@@ -128,6 +128,7 @@ const Dashboard = () => {
                   groceries={groceries}
                   onUpload={refetch}
                   onUpdate={handleUpdate}
+                  receiptDate={receiptDate}
                 />
               )}
             </div>

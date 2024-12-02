@@ -4,7 +4,11 @@ import OcrUploadButton from '../components/OcrUploadButton';
 import '../styles/Receipt.css';
 
 import EditIcon from '@mui/icons-material/EditSharp';
-import { updateOverviewWhenFoodGroupChanged } from '../backend/updateYearlyData';
+import {
+  updateOverviewWhenFoodGroupChanged,
+  updateOverviewWhenPriceChanged,
+  updateOverviewWhenQuantityChanged,
+} from '../backend/updateYearlyData';
 
 const ReceiptHead = ({ sortColumn }) => {
   const [sortField, setSortField] = useState('');
@@ -84,6 +88,7 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
   const [editableItem, setEditableItem] = useState(item);
   const [isEditing, setIsEditing] = useState(null);
   const [isHovered, setIsHovered] = useState(null);
+  const [activeField, setActiveField] = useState(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -92,7 +97,12 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (inputRef.current && !inputRef.current.contains(event.target)) {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target) &&
+        document.activeElement !== inputRef.current
+      ) {
+        setActiveField(null);
         setEditableItem((prev) => ({
           ...prev,
           [isEditing]: item[isEditing],
@@ -105,6 +115,17 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isEditing]);
+
+  const handleBlur = (fieldName, value) => {
+    setIsEditing(null);
+    if (editableItem[fieldName] !== value) {
+      handleSelect(fieldName, value);
+    }
+  };
+
+  const handleFieldClick = (field) => {
+    setActiveField((prev) => (prev === field ? null : field));
+  };
 
   const handleEdit = (field) => {
     setIsEditing(field);
@@ -189,6 +210,23 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
         await onUpdate(item.id, fieldName, value);
       }
       handleInput(fieldName, value);
+      if (fieldName === 'itemPrice') {
+        updateOverviewWhenPriceChanged(
+          receiptDate,
+          item.foodGroup,
+          /*new item price = */ value,
+          /*old item price = */ item.itemPrice,
+          item.quantity,
+        );
+      } else if (fieldName === 'quantity') {
+        updateOverviewWhenQuantityChanged(
+          receiptDate,
+          item.foodGroup,
+          /*new quantity price = */ value,
+          /*old quantity price = */ item.quantity,
+          item.itemPrice,
+        );
+      }
       setIsEditing(null);
     }
   };
@@ -232,12 +270,14 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
           className={className}
           title={name === 'itemName' ? editableItem.itemName : undefined}
           onMouseEnter={() => setIsHovered(name)}
+          onClick={() => handleFieldClick(name)}
         >
           {isEditing === name ? (
             type === 'select' ? (
               <select
                 value={editableItem[name]}
                 onChange={(e) => handleSelect(name, e.target.value)}
+                onBlur={(e) => handleBlur(name, e.target.value)}
                 ref={inputRef}
                 className="editable-select"
               >
@@ -277,13 +317,13 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
                 {name === 'itemPrice'
                   ? `$${editableItem[name]}`
                   : editableItem[name]}
+                {(isHovered === name || activeField == name) && (
+                  <EditIcon
+                    className="edit-icon"
+                    onClick={() => handleEdit(name)}
+                  />
+                )}
               </span>
-              {isHovered === name && (
-                <EditIcon
-                  className="edit-icon"
-                  onClick={() => handleEdit(name)}
-                />
-              )}
             </div>
           )}
         </td>
@@ -343,8 +383,13 @@ const Receipt = ({ groceries, onUpload, onUpdate, receiptDate }) => {
     <div>
       <div className="receipt-component-head">
         <h1>Receipt</h1>
-        <OcrUploadButton onUploadComplete={onUpload} />
-        <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
+        <div className="receipt-options">
+          <OcrUploadButton onUploadComplete={onUpload} />
+          <SearchBar
+            filterText={filterText}
+            onFilterTextChange={setFilterText}
+          />
+        </div>
       </div>
       <div className="receipt-table-wrapper">
         <table className="receipt-component-table">
