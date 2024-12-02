@@ -17,6 +17,8 @@ The receipt date is formatted as `mm/dd/yyyy`. Items that are not food-related a
 
 ## Usage
 
+Ensure you have your API key located in `.env.local`
+
 1. Send a POST request to the `/api/openai` endpoint with the following JSON structure:
 
    ```json
