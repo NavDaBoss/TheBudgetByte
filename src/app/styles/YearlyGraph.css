@@ -60,3 +60,12 @@
     font-size: 0.75rem !important; /* Smaller font size for mobile */
   }
 }
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
+  backdrop-filter: blur(8px); /* Blur effect */
+  -webkit-backdrop-filter: blur(8px); /* Safari support */
+  border-radius: 10px; /* Rounded corners */
+  border: 1px solid rgba(72, 72, 74, 0.18); /* Subtle border */
+}
+

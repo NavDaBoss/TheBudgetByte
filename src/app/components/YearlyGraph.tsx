@@ -102,7 +102,7 @@ export const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({
   };
 
   return (
-    <Card>
+    <Card className="glass-card">
       <CardContent>
         <Typography variant="h5" component="div" className="responsive-heading">
           Monthly Spending Overview ({selectedYear})
