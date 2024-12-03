@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth } from '../firebase/firebaseConfig';
 import useGroceries from '../hooks/useGroceries';
@@ -48,7 +48,7 @@ const Dashboard = () => {
     }
   };
 
-  const recalculateSummary = async () => {
+  const recalculateSummary = useCallback(async () => {
     if (!receiptID) {
       console.error('ReceiptID is not available. Skipping recalculation.');
       return;
@@ -92,14 +92,13 @@ const Dashboard = () => {
     } catch (error) {
       console.error('Failed to update receipt balance in DB:', error);
     }
-  };
+  }, [groceries, receiptID, receiptBalance]);
 
   useEffect(() => {
     if (!currentUser) {
       router.push('/login');
     }
-  }),
-    [currentUser, router];
+  }, [currentUser, router]);
 
   useEffect(() => {
     recalculateSummary();
