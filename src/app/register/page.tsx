@@ -172,7 +172,7 @@ export default function Register() {
           Continue to Login
         </Link>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

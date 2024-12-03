@@ -41,7 +41,7 @@ const useGroceries = (userID: string | null) => {
               groceriesSnapshot.docs.map((doc) => ({
                 ...(doc.data() as GroceryItem),
                 id: doc.id,
-              }))
+              })),
             );
           } else {
             setGroceries([]);
@@ -60,12 +60,12 @@ const useGroceries = (userID: string | null) => {
   const updateGroceryItem = (
     groceryID: string,
     fieldName: keyof GroceryItem,
-    value: GroceryItem[keyof GroceryItem] // Fix applied here
+    value: GroceryItem[keyof GroceryItem], // Fix applied here
   ) => {
     setGroceries((prev) =>
       prev.map((item) =>
-        item.id === groceryID ? { ...item, [fieldName]: value } : item
-      )
+        item.id === groceryID ? { ...item, [fieldName]: value } : item,
+      ),
     );
   };
 

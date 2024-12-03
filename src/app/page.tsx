@@ -97,24 +97,25 @@ export default function Home() {
         </section>
       </main>
       <footer className={styles.footer}>
-      <div>
-        {/* Copyright Information */}
-        <p>© 2024 BudgetByte</p>
-      </div>
-      <div>
-        {/* Contact Information */}
-        <p>Contact Us: BudgetByte@budgetbyte.com</p>
-      </div>
-    </footer>
+        <div>
+          {/* Copyright Information */}
+          <p>© 2024 BudgetByte</p>
+        </div>
+        <div>
+          {/* Contact Information */}
+          <p>Contact Us: BudgetByte@budgetbyte.com</p>
+        </div>
+      </footer>
       {/* Footer Section: Contact and Legal Information */}
-      
     </div>
   );
 }
 
-{/* <footer className={styles.footer}>
+{
+  /* <footer className={styles.footer}>
    
         <p>© 2024 BudgetByte</p>
       
         <p>Contact Us: BudgetByte@budgetbyte.com</p>
-      </footer> */}
+      </footer> */
+}
