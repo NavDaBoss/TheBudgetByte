@@ -2,6 +2,7 @@
 
 import styles from './page.module.css'; // Importing the CSS module for styling
 import { useRouter } from 'next/navigation'; // Importing useRouter from Next.js to handle routing
+import Image from 'next/image';
 
 export default function Home() {
   const router = useRouter(); // Creating the router object for navigation
@@ -16,7 +17,7 @@ export default function Home() {
       {/* Header Section: Contains logo and login button */}
       <header className={styles.header}>
         {/* Logo Section */}
-        <h1 className={styles.logo}>BUDGET BYTE</h1>
+        <h1 className={styles.logo}>Budget Byte</h1>
         {/* Login Button: Directs users to the login page */}
         <button className={styles.loginBtn} onClick={navigateToLogin}>
           Login
@@ -40,9 +41,12 @@ export default function Home() {
             </button>
           </div>
           {/* Image representing receipt parsing */}
-          <img
+          <Image
             src="/images/reciept.png"
             alt="Receipt Diagram"
+            layout="responsive"
+            width={16}
+            height={9}
             className={styles.image}
           />
         </section>
@@ -50,9 +54,12 @@ export default function Home() {
         {/* Section 2: Monthly Spending Analytics */}
         <section className={styles.section}>
           {/* Image showcasing the monthly spending graph */}
-          <img
+          <Image
             src="/images/graph.png"
             alt="Monthly Spending Graph"
+            layout="responsive"
+            width={16}
+            height={9}
             className={styles.image}
           />
           <div className={styles.textBlock}>
@@ -78,9 +85,12 @@ export default function Home() {
             </p>
           </div>
           {/* Image representing the lifetime stats pie chart */}
-          <img
+          <Image
             src="/images/pie.png"
             alt="Lifetime Stats Diagram"
+            layout="responsive"
+            width={16}
+            height={9}
             className={styles.image}
           />
         </section>
