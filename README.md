@@ -1,44 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BudgetByte User Manual
+
+Welcome to the source code for BudgetByte, a health and wealth app aimed to track and analyze grocery spending.
+This application is built with Next.js, React, TypeScript, MUI components, and Firebase. It uses Tesseract's OCR API to parse receipt data and ChatGPT's API to categorize the data.
+
+## Core Features
+
+- Create an account to be able to save your grocery spending data with us.
+- Upload any grocery receipt and have it automatically processed by our application.
+- Have the ability to gain a visual breakdown of your monthly and yearly grocery spending by cost and food group category.
+- Have the ability to manually create, delete, or edit any items that haven't been parsed or categorized correctly by our app.
 
 ## Setup
 
-#### Install tesseract.js to use OCR
+#### Clone the repository
+
+Run the following command to clone the repository locally:
 
 ```bash
-npm install tesseract.js
+git clone https://github.com/NavDaBoss/TheBudgetByte.git
+```
+
+Create a .env.local file in the root directory of the project and add the following environment variables:
+
+```bash
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+OPENAI_API_KEY=
+```
+
+> We have purposely left these API keys blank for security reasons. These can be provided to you upon request.
+
+#### Install the necessary dependencies
+
+Run the following command to install all of the necessary dependencies with npm:
+
+```bash
+npm install
 ```
 
 ## Getting Started
 
-First, run the development server:
+#### Running the application locally
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

@@ -207,8 +207,8 @@
 
   /* Footer adjustments for mobile */
   .footer {
-    flex-direction: column;  /* Stack footer items vertically */
-    text-align: center;  /* Center-align text */
+    flex-direction: column; /* Stack footer items vertically */
+    text-align: center; /* Center-align text */
   }
 
   /* Footer text adjustments for mobile */
