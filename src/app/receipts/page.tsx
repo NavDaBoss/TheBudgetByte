@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { auth, storage } from '../firebase/firebaseConfig'; // Adjust the path if necessary
 import { ref, listAll, getDownloadURL } from 'firebase/storage';
 import { onAuthStateChanged } from 'firebase/auth'; // Import onAuthStateChanged
+import Image from 'next/image'; // Import next image
 
 const Receipts = () => {
   const [receiptUrls, setReceiptUrls] = useState<string[]>([]);
@@ -75,10 +76,13 @@ const Receipts = () => {
                 borderRadius: '10px',
               }}
             >
-              <img
+              <Image
                 src={url}
                 alt={`Receipt ${index + 1}`}
-                style={{ width: '100%', height: 'auto' }}
+                /* style={{ width: '100%', height: 'auto' }} */
+                layout="responsive"
+                width={16}
+                height={9}
               />
             </div>
           ))

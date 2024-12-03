@@ -111,6 +111,7 @@
 
 /* Footer styling */
 .footer {
+  position: static; /* Make footer non-fixed */
   display: flex; /* Flexbox layout */
   justify-content: space-between; /* Space between footer items */
   align-items: center; /* Vertically align items */
@@ -206,8 +207,8 @@
 
   /* Footer adjustments for mobile */
   .footer {
-    flex-direction: column; /* Stack footer items vertically */
-    text-align: center; /* Center-align text */
+    flex-direction: column;  /* Stack footer items vertically */
+    text-align: center;  /* Center-align text */
   }
 
   /* Footer text adjustments for mobile */

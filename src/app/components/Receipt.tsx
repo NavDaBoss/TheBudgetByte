@@ -333,7 +333,7 @@ const ReceiptRow = ({ item, onUpdate, onDelete, receiptDate }) => {
             <div className="cell-item-content">
               <span className="cell-item-name">
                 {name === 'itemPrice'
-                  ? `$${editableItem[name]}`
+                  ? `$${Number(editableItem[name]).toFixed(2)}`
                   : editableItem[name]}
                 {(isHovered === name || activeField == name) && (
                   <>
@@ -392,6 +392,7 @@ const AddItemForm = ({ onClose, onAdd }) => {
       } else if (/^\d*\.?\d{0,2}$/.test(value)) {
         const floatValue = parseFloat(value);
         updatedValue = floatValue > 999.99 ? 999.99 : floatValue;
+        updatedValue = Math.round(updatedValue * 100) / 100;
       }
     } else if (field === 'itemName') {
       updatedValue = value.slice(0, 50).toUpperCase();
