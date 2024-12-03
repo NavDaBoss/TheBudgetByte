@@ -3,6 +3,7 @@
 import styles from './page.module.css'; // Importing the CSS module for styling
 import { useRouter } from 'next/navigation'; // Importing useRouter from Next.js to handle routing
 import Image from 'next/image';
+import Footer from './components/Footer';
 
 export default function Home() {
   const router = useRouter(); // Creating the router object for navigation
@@ -95,14 +96,25 @@ export default function Home() {
           />
         </section>
       </main>
-
-      {/* Footer Section: Contact and Legal Information */}
       <footer className={styles.footer}>
+      <div>
         {/* Copyright Information */}
         <p>© 2024 BudgetByte</p>
+      </div>
+      <div>
         {/* Contact Information */}
         <p>Contact Us: BudgetByte@budgetbyte.com</p>
-      </footer>
+      </div>
+    </footer>
+      {/* Footer Section: Contact and Legal Information */}
+      
     </div>
   );
 }
+
+{/* <footer className={styles.footer}>
+   
+        <p>© 2024 BudgetByte</p>
+      
+        <p>Contact Us: BudgetByte@budgetbyte.com</p>
+      </footer> */}

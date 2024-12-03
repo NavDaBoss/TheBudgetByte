@@ -17,6 +17,7 @@ import { auth, db } from '../firebase/firebaseConfig';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import DropDown from '../components/DropdownButton';
 import SpendingInYearGraph from './spendingInYearGraph';
+import Footer from '../components/Footer';
 
 // Uses the summary in dashboard populated with the food data from the selected month out of the selected year.
 const AnalyticsSummary = ({
@@ -230,6 +231,7 @@ const Analytics = () => {
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

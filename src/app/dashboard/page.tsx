@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth } from '../firebase/firebaseConfig';
 import useGroceries from '../hooks/useGroceries';
+import Footer from '../components/Footer';
 import {
   updateGroceryField,
   updateReceiptBalance,
@@ -134,6 +135,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <Footer/>
       {error && <p>Error: {error}</p>}
     </div>
   );
