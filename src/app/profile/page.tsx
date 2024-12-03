@@ -7,7 +7,6 @@ import './profile.css';
 import { FoodGroupSummary } from '../profile/summaryInterfaces';
 import Navbar from '../components/Navbar';
 import Summary from '../components/Summary';
-import Footer from '../components/Footer';
 import { auth } from '../firebase/firebaseConfig';
 import {
   fetchYearlyOverviewData,
@@ -343,7 +342,6 @@ export default function Profile() {
           </div>
         </div>
       </div>
-      <Footer/>
     </div>
   );
 }
