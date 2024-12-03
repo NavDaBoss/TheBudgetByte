@@ -44,10 +44,31 @@ const Dashboard = () => {
 
   const handleAdd = async (newItem) => {
     try {
-      await addGroceryItem(newItem);
-      recalculateSummary();
+      if (!receiptID) return;
+
+      const groceryID = await addGroceryItem(receiptID, newItem);
+
+      const newGroceryItem = { ...newItem, id: groceryID };
+      const updatedGroceries = [...groceries, newGroceryItem];
+      updateLocalGroceries(updatedGroceries);
+
+      recalculateSummary(updatedGroceries);
     } catch (error) {
       console.error('Error adding grocery:', error);
+    }
+  };
+
+  const handleAddClick = () => {
+    if (newItem.itemName && newItem.itemPrice > 0) {
+      onAdd(newItem);
+      setNewItem({
+        itemName: '',
+        quantity: 1,
+        itemPrice: 0.0,
+        foodGroup: 'Uncategorized',
+      });
+    } else {
+      alert('Please fill in all fields with valid values.');
     }
   };
 
@@ -60,7 +81,7 @@ const Dashboard = () => {
       );
       updateLocalGroceries(updatedGroceries);
 
-      recalculateSummary(updatedGroceries);
+      recalculateSummary();
     } catch (error) {
       console.error('Error deleting grocery:', error);
     }
@@ -79,7 +100,7 @@ const Dashboard = () => {
     }
   };
 
-  const recalculateSummary = async () => {
+  const recalculateSummary = async (updatedGroceries = groceries) => {
     if (!receiptID) {
       console.error('ReceiptID is not available. Skipping recalculation.');
       return;
@@ -88,7 +109,7 @@ const Dashboard = () => {
     const updatedFoodGroups = {};
     let totalCost = 0.0;
 
-    groceries.forEach((item) => {
+    updatedGroceries.forEach((item) => {
       const foodGroup = item.foodGroup;
       const price = parseFloat(item.itemPrice || 0) * (item.quantity || 0);
 

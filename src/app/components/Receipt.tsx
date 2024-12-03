@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from 'react';
 
 import OcrUploadButton from '../components/OcrUploadButton';
 import '../styles/Receipt.css';
+
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/EditSharp';
 import {
@@ -10,7 +12,9 @@ import {
   updateOverviewWhenQuantityChanged,
 } from '../backend/updateYearlyData';
 
-const ReceiptHead = ({ sortColumn }) => {
+const foodGroupOptions = ['Grains', 'Vegetables', 'Fruits', 'Protein', 'Dairy'];
+
+const ReceiptHead = ({ sortColumn, toggleAddForm }) => {
   const [sortField, setSortField] = useState('');
   const [order, setOrder] = useState('asc');
 
@@ -83,6 +87,15 @@ const ReceiptHead = ({ sortColumn }) => {
               {column !== 'deleteItem' ? (
                 <>
                   {label}
+                  {column == 'itemName' && (
+                    <AddBoxIcon
+                      className="add-icon"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleAddForm();
+                      }}
+                    />
+                  )}
                   <span
                     className="sort-arrow"
                     style={getSortArrowStyle(`${column}`)}
@@ -96,7 +109,6 @@ const ReceiptHead = ({ sortColumn }) => {
     </thead>
   );
 };
-
 
 const ReceiptRow = ({ item, onUpdate, onDelete, receiptDate }) => {
   const [editableItem, setEditableItem] = useState(item);
@@ -139,10 +151,6 @@ const ReceiptRow = ({ item, onUpdate, onDelete, receiptDate }) => {
 
   const handleFieldClick = (field) => {
     setActiveField((prev) => (prev === field ? null : field));
-  };
-
-  const handleDelete = () => {
-    onDelete(item.id);
   };
 
   const handleEdit = (field) => {
@@ -258,7 +266,7 @@ const ReceiptRow = ({ item, onUpdate, onDelete, receiptDate }) => {
     {
       name: 'itemName',
       className: 'receipt-item-name-column',
-      type: 'type',
+      type: 'text',
     },
     {
       name: 'foodGroup',
@@ -270,14 +278,6 @@ const ReceiptRow = ({ item, onUpdate, onDelete, receiptDate }) => {
       className: 'receipt-item-price-column',
       type: 'number',
     },
-  ];
-
-  const foodGroupOptions = [
-    'Grains',
-    'Vegetables',
-    'Fruits',
-    'Protein',
-    'Dairy',
   ];
 
   return (
@@ -348,11 +348,8 @@ const ReceiptRow = ({ item, onUpdate, onDelete, receiptDate }) => {
           )}
         </td>
       ))}
-      <td className='receipt-item-delete-column'>
-        <DeleteIcon
-          className="delete-icon"
-          onClick={() => onDelete(item.id)}
-        />
+      <td className="receipt-item-delete-column">
+        <DeleteIcon className="delete-icon" onClick={() => onDelete(item.id)} />
       </td>
     </tr>
   );
@@ -372,6 +369,141 @@ const SearchBar = ({ filterText, onFilterTextChange }) => {
   );
 };
 
+const AddItemForm = ({ onClose, onAdd }) => {
+  const [newItem, setNewItem] = useState({
+    itemName: '',
+    quantity: 1,
+    itemPrice: 0.0,
+    foodGroup: 'Uncategorized',
+  });
+
+  const handleInputChange = (field, value) => {
+    let updatedValue = value;
+
+    if (field === 'quantity') {
+      if (value === '') {
+        updatedValue = '';
+      } else {
+        updatedValue = Math.min(99, parseInt(value) || 0);
+      }
+    } else if (field === 'itemPrice') {
+      if (value == '') {
+        updatedValue = '';
+      } else if (/^\d*\.?\d{0,2}$/.test(value)) {
+        const floatValue = parseFloat(value);
+        updatedValue = floatValue > 999.99 ? 999.99 : floatValue;
+      }
+    } else if (field === 'itemName') {
+      updatedValue = value.slice(0, 50).toUpperCase();
+    }
+
+    setNewItem((prev) => ({ ...prev, [field]: updatedValue }));
+  };
+
+  const handleKeyDown = async (e, fieldName) => {
+    const allowedKeys = [
+      'Backspace',
+      'ArrowLeft',
+      'ArrowRight',
+      'Tab',
+      'Delete',
+    ];
+
+    if (fieldName == 'quantity') {
+      if (!allowedKeys.includes(e.key) && !/^\d$/.test(e.key)) {
+        e.preventDefault();
+      }
+    } else if (fieldName === 'itemPrice') {
+      if (!allowedKeys.includes(e.key, '.') && !/^\d*\.?\d{0,2}$/.test(e.key)) {
+        e.preventDefault();
+      }
+    }
+  };
+
+  const handleSubmit = () => {
+    if (newItem.itemName && newItem.itemPrice > 0) {
+      onAdd(newItem);
+      onClose();
+    } else {
+      alert('Please fill in all fields with valid values.');
+    }
+  };
+
+  const fields = [
+    {
+      label: 'Item Name',
+      field: 'itemName',
+      type: 'text',
+      placeholder: 'Apples',
+    },
+    {
+      label: 'Quantity',
+      field: 'quantity',
+      type: 'number',
+      placeholder: '1',
+    },
+    {
+      label: 'Item Price',
+      field: 'itemPrice',
+      type: 'number',
+      placeholder: '0.00',
+    },
+    {
+      label: 'Food Group',
+      field: 'foodGroup',
+      type: 'select',
+      options: foodGroupOptions,
+    },
+  ];
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <h2>Add New Item</h2>
+        {fields.map(({ label, field, type, placeholder, options }) => (
+          <div key={field} className="add-item-form-row">
+            <label htmlFor={field}>{label}</label>
+            {type === 'select' ? (
+              <select
+                value={newItem[field]}
+                onChange={(e) => handleInputChange(field, e.target.value)}
+              >
+                {options.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type={type}
+                placeholder={placeholder}
+                value={newItem[field]}
+                min={field === 'quantity' ? '1' : undefined}
+                max={
+                  field === 'quantity'
+                    ? 99
+                    : field === 'itemPrice'
+                      ? 999.99
+                      : undefined
+                }
+                maxLength={field === 'itemName' ? 50 : undefined}
+                step={field === 'itemPrice' ? '0.01' : undefined}
+                onChange={(e) => handleInputChange(field, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e, field)}
+              />
+            )}
+          </div>
+        ))}
+        <div className="modal-actions">
+          <button onClick={handleSubmit}>Add Item</button>
+          <button onClick={onClose}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Receipt = ({
   groceries,
   onUpload,
@@ -382,29 +514,10 @@ const Receipt = ({
 }) => {
   const [tableData, setTableData] = useState(groceries);
   const [filterText, setFilterText] = useState('');
-  const [newItem, setNewItem] = useState({
-    itemName: '',
-    quantity: 1,
-    itemPrice: 0.0,
-    foodGroup: 'Uncategorized',
-  });
+  const [showAddForm, setShowAddForm] = useState(false);
 
-  const handleInputChange = (field, value) => {
-    setNewItem((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleAddClick = () => {
-    if (newItem.itemName && newItem.itemPrice > 0) {
-      onAdd(newItem);
-      setNewItem({
-        itemName: '',
-        quantity: 1,
-        itemPrice: 0.0,
-        foodGroup: 'Uncategorized',
-      });
-    } else {
-      alert('Please fill in all fields)');
-    }
+  const toggleAddForm = () => {
+    setShowAddForm((prev) => !prev);
   };
 
   useEffect(() => {
@@ -448,9 +561,12 @@ const Receipt = ({
           />
         </div>
       </div>
+      {showAddForm && (
+        <AddItemForm onClose={() => setShowAddForm(false)} onAdd={onAdd} />
+      )}
       <div className="receipt-table-wrapper">
         <table className="receipt-component-table">
-          <ReceiptHead sortColumn={sortColumn} />
+          <ReceiptHead sortColumn={sortColumn} toggleAddForm={toggleAddForm} />
           <tbody className="receipt-component-body">
             {tableData
               .filter((item) =>
