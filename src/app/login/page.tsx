@@ -14,6 +14,7 @@ import {
 import { FirebaseError } from '@firebase/app';
 import './login.css';
 import Image from 'next/image';
+import Footer from '../components/Footer';
 
 /**
  * Login Page:
@@ -191,6 +192,7 @@ export default function Login() {
           Create an account
         </Link>
       </div>
+      <Footer/>
     </div>
   );
 }

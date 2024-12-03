@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import './register.css';
 import Image from 'next/image';
-
+import Footer from '../components/Footer';
 /**
  * Register Page:
  * This page handles the user registration process, including form input,
@@ -172,6 +172,7 @@ export default function Register() {
           Continue to Login
         </Link>
       </div>
+      <Footer/>
     </div>
   );
 }
