@@ -58,4 +58,4 @@ Ensure you have your API key located in `.env.local`
 | **429**        | Rate Limit Exceeded: Too many requests in a short time.           | Add a retry mechanism with exponential backoff.            |
 | **500**        | Internal Server Error: A problem occurred on OpenAI's end.        | Retry the request after some time.                         |
 | **503**        | Service Unavailable: OpenAI is temporarily unavailable.           | Retry after some time.                                     |
-|  |
+|                |
