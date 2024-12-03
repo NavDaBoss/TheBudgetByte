@@ -102,7 +102,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     recalculateSummary();
-  }, [groceries]);
+  }, [recalculateSummary]);
   return (
     <div className="page">
       <Navbar />
