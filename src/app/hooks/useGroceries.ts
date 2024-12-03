@@ -4,12 +4,21 @@ import {
   getGroceriesSubcollection,
 } from '../firebase/firebaseService';
 
+// Define an interface to represent the structure of a grocery item
+interface GroceryItem {
+  id: string;
+  itemName: string;
+  itemPrice: string;
+  foodGroup: string;
+  quantity: number;
+}
+
 const useGroceries = (userID: string | null) => {
-  const [groceries, setGroceries] = useState<any[]>([]);
-  const [receiptBalance, setReceiptBalance] = useState(0);
-  const [receiptDate, setReceiptDate] = useState(0);
+  const [groceries, setGroceries] = useState<GroceryItem[]>([]);
+  const [receiptBalance, setReceiptBalance] = useState<number>(0);
+  const [receiptDate, setReceiptDate] = useState<number>(0);
   const [receiptID, setReceiptID] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchMostRecentReceipt = useCallback(async () => {
@@ -30,9 +39,9 @@ const useGroceries = (userID: string | null) => {
           if (!groceriesSnapshot.empty) {
             setGroceries(
               groceriesSnapshot.docs.map((doc) => ({
-                ...doc.data(),
+                ...(doc.data() as GroceryItem),
                 id: doc.id,
-              })),
+              }))
             );
           } else {
             setGroceries([]);
@@ -41,7 +50,7 @@ const useGroceries = (userID: string | null) => {
           setGroceries([]);
         }
       } catch (error) {
-        setError(error);
+        setError(error instanceof Error ? error.message : 'Unknown error');
       } finally {
         setLoading(false);
       }
@@ -50,13 +59,13 @@ const useGroceries = (userID: string | null) => {
 
   const updateGroceryItem = (
     groceryID: string,
-    fieldName: string,
-    value: string,
+    fieldName: keyof GroceryItem,
+    value: GroceryItem[keyof GroceryItem] // Fix applied here
   ) => {
     setGroceries((prev) =>
       prev.map((item) =>
-        item.id === groceryID ? { ...item, [fieldName]: value } : item,
-      ),
+        item.id === groceryID ? { ...item, [fieldName]: value } : item
+      )
     );
   };
 
