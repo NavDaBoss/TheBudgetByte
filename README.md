@@ -20,6 +20,8 @@ Run the following command to clone the repository locally:
 git clone https://github.com/NavDaBoss/TheBudgetByte.git
 ```
 
+#### Adding the API Keys
+
 Create a .env.local file in the root directory of the project and add the following environment variables:
 
 ```bash
