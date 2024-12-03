@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { auth } from '../firebase/firebaseConfig';
 import useGroceries from '../hooks/useGroceries';
 import {
+  addGroceryItem,
+  deleteGroceryItem,
   updateGroceryField,
   updateReceiptBalance,
 } from '../firebase/firebaseService';
@@ -27,6 +29,7 @@ const Dashboard = () => {
     loading,
     error,
     updateGroceryItem,
+    setGroceriesState,
     refetch,
   } = useGroceries(currentUser?.uid || null);
 
@@ -34,6 +37,34 @@ const Dashboard = () => {
     foodGroups: [],
     totalCost: 0,
   });
+
+  const updateLocalGroceries = (updatedGroceries) => {
+    setGroceriesState(updatedGroceries);
+  };
+
+  const handleAdd = async (newItem) => {
+    try {
+      await addGroceryItem(newItem);
+      recalculateSummary();
+    } catch (error) {
+      console.error('Error adding grocery:', error);
+    }
+  };
+
+  const handleDelete = async (groceryID) => {
+    try {
+      await deleteGroceryItem(receiptID, groceryID);
+
+      const updatedGroceries = groceries.filter(
+        (item) => item.id !== groceryID,
+      );
+      updateLocalGroceries(updatedGroceries);
+
+      recalculateSummary(updatedGroceries);
+    } catch (error) {
+      console.error('Error deleting grocery:', error);
+    }
+  };
 
   const handleUpdate = async (groceryID, fieldName, value) => {
     try {
@@ -128,6 +159,8 @@ const Dashboard = () => {
                   groceries={groceries}
                   onUpload={refetch}
                   onUpdate={handleUpdate}
+                  onAdd={handleAdd}
+                  onDelete={handleDelete}
                   receiptDate={receiptDate}
                 />
               )}

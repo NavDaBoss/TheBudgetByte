@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 
 import OcrUploadButton from '../components/OcrUploadButton';
 import '../styles/Receipt.css';
-
+import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/EditSharp';
 import {
   updateOverviewWhenFoodGroupChanged,
@@ -59,6 +59,11 @@ const ReceiptHead = ({ sortColumn }) => {
       className: 'receipt-item-price-column',
       label: 'ITEM PRICE',
     },
+    {
+      column: 'deleteItem',
+      className: 'receipt-item-delete-column',
+      label: '',
+    },
   ];
 
   return (
@@ -68,14 +73,22 @@ const ReceiptHead = ({ sortColumn }) => {
           <th
             key={column}
             className={className}
-            onClick={() => handleSortChange(`${column}`)}
+            onClick={
+              column !== 'deleteItem'
+                ? () => handleSortChange(`${column}`)
+                : undefined
+            }
           >
             <div className="table-header-content">
-              {label}
-              <span
-                className="sort-arrow"
-                style={getSortArrowStyle(`${column}`)}
-              ></span>
+              {column !== 'deleteItem' ? (
+                <>
+                  {label}
+                  <span
+                    className="sort-arrow"
+                    style={getSortArrowStyle(`${column}`)}
+                  ></span>
+                </>
+              ) : null}
             </div>
           </th>
         ))}
@@ -84,7 +97,8 @@ const ReceiptHead = ({ sortColumn }) => {
   );
 };
 
-const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
+
+const ReceiptRow = ({ item, onUpdate, onDelete, receiptDate }) => {
   const [editableItem, setEditableItem] = useState(item);
   const [isEditing, setIsEditing] = useState(null);
   const [isHovered, setIsHovered] = useState(null);
@@ -125,6 +139,10 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
 
   const handleFieldClick = (field) => {
     setActiveField((prev) => (prev === field ? null : field));
+  };
+
+  const handleDelete = () => {
+    onDelete(item.id);
   };
 
   const handleEdit = (field) => {
@@ -318,16 +336,24 @@ const ReceiptRow = ({ item, onUpdate, receiptDate }) => {
                   ? `$${editableItem[name]}`
                   : editableItem[name]}
                 {(isHovered === name || activeField == name) && (
-                  <EditIcon
-                    className="edit-icon"
-                    onClick={() => handleEdit(name)}
-                  />
+                  <>
+                    <EditIcon
+                      className="edit-icon"
+                      onClick={() => handleEdit(name)}
+                    />
+                  </>
                 )}
               </span>
             </div>
           )}
         </td>
       ))}
+      <td className='receipt-item-delete-column'>
+        <DeleteIcon
+          className="delete-icon"
+          onClick={() => onDelete(item.id)}
+        />
+      </td>
     </tr>
   );
 };
@@ -346,9 +372,40 @@ const SearchBar = ({ filterText, onFilterTextChange }) => {
   );
 };
 
-const Receipt = ({ groceries, onUpload, onUpdate, receiptDate }) => {
+const Receipt = ({
+  groceries,
+  onUpload,
+  onUpdate,
+  onAdd,
+  onDelete,
+  receiptDate,
+}) => {
   const [tableData, setTableData] = useState(groceries);
   const [filterText, setFilterText] = useState('');
+  const [newItem, setNewItem] = useState({
+    itemName: '',
+    quantity: 1,
+    itemPrice: 0.0,
+    foodGroup: 'Uncategorized',
+  });
+
+  const handleInputChange = (field, value) => {
+    setNewItem((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleAddClick = () => {
+    if (newItem.itemName && newItem.itemPrice > 0) {
+      onAdd(newItem);
+      setNewItem({
+        itemName: '',
+        quantity: 1,
+        itemPrice: 0.0,
+        foodGroup: 'Uncategorized',
+      });
+    } else {
+      alert('Please fill in all fields)');
+    }
+  };
 
   useEffect(() => {
     setTableData(groceries);
@@ -404,6 +461,7 @@ const Receipt = ({ groceries, onUpload, onUpdate, receiptDate }) => {
                   key={item.id}
                   item={item}
                   onUpdate={onUpdate}
+                  onDelete={onDelete}
                   receiptDate={receiptDate}
                 />
               ))}

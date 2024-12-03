@@ -107,7 +107,7 @@
 }
 
 .receipt-quantity-column {
-  width: 15%;
+  width: 10%;
 }
 
 .receipt-item-name-column {
@@ -115,11 +115,17 @@
 }
 
 .receipt-food-group-column {
-  width: 25%;
+  width: 20%;
 }
 
 .receipt-item-price-column {
-  width: 25%;
+  width: 20%;
+}
+
+.receipt-item-delete-column {
+  text-align: center;
+  vertical-align: middle;
+  width: 10%;
 }
 
 .search-bar {
@@ -173,6 +179,13 @@
   flex-grow: 1;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+}
+
+.delete-icon {
+  visiblity: hidden;
+}
+.delete-icon:hover {
+  color: var(--red);
 }
 
 .edit-icon {

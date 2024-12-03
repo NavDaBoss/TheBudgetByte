@@ -5,10 +5,46 @@ import {
   orderBy,
   limit,
   doc,
+  addDoc,
+  deleteDoc,
   getDocs,
   updateDoc,
 } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
+
+// Add a new grocery item to a receipt's subcollection
+export const addGroceryItem = async (receiptID: string, groceryData: any) => {
+  try {
+    const groceriesRef = collection(db, 'receiptData', receiptID, 'groceries');
+    const docRef = await addDoc(groceriesRef, groceryData);
+    console.log(`Added grocery item with ID: ${docRef.id}`);
+    return docRef.id;
+  } catch (error) {
+    console.log(`Error adding grocery item:`, error);
+    throw new Error('Failed to add grocery item');
+  }
+};
+
+// Delete a grocery item from a receipt's subcollection
+export const deleteGroceryItem = async (
+  receiptID: string,
+  groceryID: string,
+) => {
+  try {
+    const groceryDocRef = doc(
+      db,
+      'receiptData',
+      receiptID,
+      'groceries',
+      groceryID,
+    );
+    await deleteDoc(groceryDocRef);
+    console.log(`Deleted grocery item with ID: ${groceryID}`);
+  } catch (error) {
+    console.error('Error deleting grocery item:', error);
+    throw new Error('Failed to delete grocery item');
+  }
+};
 
 // Fetch the most recent receipt for a user
 export const getMostRecentReceipt = async (userId: string) => {

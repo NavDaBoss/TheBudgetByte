@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
+  addGroceryItem,
+  deleteGroceryItem,
   getMostRecentReceipt,
   getGroceriesSubcollection,
 } from '../firebase/firebaseService';
@@ -11,6 +13,26 @@ const useGroceries = (userID: string | null) => {
   const [receiptID, setReceiptID] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const addGrocery = async (newItem: any) => {
+    if (!receiptID) return;
+    try {
+      const groceryID = await addGroceryItem(receiptID, newItem);
+      setGroceries((prev) => [...prev, { ...newItem, id: groceryID }]);
+    } catch (error) {
+      setError('Failed to add grocery item');
+    }
+  };
+
+  const deleteGrocery = async (groceryID: string) => {
+    if (!receiptID) return;
+    try {
+      await deleteGroceryItem(receiptID, groceryID);
+      setGroceries((prev) => prev.filter((item) => item.id !== groceryID));
+    } catch (error) {
+      setError('Failed to delete grocery item');
+    }
+  };
 
   const fetchMostRecentReceipt = useCallback(async () => {
     if (userID) {
@@ -60,6 +82,10 @@ const useGroceries = (userID: string | null) => {
     );
   };
 
+  const setGroceriesState = (updatedGroceries) => {
+    setGroceries(updatedGroceries);
+  };
+
   useEffect(() => {
     fetchMostRecentReceipt();
   }, [userID, fetchMostRecentReceipt]);
@@ -69,7 +95,10 @@ const useGroceries = (userID: string | null) => {
     receiptID,
     receiptBalance,
     receiptDate,
+    addGrocery,
+    deleteGrocery,
     updateGroceryItem,
+    setGroceriesState,
     loading,
     error,
     refetch: fetchMostRecentReceipt,
