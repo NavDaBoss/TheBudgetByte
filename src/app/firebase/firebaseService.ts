@@ -5,23 +5,78 @@ import {
   orderBy,
   limit,
   doc,
+  addDoc,
+  deleteDoc,
   getDocs,
   updateDoc,
+  QuerySnapshot,
+  DocumentReference,
 } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
 
+export interface GroceryItem {
+  itemName: string;
+  itemPrice: string;
+  foodGroup: string;
+  quantity: number;
+}
+
+export interface Receipt {
+  userID: string;
+  submittedTimestamp: number;
+  receiptBalance: number;
+}
+
+// Add a new grocery item to a receipt's subcollection
+export const addGroceryItem = async (
+  receiptID: string,
+  groceryData: GroceryItem,
+) => {
+  try {
+    const groceriesRef = collection(db, 'receiptData', receiptID, 'groceries');
+    const docRef: DocumentReference = await addDoc(groceriesRef, groceryData);
+    console.log(`Added grocery item with ID: ${docRef.id}`);
+    return docRef.id;
+  } catch (error) {
+    console.log(`Error adding grocery item:`, error);
+    throw new Error('Failed to add grocery item');
+  }
+};
+
+// Delete a grocery item from a receipt's subcollection
+export const deleteGroceryItem = async (
+  receiptID: string,
+  groceryID: string,
+): Promise<void> => {
+  try {
+    const groceryDocRef = doc(
+      db,
+      'receiptData',
+      receiptID,
+      'groceries',
+      groceryID,
+    );
+    await deleteDoc(groceryDocRef);
+    console.log(`Deleted grocery item with ID: ${groceryID}`);
+  } catch (error) {
+    console.error('Error deleting grocery item:', error);
+    throw new Error('Failed to delete grocery item');
+  }
+};
+
 // Fetch the most recent receipt for a user
-export const getMostRecentReceipt = async (userId: string) => {
+export const getMostRecentReceipt = async (
+  userID: string,
+): Promise<QuerySnapshot> => {
   try {
     const receiptRef = collection(db, 'receiptData');
     const q = query(
       receiptRef,
-      where('userID', '==', userId),
+      where('userID', '==', userID),
       orderBy('submittedTimestamp', 'desc'),
       limit(1),
     );
-    const querySnapshot = await getDocs(q);
-    return querySnapshot;
+    return await getDocs(q); // Returns a query snapshot
   } catch (error) {
     console.log('Error fetching most recent receipt:', error);
     throw new Error('Error fetching most recent receipt');
@@ -29,11 +84,12 @@ export const getMostRecentReceipt = async (userId: string) => {
 };
 
 // Fetch the groceries subcollection for a specific receipt
-export const getGroceriesSubcollection = async (receiptId: string) => {
+export const getGroceriesSubcollection = async (
+  receiptId: string,
+): Promise<QuerySnapshot> => {
   try {
     const groceriesRef = collection(db, 'receiptData', receiptId, 'groceries');
-    const querySnapshot = await getDocs(groceriesRef);
-    return querySnapshot;
+    return await getDocs(groceriesRef); // Returns a query snapshot
   } catch (error) {
     console.error('Error fetching groceries subcollection:', error);
     throw new Error('Error fetching groceries subcollection');
@@ -42,17 +98,17 @@ export const getGroceriesSubcollection = async (receiptId: string) => {
 
 /**
  * Updates a specific field in a grocery document for a given receipt.
- * @param {string} receiptID - The ID of the receipt document.
- * @param {string} groceryID - The ID of the grocery document to update.
- * @param {string} fieldName - The field to update.
- * @param {any} value - The new value for the field.
+ * @param receiptID - The ID of the receipt document.
+ * @param groceryID - The ID of the grocery document to update.
+ * @param fieldName - The field to update.
+ * @param value - The new value for the field.
  */
 export const updateGroceryField = async (
-  receiptID,
-  groceryID,
-  fieldName,
-  value,
-) => {
+  receiptID: string,
+  groceryID: string,
+  fieldName: keyof GroceryItem,
+  value: GroceryItem[keyof GroceryItem],
+): Promise<void> => {
   try {
     const groceryDocRef = doc(
       db,
@@ -70,7 +126,15 @@ export const updateGroceryField = async (
   }
 };
 
-export const updateReceiptBalance = async (receiptID, totalCost) => {
+/**
+ * Updates the total balance of a receipt.
+ * @param receiptID - The ID of the receipt document.
+ * @param totalCost - The new total cost to set for the receipt.
+ */
+export const updateReceiptBalance = async (
+  receiptID: string,
+  totalCost: number,
+): Promise<void> => {
   try {
     const receiptDocRef = doc(db, 'receiptData', receiptID);
     await updateDoc(receiptDocRef, { receiptBalance: totalCost });

@@ -91,7 +91,7 @@
 
 @media (max-width: 768px) {
   .summary-card {
-    width: 100%;
+    width: 305px;
   }
 
   .chart-legend-container {
