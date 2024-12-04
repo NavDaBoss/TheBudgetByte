@@ -1,5 +1,10 @@
 # Backend
- The `backend` folder contains source code that directly interacts with our Firebase backend through TypeScript API calls. 
+
+## Overview
+
+The `backend` folder contains source code that directly interacts with our Firebase backend through TypeScript API calls.
+
+## Files
 
 ## fetchProfileData.ts
 

@@ -4,6 +4,7 @@
 
 - [Overview](#overview)
 - [Components](#components)
+  - [Navbar](#navbar)
   - [Summary](#summary)
   - [Receipt](#receipt)
 - [Usage](#usage)
@@ -19,6 +20,13 @@ These components include chart visualizations, food group breakdowns,
 and functions for adding, updating, and deleting grocery items.
 
 ## Components
+
+### `Navbar.tsx`
+
+The `Navbar` component is responsible for display the navbar at the top of all of the pages.
+It allows the user to navigate to the dashboard, analytics, and profile as well as logging out.
+It uses a boolean and CSS to denote which page the user is currently on in a sleek manner.
+It collapses into a hamburger and vertical navbar (if clicked) to achieve mobile responsiveness.
 
 ### `Summary.tsx`
 
@@ -82,8 +90,5 @@ The `Summary` component is also used in the `Profile` page to render a user's
 overall food group breakdown and total spending.
 
 ```tsx
-<Summary
-  data={foodGroupSummary.foodGroups}
-  totalCost={totalAmount}
-/>
+<Summary data={foodGroupSummary.foodGroups} totalCost={totalAmount} />
 ```
