@@ -1,5 +1,6 @@
 # Backend
- The `backend` folder contains source code that directly interacts with our Firebase backend through TypeScript API calls. 
+
+The `backend` folder contains source code that directly interacts with our Firebase backend through TypeScript API calls.
 
 ## fetchProfileData.ts
 
@@ -67,7 +68,7 @@ type OpenAIResponse = {
 };
 ```
 
-Params: 
+Params:
 
 - apiResponse: OpenAIResponse
 - confirmedDate: string
@@ -85,4 +86,3 @@ submittedTimestamp: timestamp
 ```
 
 It then adds a subcollection with documents that contain GroceryItem.
-
