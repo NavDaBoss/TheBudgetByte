@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app';
+import { initializeApp, FirebaseApp } from 'firebase/app';
 import {
   getAuth,
   GoogleAuthProvider,
@@ -10,11 +10,20 @@ import {
   updateProfile,
   sendPasswordResetEmail,
 } from 'firebase/auth';
-import { getFirestore, doc, setDoc } from 'firebase/firestore'; // Firestore
-import { getStorage } from 'firebase/storage';
+import { Firestore, getFirestore, doc, setDoc } from 'firebase/firestore'; // Firestore
+import { getStorage, Storage } from 'firebase/storage';
+
+interface FirebaseConfig {
+  apiKey: string;
+  authDomain: string;
+  projectId: string;
+  storageBucket: string;
+  messagingSenderId: string;
+  appId: string;
+}
 
 // Your web app's Firebase configuration
-export const firebaseConfig = {
+export const firebaseConfig: FirebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
@@ -24,13 +33,13 @@ export const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const app: FirebaseApp = initializeApp(firebaseConfig);
+const auth: Auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-const db = getFirestore(app); // Initialize Firestore
+const db: Firestore = getFirestore(app); // Initialize Firestore
 
 // Function to save user data in Firestore
-const saveUserToFirestore = async (user) => {
+const saveUserToFirestore = async (user: firebase.User): Promise<void> => {
   await setDoc(doc(db, 'users', user.uid), {
     uid: user.uid,
     displayName: user.displayName || 'Anonymous',
@@ -39,7 +48,7 @@ const saveUserToFirestore = async (user) => {
   });
 };
 
-export const storage = getStorage(app);
+export const storage: Storage = getStorage(app);
 export {
   auth,
   provider,
