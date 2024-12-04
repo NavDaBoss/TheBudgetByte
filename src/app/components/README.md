@@ -94,6 +94,7 @@ overall food group breakdown and total spending.
 ```
 
 ### Example usage of OcrUploadButton
+
 ```tsx
 import React from 'react';
 import OcrUploadButton from './OcrUploadButton';
