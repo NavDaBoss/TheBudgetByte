@@ -1,19 +1,32 @@
-import { useMemo } from 'react';
+import { useMemo, FC } from 'react';
 import { Doughnut, Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 
 import '../styles/Summary.css';
 
-const Summary = ({ data, totalCost }) => {
-  const colorMap = {
-    Fruits: '#ed1c24',
-    Grains: '#fcd112',
-    Vegetables: '#15be53',
-    Dairy: '#42cafd',
-    Protein: '#9d44b5',
-    Uncategorized: '#000000',
-  };
+interface FoodGroupData {
+  type: string;
+  quantity: number;
+  totalCost: number;
+  pricePercentage: number;
+}
 
+interface SummaryProps {
+  data: FoodGroupData[];
+  totalCost: number;
+}
+
+const colorMap: Record<string, string> = {
+  Fruits: '#ed1c24',
+  Grains: '#fcd112',
+  Vegetables: '#15be53',
+  Dairy: '#42cafd',
+  Protein: '#9d44b5',
+  Uncategorized: '#000000',
+};
+
+const Summary: FC<SummaryProps> = ({ data, totalCost }) => {
+  // Transform and sort data for charts
   const pieData = useMemo(
     () =>
       data
@@ -28,6 +41,7 @@ const Summary = ({ data, totalCost }) => {
     [data],
   );
 
+  // Data and configuration for the doughnut chart
   const donutChartData = {
     labels: pieData.map((item) => item.label),
     datasets: [
@@ -56,6 +70,7 @@ const Summary = ({ data, totalCost }) => {
     },
   };
 
+  // Data and configuration for the bar chart
   const barChartData = {
     labels: pieData.map((item) => item.label),
     datasets: [

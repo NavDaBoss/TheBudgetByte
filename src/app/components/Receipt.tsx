@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, FC } from 'react';
 
 import OcrUploadButton from '../components/OcrUploadButton';
 import '../styles/Receipt.css';
@@ -13,14 +13,68 @@ import {
 } from '../backend/updateYearlyData';
 import { FoodTypes } from '../backend/yearlyOverviewInterface';
 
-const foodGroupOptions = ['Grains', 'Vegetables', 'Fruits', 'Protein', 'Dairy'];
+interface GroceryItem {
+  id: string;
+  itemName: string;
+  itemPrice: number;
+  foodGroup: FoodTypes;
+  quantity: number;
+}
 
-const ReceiptHead = ({ sortColumn, toggleAddForm }) => {
-  const [sortField, setSortField] = useState('');
-  const [order, setOrder] = useState('asc');
+interface ReceiptProps {
+  groceries: GroceryItem[];
+  onUpload: () => void;
+  onUpdate: (
+    id: string,
+    fieldName: keyof GroceryItem,
+    value: any,
+  ) => Promise<void>;
+  onAdd: (item: Omit<GroceryItem, 'id'>) => void;
+  onDelete: (id: string) => void;
+  receiptDate: string;
+}
 
-  const handleSortChange = (accessor) => {
-    let sortOrder = 'asc';
+interface ReceiptHeadProps {
+  sortColumn: (field: string, order: 'asc' | 'desc' | 'none') => void;
+  toggleAddForm: () => void;
+}
+
+interface ReceiptRowProps {
+  item: GroceryItem;
+  onUpdate: (
+    id: string,
+    fieldName: keyof GroceryItem,
+    value: any,
+  ) => Promise<void>;
+  onDelete: (id: string) => void;
+  receiptDate: string;
+}
+
+interface AddItemFormProps {
+  onClose: () => void;
+  onAdd: (item: Omit<GroceryItem, 'id'>) => void;
+  receiptDate: string;
+}
+
+interface SearchBarProps {
+  filterText: string;
+  onFilterTextChange: (text: string) => void;
+}
+
+const foodGroupOptions: FoodTypes[] = [
+  'Grains',
+  'Vegetables',
+  'Fruits',
+  'Protein',
+  'Dairy',
+];
+
+const ReceiptHead: FC<ReceiptHeadProps> = ({ sortColumn, toggleAddForm }) => {
+  const [sortField, setSortField] = useState<string>('');
+  const [order, setOrder] = useState<'asc' | 'desc' | 'none'>('asc');
+
+  const handleSortChange = (accessor: string) => {
+    let sortOrder: 'asc' | 'desc' | 'none' = 'asc';
     if (accessor === sortField) {
       sortOrder = order === 'asc' ? 'desc' : order === 'desc' ? 'none' : 'asc';
     }
@@ -29,7 +83,7 @@ const ReceiptHead = ({ sortColumn, toggleAddForm }) => {
     sortColumn(accessor, sortOrder);
   };
 
-  const getSortArrowStyle = (accessor) => {
+  const getSortArrowStyle = (accessor: string) => {
     if (sortField !== accessor)
       return { borderTopColor: 'black', transform: 'rotate(0deg)' };
 
@@ -111,16 +165,78 @@ const ReceiptHead = ({ sortColumn, toggleAddForm }) => {
   );
 };
 
-const ReceiptRow = ({ item, onUpdate, onDelete, receiptDate }) => {
-  const [editableItem, setEditableItem] = useState(item);
-  const [isEditing, setIsEditing] = useState(null);
-  const [isHovered, setIsHovered] = useState(null);
+const ReceiptRow: FC<ReceiptRowProps> = ({
+  item,
+  onUpdate,
+  onDelete,
+  receiptDate,
+}) => {
+  const [editableItem, setEditableItem] = useState<GroceryItem>(item);
+  const [isEditing, setIsEditing] = useState<keyof GroceryItem | null>(null);
+  const [isHovered, setIsHovered] = useState<keyof GroceryItem | null>(null);
   const [activeField, setActiveField] = useState(null);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement | HTMLSelectElement>(null);
 
   useEffect(() => {
     setEditableItem(item);
   }, [item]);
+
+  const handleDelete = () => {
+    updateOverviewWhenFoodGroupChanged(
+      receiptDate,
+      /* old food group */ item.foodGroup,
+      /* new food group */ 'Uncategorized' as FoodTypes,
+      item.itemPrice * item.quantity,
+      item.quantity,
+    );
+    onDelete(item.id);
+  };
+
+  const handleSelect = async (fieldName: keyof GroceryItem, value: any) => {
+    if (editableItem[fieldName] !== value) {
+      try {
+        await onUpdate(item.id, fieldName, value);
+        updateOverviewWhenFoodGroupChanged(
+          receiptDate,
+          item.foodGroup,
+          value,
+          item.itemPrice * item.quantity,
+          item.quantity,
+        );
+        setEditableItem((prev) => ({
+          ...prev,
+          [fieldName]: value,
+        }));
+      } catch (error) {
+        console.error(`Failed to update ${fieldName}:`, error);
+      }
+    }
+  };
+
+  const handleInput = (fieldName: keyof GroceryItem, value: any) => {
+    let updatedValue = value;
+    if (fieldName === 'quantity') {
+      if (value === '') {
+        updatedValue = '';
+      } else {
+        updatedValue = Math.min(99, parseInt(value) || 0);
+      }
+    } else if (fieldName === 'itemPrice') {
+      if (value == '') {
+        updatedValue = '';
+      } else if (/^\d*\.?\d{0,2}$/.test(value)) {
+        const floatValue = parseFloat(value);
+        updatedValue = floatValue > 999.99 ? 999.99 : floatValue;
+      }
+    } else if (fieldName === 'itemName') {
+      updatedValue = value.slice(0, 50).toUpperCase();
+    }
+
+    setEditableItem((prev) => ({
+      ...prev,
+      [fieldName]: updatedValue,
+    }));
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -156,64 +272,6 @@ const ReceiptRow = ({ item, onUpdate, onDelete, receiptDate }) => {
 
   const handleEdit = (field) => {
     setIsEditing(field);
-  };
-
-  const handleDelete = () => {
-    updateOverviewWhenFoodGroupChanged(
-      receiptDate,
-      /* old food group */ item.foodGroup,
-      /* new food group */ 'Uncategorized' as FoodTypes,
-      item.itemPrice * item.quantity,
-      item.quantity,
-    );
-    onDelete(item.id);
-  };
-
-  const handleInput = (fieldName, value) => {
-    let updatedValue = value;
-
-    if (fieldName === 'quantity') {
-      if (value === '') {
-        updatedValue = '';
-      } else {
-        updatedValue = Math.min(99, parseInt(value) || 0);
-      }
-    } else if (fieldName === 'itemPrice') {
-      if (value == '') {
-        updatedValue = '';
-      } else if (/^\d*\.?\d{0,2}$/.test(value)) {
-        const floatValue = parseFloat(value);
-        updatedValue = floatValue > 999.99 ? 999.99 : floatValue;
-      }
-    } else if (fieldName === 'itemName') {
-      updatedValue = value.slice(0, 50).toUpperCase();
-    }
-
-    setEditableItem((prev) => ({
-      ...prev,
-      [fieldName]: updatedValue,
-    }));
-  };
-
-  const handleSelect = async (fieldName, value) => {
-    if (editableItem[fieldName] !== value) {
-      try {
-        await onUpdate(item.id, fieldName, value);
-        updateOverviewWhenFoodGroupChanged(
-          receiptDate,
-          item.foodGroup,
-          value,
-          item.itemPrice * item.quantity,
-          item.quantity,
-        );
-        setEditableItem((prev) => ({
-          ...prev,
-          [fieldName]: value,
-        }));
-      } catch (error) {
-        console.error(`Failed to update ${fieldName}:`, error);
-      }
-    }
   };
 
   const handleKeyDown = async (e, fieldName) => {
@@ -367,7 +425,7 @@ const ReceiptRow = ({ item, onUpdate, onDelete, receiptDate }) => {
   );
 };
 
-const SearchBar = ({ filterText, onFilterTextChange }) => {
+const SearchBar: FC<SearchBarProps> = ({ filterText, onFilterTextChange }) => {
   return (
     <div className="search-bar-container">
       <input
@@ -381,7 +439,7 @@ const SearchBar = ({ filterText, onFilterTextChange }) => {
   );
 };
 
-const AddItemForm = ({ onClose, onAdd, receiptDate }) => {
+const AddItemForm: FC<AddItemFormProps> = ({ onClose, onAdd, receiptDate }) => {
   const [newItem, setNewItem] = useState({
     itemName: '',
     quantity: 1,
@@ -523,7 +581,7 @@ const AddItemForm = ({ onClose, onAdd, receiptDate }) => {
   );
 };
 
-const Receipt = ({
+const Receipt: FC<ReceiptProps> = ({
   groceries,
   onUpload,
   onUpdate,
@@ -531,9 +589,9 @@ const Receipt = ({
   onDelete,
   receiptDate,
 }) => {
-  const [tableData, setTableData] = useState(groceries);
-  const [filterText, setFilterText] = useState('');
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [tableData, setTableData] = useState<GroceryItem[]>(groceries);
+  const [filterText, setFilterText] = useState<string>('');
+  const [showAddForm, setShowAddForm] = useState<boolean>(false);
 
   const toggleAddForm = () => {
     setShowAddForm((prev) => !prev);
@@ -543,7 +601,10 @@ const Receipt = ({
     setTableData(groceries);
   }, [groceries]);
 
-  const sortColumn = (sortField, sortOrder) => {
+  const sortColumn = (
+    sortField: keyof GroceryItem,
+    sortOrder: 'asc' | 'desc' | 'none',
+  ) => {
     if (sortOrder === 'none') {
       setTableData(groceries);
       return;
@@ -551,18 +612,18 @@ const Receipt = ({
 
     if (sortField) {
       const sorted = [...groceries].sort((a, b) => {
-        console.log(typeof a[sortField], typeof b[sortField]);
-        if (typeof b[sortField] === 'number') {
-          return (b[sortField] - a[sortField]) * (sortOrder === 'asc' ? 1 : -1);
-        }
-        a = a[sortField].toLowerCase();
-        b = b[sortField].toLowerCase();
+        const valA = a[sortField];
+        const valB = b[sortField];
 
-        return (
-          a.localeCompare(b, 'en', {
-            numeric: true,
-          }) * (sortOrder === 'asc' ? 1 : -1)
-        );
+        if (typeof valA === 'string' && typeof valB === 'string') {
+          return (
+            valA.localeCompare(valB, 'en', { numeric: true }) *
+            (sortOrder === 'asc' ? 1 : -1)
+          );
+        } else if (typeof valA === 'number' && typeof valB === 'number') {
+          return (valA - valB) * (sortOrder === 'asc' ? 1 : -1);
+        }
+        return 0;
       });
       setTableData(sorted);
     }
