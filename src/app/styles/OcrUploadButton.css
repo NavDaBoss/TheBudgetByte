@@ -1,32 +1,32 @@
 .uploadButton {
-  background-color: var(--green); /* Green background */
+  background-color: var(--green) !important; /* Green background */
 }
 
 .dialogFileButton {
-  background-color: var(--green); /* Green background */
+  background-color: var(--green) !important; /* Green background */
 }
 
 .dialogParseButton {
-  color: #000000;
+  color: #000000 !important;
 }
 
 .dialogCloseButton {
-  color: #000000;
+  color: #000000 !important;
 }
 
 .dialogConfirmButton {
-  color: #000000;
+  color: #000000 !important;
 }
 
 .ocrRequirements {
-  color: #808080;
-  font-size: 0.9rem;
-  margin-bottom: 3%;
+  color: #808080 !important;
+  font-size: 0.9rem !important;
+  margin-bottom: 3% !important;
 }
 
 .listOcrRequirements {
-  color: #808080;
-  font-size: 0.9rem;
-  margin-left: 2.75%;
-  margin-bottom: 2%;
+  color: #808080 !important;
+  font-size: 0.9rem !important;
+  margin-left: 2.75% !important;
+  margin-bottom: 2% !important;
 }

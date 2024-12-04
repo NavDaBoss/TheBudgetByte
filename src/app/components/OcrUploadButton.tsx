@@ -202,6 +202,7 @@ export default function OcrUploadButton({
       <Button
         variant="contained"
         onClick={handleDialogOpen}
+        // className="uploadButton"
         className="uploadButton"
       >
         Upload Receipt
