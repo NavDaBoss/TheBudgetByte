@@ -27,7 +27,12 @@ export interface Receipt {
   receiptBalance: number;
 }
 
-// Add a new grocery item to a receipt's subcollection
+/**
+ * Adds a new grocery item to a receipt's subcollection.
+ * @param {string} receiptID - The ID of the receipt.
+ * @param {GroceryItem} groceryData - The grocery item data to add.
+ * @return {Promise<string>} The ID of the addded grocery document.
+ */
 export const addGroceryItem = async (
   receiptID: string,
   groceryData: GroceryItem,
@@ -43,7 +48,12 @@ export const addGroceryItem = async (
   }
 };
 
-// Delete a grocery item from a receipt's subcollection
+/**
+ * Deletes a grocery item from a receipt's subcollection.
+ * @param {string} receiptID - The ID of the receipt.
+ * @param {string} groceryID - The ID of the grocery item to delete.
+ * @return {Promise<void>}
+ */
 export const deleteGroceryItem = async (
   receiptID: string,
   groceryID: string,
@@ -64,7 +74,11 @@ export const deleteGroceryItem = async (
   }
 };
 
-// Fetch the most recent receipt for a user
+/**
+ * Fetches the most recent receipt for a user.
+ * @param {string} userID - The ID of the user.
+ * @return {Promise<QuerySnapshot>} A query snapshot containing the receipt data.
+ **/
 export const getMostRecentReceipt = async (
   userID: string,
 ): Promise<QuerySnapshot> => {
@@ -83,12 +97,17 @@ export const getMostRecentReceipt = async (
   }
 };
 
-// Fetch the groceries subcollection for a specific receipt
+/**
+ * Fetches the groceries subcollection for a specific receipt.
+ * @param {string} receiptID - The ID of the receipt.
+ * @return {Promise<QuerySnapshot>} A query snapshot containing the grocery
+ * items.
+ */
 export const getGroceriesSubcollection = async (
-  receiptId: string,
+  receiptID: string,
 ): Promise<QuerySnapshot> => {
   try {
-    const groceriesRef = collection(db, 'receiptData', receiptId, 'groceries');
+    const groceriesRef = collection(db, 'receiptData', receiptID, 'groceries');
     return await getDocs(groceriesRef); // Returns a query snapshot
   } catch (error) {
     console.error('Error fetching groceries subcollection:', error);
@@ -98,10 +117,11 @@ export const getGroceriesSubcollection = async (
 
 /**
  * Updates a specific field in a grocery document for a given receipt.
- * @param receiptID - The ID of the receipt document.
- * @param groceryID - The ID of the grocery document to update.
- * @param fieldName - The field to update.
- * @param value - The new value for the field.
+ * @param {string} receiptID - The ID of the receipt document.
+ * @param {string} groceryID - The ID of the grocery document to update.
+ * @param {string} fieldName - The name of the field to update.
+ * @param {*} value - The new value for the field.
+ * @return {Promise<void>}
  */
 export const updateGroceryField = async (
   receiptID: string,
@@ -128,8 +148,9 @@ export const updateGroceryField = async (
 
 /**
  * Updates the total balance of a receipt.
- * @param receiptID - The ID of the receipt document.
- * @param totalCost - The new total cost to set for the receipt.
+ * @param {string} receiptID - The ID of the receipt document.
+ * @param {number} totalCost - The new total cost to set for the receipt.
+ * @return {Promise<void>}
  */
 export const updateReceiptBalance = async (
   receiptID: string,

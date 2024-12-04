@@ -27,7 +27,7 @@ interface ReceiptProps {
   onUpdate: (
     id: string,
     fieldName: keyof GroceryItem,
-    value: any,
+    value: string | number,
   ) => Promise<void>;
   onAdd: (item: Omit<GroceryItem, 'id'>) => void;
   onDelete: (id: string) => void;
@@ -44,7 +44,7 @@ interface ReceiptRowProps {
   onUpdate: (
     id: string,
     fieldName: keyof GroceryItem,
-    value: any,
+    value: string | number,
   ) => Promise<void>;
   onDelete: (id: string) => void;
   receiptDate: string;
@@ -192,7 +192,10 @@ const ReceiptRow: FC<ReceiptRowProps> = ({
     onDelete(item.id);
   };
 
-  const handleSelect = async (fieldName: keyof GroceryItem, value: any) => {
+  const handleSelect = async (
+    fieldName: keyof GroceryItem,
+    value: string | number,
+  ) => {
     if (editableItem[fieldName] !== value) {
       try {
         await onUpdate(item.id, fieldName, value);
@@ -213,8 +216,11 @@ const ReceiptRow: FC<ReceiptRowProps> = ({
     }
   };
 
-  const handleInput = (fieldName: keyof GroceryItem, value: any) => {
-    let updatedValue = value;
+  const handleInput = (
+    fieldName: keyof GroceryItem,
+    value: string | number,
+  ) => {
+    let updatedValue: string | number = value;
     if (fieldName === 'quantity') {
       if (value === '') {
         updatedValue = '';

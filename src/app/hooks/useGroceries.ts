@@ -14,12 +14,12 @@ export interface GroceryItem {
   quantity: number;
 }
 
-interface Receipt {
-  receiptBalance: number;
-  receiptDate: number;
-  id: string;
-}
-
+/**
+ * Custom hook for managing groceries and receipt data.
+ * @param {string} userID - The ID of the user.
+ * @return {Object} Object containing grocery and receipt-related methods and
+ * data.
+ */
 const useGroceries = (userID: string) => {
   const [groceries, setGroceries] = useState<GroceryItem[]>([]);
   const [receiptBalance, setReceiptBalance] = useState<number>(0);
@@ -28,15 +28,18 @@ const useGroceries = (userID: string) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  /** Adds a new grocery item to the current receipt.
+  /**
+   * Adds a new grocery item to the current receipt.
    * Updates the local state to include the new item.
+   * @param {Omit<GroceryItem, 'id'>} newItem - The new grocery item to add.
+   * @return {Promise<void>}
    */
   const addGrocery = async (newItem: Omit<GroceryItem, 'id'>) => {
     if (!receiptID) return;
     try {
       const groceryID = await addGroceryItem(receiptID, newItem);
       setGroceries((prev) => [...prev, { ...newItem, id: groceryID }]);
-    } catch (error) {
+    } catch {
       setError('Failed to add grocery item');
     }
   };
@@ -44,13 +47,15 @@ const useGroceries = (userID: string) => {
   /**
    * Deletes a grocery item from the current receipt.
    * Updates the local state to exclude the deleted item.
+   * @param {string} groceryID - The ID of the grocery item to delete.
+   * @return {Promise<void>}
    */
   const deleteGrocery = async (groceryID: string) => {
     if (!receiptID) return;
     try {
       await deleteGroceryItem(receiptID, groceryID);
       setGroceries((prev) => prev.filter((item) => item.id !== groceryID));
-    } catch (error) {
+    } catch {
       setError('Failed to delete grocery item');
     }
   };
@@ -58,6 +63,7 @@ const useGroceries = (userID: string) => {
   /**
    * Fetches the most recent receipt for the user and its associated groceries.
    * Updates state with the receipt data and groceries.
+   * @return {Promise<void>}
    */
   const fetchMostRecentReceipt = useCallback(async () => {
     if (userID) {
@@ -97,9 +103,9 @@ const useGroceries = (userID: string) => {
 
   /**
    * Updates a single field of a grocery item in the local state.
-   * @param groceryID - The ID of the grocery item to update.
-   * @param fieldName - The field to update.
-   * @param value - The new value for the field.
+   * @param {string} groceryID - The ID of the grocery item to update.
+   * @param {string} fieldName - The field to update.
+   * @param {*} value - The new value for the field.
    * */
   const updateGroceryItem = (
     groceryID: string,
@@ -116,7 +122,7 @@ const useGroceries = (userID: string) => {
   /**
    * Replaces the current groceries list with a new list.
    * Useful for batch updates or refreshing the state.
-   * @param updatedGroceries: The new groceries list.
+   * @param {GroceryItem[]} updatedGroceries - The new groceries list.
    */
   const setGroceriesState = (updatedGroceries: GroceryItem[]) => {
     setGroceries(updatedGroceries);
