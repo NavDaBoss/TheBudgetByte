@@ -152,7 +152,6 @@ export default function OcrUploadButton({
 
     try {
       const docRef = await addDoc(collection(db, 'receiptData'), {
-        // groceryStore: apiResponse.groceryStore,
         receiptDate: confirmedDate, // Use the confirmed date
         receiptBalance: parseFloat(
           apiResponse.groceries
@@ -191,7 +190,6 @@ export default function OcrUploadButton({
       console.error('Error saving to Firestore:', error);
     } finally {
       setIsConfirmingDate(false);
-      alert('Data saved successfully!');
       handleDialogClose();
     }
   };
@@ -202,7 +200,6 @@ export default function OcrUploadButton({
       <Button
         variant="contained"
         onClick={handleDialogOpen}
-        // className="uploadButton"
         className="uploadButton"
       >
         Upload Receipt
