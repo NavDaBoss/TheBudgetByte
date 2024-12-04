@@ -1,6 +1,9 @@
-# fetchProfileData.ts
+# Backend
+ The `backend` folder contains source code that directly interacts with our Firebase backend through TypeScript API calls. 
 
-## fetchYearlyOverviewData()
+## fetchProfileData.ts
+
+### fetchYearlyOverviewData()
 
 Params:
 
@@ -12,7 +15,7 @@ This function accepts three functions that are used to update the states that st
 
 In terms of the core functionality, it queries through each year (for the totals and receipt count) in the YearlyOverview Data and queries each month (to calculate the lifetime food group summary data) within each year to fetch the relevant data.
 
-## updateProfilePicture()
+### updateProfilePicture()
 
 Params:
 
@@ -22,7 +25,7 @@ Params:
 
 This function accepts three parameters: the file that contains the new profile picture, the display name of the user, and the function that toggles whether the user is currently editing the profile pic or not. It updates the user's profile picture in Firebase Storage and Firestore through a backend API call. The display name is needed to associate the new profile picture with that user.
 
-## updateDisplayName()
+### updateDisplayName()
 
 Params:
 
@@ -32,7 +35,7 @@ Params:
 
 This function accepts three parameters: the display name of the user, the function that toggles whether the user is currently editing their name or not, and the function that sets the error message (if necessary). First, it validates the new display name to ensure that it doesn't exceed twenty characters. Then, it updates the user's display name in Firebase Authentication and Firestore through a backend API call.
 
-## resetUserPassword()
+### resetUserPassword()
 
 Params:
 
