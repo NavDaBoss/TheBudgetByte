@@ -11,7 +11,7 @@ import {
   FoodGroupInfo,
   MonthlyData,
   YearlyOverview,
-} from '../backend/yearlyOverviewInterface';
+} from '../backend/yearlyOverview/yearlyOverviewInterface';
 
 // Displays the months before and after
 const getMonthsToDisplay = (monthlyData: { [month: string]: MonthlyData }) => {

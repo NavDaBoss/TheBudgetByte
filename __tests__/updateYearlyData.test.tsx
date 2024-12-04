@@ -3,9 +3,9 @@ import {
   updateOverviewWhenPriceChanged,
   updateOverviewWhenQuantityChanged,
   updateUsersYearlyOverview,
-} from '@/app/backend/updateYearlyData';
+} from '@/app/backend/yearlyOverview/updateYearlyData';
 import { updateDoc } from 'firebase/firestore';
-import { FoodTypes } from '@/app/backend/yearlyOverviewInterface';
+import { FoodTypes } from '@/app/backend/yearlyOverview/yearlyOverviewInterface';
 
 const mockValidGroceries = [
   {
@@ -111,9 +111,9 @@ let populatedOverviewTemplate = {
 };
 
 // Mock dependencies
-jest.mock('../src/app/backend/updateYearlyData', () => {
+jest.mock('../src/app/backend/yearlyOverview/updateYearlyData', () => {
   const actualModule = jest.requireActual(
-    '../src/app/backend/updateYearlyData',
+    '../src/app/backend/yearlyOverview/updateYearlyData',
   );
   return {
     ...actualModule,

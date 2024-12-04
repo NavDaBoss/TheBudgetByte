@@ -15,7 +15,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
-import { updateUsersYearlyOverview } from '@/app/backend/updateYearlyData';
+import { updateUsersYearlyOverview } from '@/app/backend/yearlyOverview/updateYearlyData';
 
 // MUI Date Picker
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';

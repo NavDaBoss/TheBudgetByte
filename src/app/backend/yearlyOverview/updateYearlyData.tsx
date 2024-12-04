@@ -1,9 +1,9 @@
 import {
   groceryItemSchema,
   groceryReceiptExtraction,
-} from '../api/openai/route';
+} from '../../api/openai/route';
 import { z } from 'zod';
-import { auth, db } from '../firebase/firebaseConfig';
+import { auth, db } from '../../firebase/firebaseConfig';
 import {
   collection,
   getDocs,
@@ -19,7 +19,7 @@ import {
   MonthlyData,
   YearlyOverview,
   YearlyOverviewData,
-} from '../backend/yearlyOverviewInterface';
+} from './yearlyOverviewInterface';
 
 type GroceryItem = z.infer<typeof groceryItemSchema>;
 type ReceiptDate = z.infer<typeof groceryReceiptExtraction>['receiptDate'];
