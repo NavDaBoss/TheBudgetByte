@@ -54,6 +54,14 @@ and inline editing of grocery items.
 - `onDelete`: Function to delete a grocery item.
 - `receiptDate`: The date of the current receipt.
 
+### `OcrUploadButton.tsx`
+
+The `OcrUploadButton` component handles uploading a receipt image, using Tesseract OCR to extract text from the image, calling `api/openai` to extract valuable information from the raw OCR text, and finally saving the extracted data to Firestore. It uses MUI Dialog and Date Picker components for a user-friendly interface.
+
+#### Props
+
+- `onUploadComplete`: An optional callback function that is called after the receipt upload and save process is successfully completed.
+
 ## Usage
 
 ### Example usage in `Dashboard` page:
@@ -91,4 +99,24 @@ overall food group breakdown and total spending.
 
 ```tsx
 <Summary data={foodGroupSummary.foodGroups} totalCost={totalAmount} />
+```
+
+### Example usage of OcrUploadButton
+
+```tsx
+import React from 'react';
+import OcrUploadButton from './OcrUploadButton';
+
+export default function App() {
+  const handleUploadComplete = () => {
+    console.log('Receipt upload and save completed!');
+  };
+
+  return (
+    <div>
+      <h1>Upload Your Receipt</h1>
+      <OcrUploadButton onUploadComplete={handleUploadComplete} />
+    </div>
+  );
+}
 ```

@@ -3,8 +3,7 @@
 import '../styles/OcrUploadButton.css';
 import React, { useState } from 'react';
 import Tesseract from 'tesseract.js';
-import { db, auth } from '../firebase/firebaseConfig'; // Import Firestore config
-import { collection, addDoc, updateDoc } from 'firebase/firestore'; // Import Firestore methods
+import { auth } from '../firebase/firebaseConfig'; // Import Firestore config
 
 // MUI
 import Button from '@mui/material/Button';
@@ -16,6 +15,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import { updateUsersYearlyOverview } from '@/app/backend/yearlyOverview/updateYearlyData';
+import { saveReceiptDataToFirestore } from '@/app/backend/ocrUpload';
 
 // MUI Date Picker
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -40,6 +40,11 @@ type OpenAIResponse = {
   // groceryStore: string;
   receiptDate: string;
   groceries: GroceryItem[];
+};
+
+// Ensure the currentUser type includes `uid`
+type FirebaseUser = {
+  uid: string;
 };
 
 // For my MUI Upload Button
@@ -148,39 +153,18 @@ export default function OcrUploadButton({
   };
 
   const handleSaveToFirestore = async () => {
-    if (!apiResponse || !confirmedDate) return;
+    if (!apiResponse || !confirmedDate || !selectedImage || !currentUser) {
+      console.error('Missing required parameters for saving to Firestore.');
+      return;
+    }
 
     try {
-      const docRef = await addDoc(collection(db, 'receiptData'), {
-        // groceryStore: apiResponse.groceryStore,
-        receiptDate: confirmedDate, // Use the confirmed date
-        receiptBalance: parseFloat(
-          apiResponse.groceries
-            .reduce((sum, item) => sum + item.totalPrice, 0)
-            .toFixed(2),
-        ),
-        submittedTimestamp: new Date(),
-        fileName: selectedImage?.name,
-        userID: currentUser?.uid,
-      });
-
-      await updateDoc(docRef, { receiptID: docRef.id });
-      console.log('OCR result saved to Firestore');
-      console.log('docRef.id = ', docRef.id);
-
-      // Reference 'groceries' subcollection to main document
-      const groceriesSubCollectionRef = collection(docRef, 'groceries');
-
-      // Loop through each dictionary in groceries
-      apiResponse.groceries.forEach(async (item: GroceryItem) => {
-        await addDoc(groceriesSubCollectionRef, {
-          itemName: item.itemName,
-          itemPrice: item.itemPrice.toFixed(2),
-          quantity: item.quantity,
-          foodGroup: item.foodGroup,
-          totalPrice: item.totalPrice.toFixed(2),
-        });
-      });
+      await saveReceiptDataToFirestore(
+        apiResponse,
+        confirmedDate,
+        selectedImage,
+        (currentUser as FirebaseUser).uid,
+      );
 
       updateUsersYearlyOverview(apiResponse.groceries, confirmedDate);
 
@@ -191,7 +175,6 @@ export default function OcrUploadButton({
       console.error('Error saving to Firestore:', error);
     } finally {
       setIsConfirmingDate(false);
-      alert('Data saved successfully!');
       handleDialogClose();
     }
   };
@@ -202,7 +185,6 @@ export default function OcrUploadButton({
       <Button
         variant="contained"
         onClick={handleDialogOpen}
-        // className="uploadButton"
         className="uploadButton"
       >
         Upload Receipt

@@ -52,3 +52,41 @@ Params:
 - router: AppInstanceRouter
 
 This function accepts six parameters: the string that contains the user's current password, the string that contains the user's desired new password, the string that contains the confirmed password (which should match the new password), the function that sets an error message (if necessary), the function that sets a success message, and the NextJS navigation router. This function first validates the new password (ensuring it is at least six characters long and matches the confirmation password) and then validates the current password to ensure that the user is the one that is making this request. It then makes a backend API call to Firebase to update the password, if successful. Lastly, it redirects the user back to the app after two seconds.
+
+## ocrUpload.ts
+
+### saveReceiptDataToFirestore()
+
+```
+type GroceryItem = {
+  itemName: string;
+  itemPrice: number;
+  quantity: number;
+  foodGroup: string;
+  totalPrice: number;
+};
+
+type OpenAIResponse = {
+  receiptDate: string;
+  groceries: GroceryItem[];
+};
+```
+
+Params:
+
+- apiResponse: OpenAIResponse
+- confirmedDate: string
+- selectedImage: File
+- currentUserUid: string
+
+This functions takes in the above parameters. It first creates a main document in the receiptData collection with the fields:
+
+```
+fileName: string
+receiptBalance: number
+receiptDate: string
+receiptID: string
+submittedTimestamp: timestamp
+```
+
+It then adds a subcollection with documents that contain GroceryItem.
