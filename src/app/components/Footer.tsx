@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
       </div>
       <div>
         {/* Contact Information */}
-        <p>Contact Us: BudgetByte@budgetbyte.com</p>
+        <p>Contact Us: support@budgetbyte.com</p>
       </div>
     </footer>
   );
