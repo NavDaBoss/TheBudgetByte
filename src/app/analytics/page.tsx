@@ -11,7 +11,10 @@ import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 
 import Navbar from '../components/Navbar';
 import Summary from '../components/Summary';
-import { YearlyOverview, monthNames } from '../backend/yearlyOverviewInterface';
+import {
+  YearlyOverview,
+  monthNames,
+} from '../backend/yearlyOverview/yearlyOverviewInterface';
 import { useRouter } from 'next/navigation';
 import { auth, db } from '../firebase/firebaseConfig';
 import { collection, query, where, getDocs } from 'firebase/firestore';

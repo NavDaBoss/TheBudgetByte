@@ -10,8 +10,8 @@ import {
   updateOverviewWhenFoodGroupChanged,
   updateOverviewWhenPriceChanged,
   updateOverviewWhenQuantityChanged,
-} from '../backend/updateYearlyData';
-import { FoodTypes } from '../backend/yearlyOverviewInterface';
+} from '../backend/yearlyOverview/updateYearlyData';
+import { FoodTypes } from '../backend/yearlyOverview/yearlyOverviewInterface';
 
 interface GroceryItem {
   id: string;
