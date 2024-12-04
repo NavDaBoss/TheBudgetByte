@@ -71,6 +71,7 @@ export const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({
     return dataset ? dataset.borderColor : 'rgba(0, 0, 0, 1)';
   };
 
+  // Defines how the graph looks like.
   const options = {
     responsive: true,
     plugins: {
@@ -94,6 +95,7 @@ export const AnalyticsLineGraph: React.FC<AnalyticsLineGraphProps> = ({
     },
   };
 
+  // Handles the feature where you can check/uncheck the legend in the graph
   const handleCheckboxChange = (category: Category) => {
     params.setCategoryLegend((prevState) => ({
       ...prevState,
