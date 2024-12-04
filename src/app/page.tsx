@@ -40,7 +40,7 @@ export default function Home() {
               tracking.
             </p>
             {/* Scan Receipt Button: Redirects to login or receipt scanning page */}
-            <div className='buttonContainer'>
+            <div className="buttonContainer">
               <button className={styles.scanBtn} onClick={navigateToLogin}>
                 Try It Out
               </button>
