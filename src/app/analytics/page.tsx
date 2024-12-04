@@ -50,6 +50,7 @@ const AnalyticsSummary = ({
   );
 };
 
+// The Summary Cards that are at the top of analytics
 const AnalyticsSummaryCard = ({
   yearlyOverview,
   selectedYear,
@@ -139,6 +140,7 @@ const Analytics = () => {
   const [selectedYear, setSelectedYear] = useState('2024');
   const [selectedMonth, setSelectedMonth] = useState('January');
 
+  // Move to backend folder eventually
   useEffect(() => {
     if (!currentUser) {
       router.push('/login');

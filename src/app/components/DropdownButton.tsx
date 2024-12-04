@@ -2,8 +2,8 @@ import { useState } from 'react';
 import '../styles/DropdownButton.css';
 
 interface DropDownProps {
-  selectedValue: string; // Current selected value
-  setSelectedValue: (value: string) => void; // Function to update the selected value
+  selectedValue: string;
+  setSelectedValue: (value: string) => void;
   values: string[]; // Array of values to display in the dropdown
   label: string; // Label for the dropdown
 }

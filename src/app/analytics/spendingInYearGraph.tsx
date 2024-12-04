@@ -77,12 +77,13 @@ const createYearlyMoneySpentGraphParams = (
     return displayedMonths.map((month) => {
       let sum = 0;
       for (const category in categoryLegend) {
+        // Check if category is checkmarked
         if (
           categoryLegend[category] &&
           category !== 'Total' &&
           month in monthlyData
         ) {
-          // Check if category is checkmarked
+          // Sum up the total for the month
           const foodGroup = monthlyData[month].foodGroups.find(
             (group: FoodGroupInfo) => group.type === category,
           );
@@ -143,11 +144,13 @@ const createYearlyMoneySpentGraphParams = (
 
   return graphParams;
 };
+
 interface SpendingInYearGraphProps {
   selectedYear: string;
   yearlyOverview: YearlyOverview | null;
 }
 
+// Currently only graphs spending, but can be adjusted to graph other foodGroup fields as well.
 const SpendingInYearGraph: React.FC<SpendingInYearGraphProps> = ({
   selectedYear,
   yearlyOverview,
@@ -160,6 +163,7 @@ const SpendingInYearGraph: React.FC<SpendingInYearGraphProps> = ({
     Grains: true,
     Dairy: true,
   });
+  // Can't display graph if there is no overview
   const graphParams = yearlyOverview
     ? createYearlyMoneySpentGraphParams(
         selectedYear,
