@@ -67,7 +67,7 @@ const createOrGetYearlyOverview = async () => {
 
 // Get the year from the receipt.
 const getYearFromReceiptDate = (receiptDate: string): string | null => {
-  // Regular expression to match mm/dd/yyyy or mm/dd/yy formats
+  // Regex to match mm/dd/yyyy or mm/dd/yy formats
   const dateRegex = /^(0[1-9]|1[0-2])\/([0-2][0-9]|3[01])\/(\d{2}|\d{4})$/;
 
   const match = receiptDate.match(dateRegex);
@@ -86,7 +86,7 @@ const getYearFromReceiptDate = (receiptDate: string): string | null => {
 
 // Get the month from the receipt.
 const getMonthFromReceiptDate = (receiptDate: string): string | null => {
-  // Regular expression to match mm or m (for single digit months) and extract the month
+  // Regex to match mm or m (for single digit months) and extract the month
   const monthRegex = /^(\d{1,2})\//;
 
   const match = receiptDate.match(monthRegex);
@@ -214,7 +214,7 @@ export const updateUsersYearlyOverview = async (
     ) {
       continue;
     }
-    // Type assertion: Ensure foodGroup is a key in foodGroupsTotalCost.
+
     const foodGroup = grocery.foodGroup as keyof typeof foodGroupsTotalCost;
 
     // Update total cost of the corresponding food group.
@@ -374,6 +374,8 @@ export const updateOverviewWhenPriceChanged = async (
     );
     return;
   }
+  // Adjust the spending by the difference in price, this value can be positive or negative.
+  // Since this is an item price, the quantity must be multipled to it.
   const spending = (newPrice - oldPrice) * quantity;
   foodGroupsTotalCost[foodGroup] = spending;
   yearOverview.totalSpent =
@@ -431,6 +433,9 @@ export const updateOverviewWhenQuantityChanged = async (
     );
     return;
   }
+  // Adjust the spending by the difference in quantity, this value can be positive or negative.
+  // Since this is an item price, the quantity must be multipled to it.
+  // We must all acount for the difference in quantity and update quantity fields.
   const quantityDiff = newQuantity - oldQuantity;
   const spending = price * quantityDiff;
   foodGroupsTotalCost[foodGroup] = spending;

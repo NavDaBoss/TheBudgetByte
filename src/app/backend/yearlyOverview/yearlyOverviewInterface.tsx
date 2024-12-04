@@ -39,6 +39,7 @@ interface MonthlyData {
   foodGroups: FoodGroupInfo[];
 }
 
+// Define the type for the year data
 interface YearlyOverviewData {
   totalReceipts: number;
   totalSpent: number;
@@ -48,6 +49,7 @@ interface YearlyOverviewData {
   };
 }
 
+// Multiple years in the overview
 interface YearlyOverview {
   yearlyOverviewData: {
     [year: string]: YearlyOverviewData;
