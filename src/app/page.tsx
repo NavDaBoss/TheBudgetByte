@@ -41,10 +41,10 @@ export default function Home() {
             </p>
             {/* Scan Receipt Button: Redirects to login or receipt scanning page */}
             <div className="buttonContainer">
-              <button className={styles.scanBtn} onClick={navigateToLogin}>
+              <button className={styles.scanBtn} onClick={navigateToRegister}>
                 Try It Out
               </button>
-              <button className={styles.lgnBtn1} onClick={navigateToRegister}>
+              <button className={styles.lgnBtn1} onClick={navigateToLogin}>
                 Login
               </button>
             </div>

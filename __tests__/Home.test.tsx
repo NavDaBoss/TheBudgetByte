@@ -1,77 +1,74 @@
-import { render, screen, fireEvent } from '@testing-library/react'; // For rendering and testing components
-import Home from '../src/app/page'; // Import the Home component
-import { useRouter } from 'next/navigation'; // Import useRouter for mocking
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom'; // For extended matchers
-import { jest } from '@jest/globals';
+import Home from '../src/app/page'; // Importing the Home component
+import { useRouter } from 'next/navigation'; // Importing useRouter from Next.js
 
+// Mock the Next.js useRouter function
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
-
-// Defining types for the mocked router
-interface MockRouter {
-  push: jest.Mock;
-}
 
 describe('Home Component', () => {
   let pushMock: jest.Mock;
 
   beforeEach(() => {
-    pushMock = jest.fn(); // Mocking the router push function
+    // Create a mock function for router.push
+    pushMock = jest.fn();
+
+    // Mock useRouter to return the push function
     (useRouter as jest.Mock).mockReturnValue({
       push: pushMock,
-    } as MockRouter); // Assigning the mock
+    });
   });
 
-  afterEach(() => {
-    jest.clearAllMocks(); // Clear mocks after each test
-  });
-
-  test('renders the logo correctly', () => {
+  it('renders the header with the correct logo text', () => {
     render(<Home />);
     const logo = screen.getByText('Budget Byte');
-    expect(logo).toBeInTheDocument(); // Verify if the logo is present
+    expect(logo).toBeInTheDocument();
   });
 
-  test('renders the Smart Receipt Parsing section', () => {
-    render(<Home />);
-    const header = screen.getByText('Smart Receipt Parsing');
-    expect(header).toBeInTheDocument();
-  });
-
-  test('renders Try It Out and Login buttons and navigates correctly', () => {
+  it('renders the "Try It Out" and "Login" buttons', () => {
     render(<Home />);
     const tryItOutButton = screen.getByText('Try It Out');
     const loginButton = screen.getByText('Login');
 
     expect(tryItOutButton).toBeInTheDocument();
     expect(loginButton).toBeInTheDocument();
-
-    fireEvent.click(tryItOutButton); // Simulate a button click
-    expect(pushMock).toHaveBeenCalledWith('/login'); // Check if the correct route is pushed
-
-    fireEvent.click(loginButton); // Simulate a button click
-    expect(pushMock).toHaveBeenCalledWith('/register'); // Check if the correct route is pushed
   });
 
-  test('renders the Monthly Spending Analytics section', () => {
+  it('navigates to the register page when "Try It Out" is clicked', () => {
     render(<Home />);
-    const header = screen.getByText('Monthly Spending Analytics');
-    expect(header).toBeInTheDocument();
+    const tryItOutButton = screen.getByText('Try It Out');
+
+    fireEvent.click(tryItOutButton);
+    expect(pushMock).toHaveBeenCalledWith('/register');
   });
 
-  test('renders the Lifetime Stats section', () => {
+  it('navigates to the login page when "Login" is clicked', () => {
     render(<Home />);
-    const header = screen.getByText('Lifetime Stats');
-    expect(header).toBeInTheDocument();
+    const loginButton = screen.getByText('Login');
+
+    fireEvent.click(loginButton);
+    expect(pushMock).toHaveBeenCalledWith('/login');
   });
 
-  test('renders footer with copyright and contact information', () => {
+  it('renders images with correct alt text', () => {
     render(<Home />);
-    const copyright = screen.getByText('© 2024 BudgetByte');
-    const contact = screen.getByText('Contact us: support@budgetbyte.com');
+    const receiptImage = screen.getByAltText('Receipt Diagram');
+    const graphImage = screen.getByAltText('Monthly Spending Graph');
+    const pieImage = screen.getByAltText('Lifetime Stats Diagram');
 
-    expect(copyright).toBeInTheDocument();
-    expect(contact).toBeInTheDocument();
+    expect(receiptImage).toBeInTheDocument();
+    expect(graphImage).toBeInTheDocument();
+    expect(pieImage).toBeInTheDocument();
+  });
+
+  it('renders footer with copyright and contact information', () => {
+    render(<Home />);
+    const copyrightText = screen.getByText('© 2024 BudgetByte');
+    const contactText = screen.getByText('Contact us: support@budgetbyte.com');
+
+    expect(copyrightText).toBeInTheDocument();
+    expect(contactText).toBeInTheDocument();
   });
 });
