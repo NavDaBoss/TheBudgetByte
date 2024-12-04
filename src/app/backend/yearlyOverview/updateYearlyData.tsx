@@ -1,7 +1,7 @@
 import {
   groceryItemSchema,
   groceryReceiptExtraction,
-} from '../../api/openai/route';
+} from '../../api/openai/groceryInterface';
 import { z } from 'zod';
 import { auth, db } from '../../firebase/firebaseConfig';
 import {
