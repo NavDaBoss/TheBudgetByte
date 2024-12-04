@@ -1,59 +1,59 @@
 .section-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding-bottom: 100px;
-  padding-top: 20px;
-  max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth));
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  padding-bottom: 100px !important;
+  padding-top: 20px !important;
+  max-width: calc(var(--columnPaddingNormal) * 2 + var(--layoutWidth)) !important;
 }
 
 .graph-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: left;
-  width: 100%;
-  margin: 0 auto;
-  padding-top: 30px;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: left !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding-top: 30px !important;
 }
 
 .legend-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1px;
-  max-width: 100%;
-  margin-bottom: 8px;
-  justify-content: center;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 1px !important;
+  max-width: 100% !important;
+  margin-bottom: 8px !important;
+  justify-content: center !important;
 }
 
 .responsive-heading {
-  font-size: 1.5rem;
-  text-align: center;
+  font-size: 1.5rem !important;
+  text-align: center !important;
 }
 
 @media (max-width: 700px) {
   .legend-container {
-    max-width: 100%; /* Full width on small screens */
-    justify-content: center;
-    margin-top: 16px;
-    gap: 0px;
+    max-width: 100% !important; /* Full width on small screens */
+    justify-content: center !important;
+    margin-top: 16px !important;
+    gap: 0px !important;
   }
 
   /* Reduce checkbox size */
   .legend-container .MuiFormControlLabel-root {
-    padding: 0px;
-    flex-basis: 25%; /* Stacks two checkbox per row */
+    padding: 0px !important;
+    flex-basis: 25% !important; /* Stacks two checkbox per row */
   }
 
   .legend-container .MuiCheckbox-root {
-    padding: 0px;
-    transform: scale(0.5); /* Scale down checkboxes */
+    padding: 0px !important;
+    transform: scale(0.5) !important; /* Scale down checkboxes */
   }
 
   .responsive-heading {
-    font-size: 1rem; /* Smaller font size for mobile */
-    padding: 0px;
+    font-size: 1rem !important; /* Smaller font size for mobile */
+    padding: 0px !important;
   }
 
   .css-rizt0-MuiTypography-root {
@@ -62,9 +62,9 @@
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
-  backdrop-filter: blur(8px); /* Blur effect */
-  -webkit-backdrop-filter: blur(8px); /* Safari support */
-  border-radius: 10px; /* Rounded corners */
-  border: 1px solid rgba(72, 72, 74, 0.18); /* Subtle border */
+  background: rgba(255, 255, 255, 0.5) !important; /* Semi-transparent white background */
+  backdrop-filter: blur(8px) !important; /* Blur effect */
+  -webkit-backdrop-filter: blur(8px) !important; /* Safari support */
+  border-radius: 10px !important; /* Rounded corners */
+  border: 1px solid rgba(72, 72, 74, 0.18) !important; /* Subtle border */
 }
