@@ -1,19 +1,17 @@
 import React from 'react';
 import styles from '../styles/Footer.module.css'; // Assuming you're using CSS modules for styling
 
-
 // This component goes on every page
 // dashboard
 // analytics
 // profile
 // login
 // register
-// landing -- 
+// landing --
 
-// Usage 
+// Usage
 // import Footer from '../components/Footer';
 // <Footer />
-
 
 const Footer: React.FC = () => {
   return (
@@ -24,7 +22,7 @@ const Footer: React.FC = () => {
       </div>
       <div>
         {/* Contact Information */}
-        <p>Contact Us: BudgetByte@budgetbyte.com</p>
+        <p>Contact Us: support@budgetbyte.com</p>
       </div>
     </footer>
   );

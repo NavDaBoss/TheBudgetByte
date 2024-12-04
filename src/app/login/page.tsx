@@ -192,7 +192,7 @@ export default function Login() {
           Create an account
         </Link>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

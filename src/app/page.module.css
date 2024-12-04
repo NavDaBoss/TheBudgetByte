@@ -71,16 +71,37 @@
 }
 
 /* Paragraph text inside text block */
-.textBlock p {
-  font-size: 1.8vw; /* Font size relative to viewport width for responsiveness */
-  margin: 10px 0; /* Margin between paragraphs */
-  padding: 40px; /* Padding around the text */
+.textBlock h2 {
+  font-size: 2.3vw; /* Font size relative to viewport width for responsiveness */
+  margin-left: 40px;
   text-align: left; /* Align text to the left */
+}
+
+.textBlock p {
+  font-size: 1.7vw; /* Font size relative to viewport width for responsiveness */
+  margin: 10px 0; /* Margin between other items */
+  padding: 10px;
+  padding-left: 40px; /* Padding around the text */
+  padding-right: 40px;
+  text-align: left; /* Align text to the left */
+  color: var(--grey3);
 }
 
 /* Scan Receipt button styling */
 .scanBtn {
   background-color: #00c853; /* Green background for scan button */
+  color: #fff; /* White text */
+  border: none; /* No border */
+  padding: 10px 20px; /* Button padding */
+  font-size: 24px; /* Font size */
+  cursor: pointer; /* Change cursor on hover */
+  margin-top: 10px; /* Add top margin */
+  border-radius: 5px; /* Rounded corners */
+  margin-left: 40px; /* Add left margin */
+}
+
+.lgnBtn1 {
+  background-color: black; /* Green background for scan button */
   color: #fff; /* White text */
   border: none; /* No border */
   padding: 10px 20px; /* Button padding */
@@ -129,90 +150,104 @@
 @media (max-width: 1000px) {
   /* Header adjustments for mobile */
   .header {
+    display: flex;
     flex-direction: column; /* Stack elements vertically */
     align-items: center; /* Center align the items */
     justify-content: center; /* Center the content */
-    padding-bottom: 0; /* Remove bottom padding */
+    padding: 20px 0; /* Add vertical padding */
   }
 
   /* Logo adjustments for mobile */
   .header h1 {
-    margin-bottom: 20px; /* Add space below the logo */
-    font-size: 4vw; /* Scale font size relative to viewport width */
-    padding: 6px 16px; /* Adjust padding */
+    font-size: 6vw; /* Scale font size relative to viewport width */
+    margin-bottom: 10px; /* Add space below the logo */
   }
 
-  /* Login button adjustments for mobile */
-  .loginBtn {
-    margin-left: 0; /* Remove left margin */
-    margin-top: 0; /* Remove top margin */
-    font-size: 2.8vw; /* Scale font size */
-    padding: 6px 16px; /* Adjust padding */
-    border-radius: 3px; /* Smaller border radius */
-    margin-bottom: 15px; /* Add bottom margin */
-    right: 20px; /* Adjust right position */
+  /* Button container: Ensures buttons are next to each other */
+  .buttonContainer {
+    display: flex; /* Arrange buttons side by side */
+    flex-direction: row;
+    align-items: flex-start; /* Center buttons horizontally */
+    justify-content: flex-start; /* Center buttons vertically */
+    gap: 10px; /* Add space between buttons */
+    width: 100%; /* Ensure container takes full width */
+    margin: 0px 0px;
+  }
+
+  /* General button styling for mobile */
+  .scanBtn,
+  .lgnBtn1 {
+    font-size: 2vw; /* Scale font size */
+    padding: 4px 8px; /* Adjust padding */
+    border-radius: 5px; /* Adjust border radius */
+    width: 50%; /* Make both buttons the same width */
+    max-width: 100px; /* Limit max width */
+    max-height: 30px;
+    text-align: center; /* Center text inside buttons */
   }
 
   /* Main content adjustments for mobile */
   .main {
-    padding: 20px; /* Adjust padding */
-    padding-top: 0; /* Remove top padding */
-    padding-bottom: 0; /* Remove bottom padding */
+    padding: 5vw; /* Adjust padding */
+    text-align: center; /* Center align text */
   }
 
   /* Section layout adjustments for mobile */
   .section {
+    display: flex;
     flex-direction: column; /* Stack sections vertically */
-    text-align: center; /* Center-align text */
+    align-items: flex-start; /* Align all items to the left */
     margin-bottom: 20px; /* Add bottom margin */
   }
 
-  /* Adjust text block margins for mobile */
-  .textBlock {
-    margin: 5px 0; /* Adjust margins */
-    margin-left: 1%; /* Adjust left margin */
-    margin-right: 1%; /* Adjust right margin */
-  }
-
-  /* Paragraph font size adjustments for mobile */
-  .textBlock p {
-    font-size: 3.5vw; /* Scale font size */
-    padding: 4vw; /* Adjust padding */
-  }
-
-  /* Reversed order for even sections on mobile */
-  .section:nth-child(even) {
-    flex-direction: column-reverse; /* Reverse layout */
-  }
-
-  /* Hide scan button on mobile */
-  .scanBtn {
-    padding: 2%; /* Adjust padding */
-    font-size: 14px; /* Smaller font size */
-    border-radius: 3px; /* Smaller border radius */
-    display: none; /* Hide button on mobile */
+  .section:nth-of-type(even) {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-start; /* Ensure the even sections also align left */
   }
 
   /* Image adjustments for mobile */
   .image {
     max-width: 90%; /* Full width for images */
-    margin-right: 0px; /* Remove right margin */
-    border-radius: 10px; /* Smaller border radius */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px; /* Adjust border radius */
+    margin: 0 auto 15px; /* Center image and add bottom margin */
+    align-self: center; /* Ensure the image aligns itself at the center */
   }
 
-  /* Adjustments for even section image positioning on mobile */
   .section:nth-child(even) .image {
-    margin-left: 0; /* Remove left margin */
+    margin-right: 0px;
+    margin-left: 0px; /* Remove left margin */
   }
 
   /* Footer adjustments for mobile */
   .footer {
-    flex-direction: column;  /* Stack footer items vertically */
-    text-align: center;  /* Center-align text */
+    display: flex;
+    flex-direction: column; /* Stack footer items vertically */
+    align-items: center; /* Center-align footer items */
+    padding: 10px 0; /* Add vertical padding */
   }
 
   /* Footer text adjustments for mobile */
   .footer p {
+    font-size: 3vw; /* Adjust font size */
     margin: 5px 0; /* Adjust margins */
+  }
+
+  /* Paragraph text inside text block */
+  .textBlock h2 {
+    font-size: 4vw; /* Font size relative to viewport width for responsiveness */
+    margin-left: 40px;
+    text-align: left; /* Align text to the left */
+  }
+
+  .textBlock p {
+    font-size: 3vw; /* Font size relative to viewport width for responsiveness */
+    margin: 10px 0; /* Margin between other items */
+    padding: 10px;
+    padding-left: 40px; /* Padding around the text */
+    padding-right: 40px;
+    text-align: left; /* Align text to the left */
+    color: var(--grey3);
   }
 }

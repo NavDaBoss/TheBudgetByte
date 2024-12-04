@@ -1,39 +1,39 @@
 /* Footer styling */
 .footer {
-    display: flex; /* Flexbox layout */
-    justify-content: space-between; /* Space between footer items */
-    align-items: center; /* Vertically align items */
-    padding: 20px 40px; /* Padding around footer */
-    position: fixed; /* Fixed positioning */
-    bottom: 0; /* Stick to bottom */
-    left: 0; /* Stick to left */
-    right: 0; /* Stick to right */
-    z-index: 1000; /* Ensure footer is above other elements */
+  display: flex; /* Flexbox layout */
+  justify-content: space-between; /* Space between footer items */
+  align-items: center; /* Vertically align items */
+  padding: 20px 40px; /* Padding around footer */
+  position: fixed; /* Fixed positioning */
+  bottom: 0; /* Stick to bottom */
+  left: 0; /* Stick to left */
+  right: 0; /* Stick to right */
+  z-index: 1000; /* Ensure footer is above other elements */
 }
 
 /* Footer item spacing */
 .footer > * {
-    margin-right: 10px; /* Adjust the space between items */
+  margin-right: 10px; /* Adjust the space between items */
 }
 
 /* Footer text adjustments for mobile */
 @media (max-width: 750px) {
-    /* Footer adjustments for mobile */
-    .footer {
-        position: static; /* Make footer non-fixed */
-        flex-direction: column; /* Stack footer items vertically */
-        text-align: center; /* Center-align text */
-        padding: 10px 20px; /* Adjust padding for mobile */
-        margin: 0; /* Reset margins */
-    }
+  /* Footer adjustments for mobile */
+  .footer {
+    position: static; /* Make footer non-fixed */
+    flex-direction: column; /* Stack footer items vertically */
+    text-align: center; /* Center-align text */
+    padding: 10px 20px; /* Adjust padding for mobile */
+    margin: 0; /* Reset margins */
+  }
 
-    /* Footer text adjustments for mobile */
-    .footer p {
-        margin: 5px 0; /* Adjust margins */
-    }
+  /* Footer text adjustments for mobile */
+  .footer p {
+    margin: 5px 0; /* Adjust margins */
+  }
 
-    /* Remove right margin for last item when stacked */
-    .footer > *:last-child {
-        margin-right: 0;
-    }
+  /* Remove right margin for last item when stacked */
+  .footer > *:last-child {
+    margin-right: 0;
+  }
 }

@@ -3,7 +3,6 @@
 import styles from './page.module.css'; // Importing the CSS module for styling
 import { useRouter } from 'next/navigation'; // Importing useRouter from Next.js to handle routing
 import Image from 'next/image';
-import Footer from './components/Footer';
 
 export default function Home() {
   const router = useRouter(); // Creating the router object for navigation
@@ -13,6 +12,10 @@ export default function Home() {
     router.push('/login'); // Pushing the login page route when the user clicks the button
   };
 
+  const navigateToRegister = () => {
+    router.push('/register'); // Pushing the login page route when the user clicks the button
+  };
+
   return (
     <div className={styles.container}>
       {/* Header Section: Contains logo and login button */}
@@ -20,9 +23,6 @@ export default function Home() {
         {/* Logo Section */}
         <h1 className={styles.logo}>Budget Byte</h1>
         {/* Login Button: Directs users to the login page */}
-        <button className={styles.loginBtn} onClick={navigateToLogin}>
-          Login
-        </button>
       </header>
 
       <main className={styles.main}>
@@ -30,16 +30,24 @@ export default function Home() {
         <section className={styles.section}>
           <div className={styles.textBlock}>
             {/* Description of the Receipt Parsing feature */}
+            <h2>
+              <strong>Smart Receipt Parsing</strong>
+            </h2>
             <p>
-              <strong>Smart Receipt Parsing</strong> | Upload your grocery
-              receipts, and our AI will automatically parse and categorize the
-              items into food groups like fruits, vegetables, grains, protein,
-              and others. Easily edit items to ensure accurate tracking.
+              Upload your grocery receipts, and our AI will automatically parse
+              and categorize the items into food groups like fruits, vegetables,
+              grains, protein, and others. Easily edit items to ensure accurate
+              tracking.
             </p>
             {/* Scan Receipt Button: Redirects to login or receipt scanning page */}
-            <button className={styles.scanBtn} onClick={navigateToLogin}>
-              Scan Receipt
-            </button>
+            <div className='buttonContainer'>
+              <button className={styles.scanBtn} onClick={navigateToLogin}>
+                Try It Out
+              </button>
+              <button className={styles.lgnBtn1} onClick={navigateToRegister}>
+                Login
+              </button>
+            </div>
           </div>
           {/* Image representing receipt parsing */}
           <Image
@@ -65,11 +73,13 @@ export default function Home() {
           />
           <div className={styles.textBlock}>
             {/* Description of the Monthly Spending Analytics feature */}
+            <h2>
+              <strong>Monthly Spending Analytics</strong>
+            </h2>
             <p>
-              <strong>Monthly Spending Analytics</strong> | Visualize your
-              grocery expenses over time with detailed breakdowns by food group.
-              Track trends in your spending habits and see where your budget is
-              going.
+              Visualize your grocery expenses over time with detailed breakdowns
+              by food group. Track trends in your spending habits and see where
+              your budget is going.
             </p>
           </div>
         </section>
@@ -78,11 +88,13 @@ export default function Home() {
         <section className={styles.section}>
           <div className={styles.textBlock}>
             {/* Description of the Lifetime Stats feature */}
+            <h2>
+              <strong>Lifetime Stats</strong>
+            </h2>
             <p>
-              <strong>Lifetime Stats</strong> | Get a comprehensive summary of
-              your grocery spending, including total receipts scanned and
-              lifetime spending in each food category. Gain a deeper
-              understanding of your purchasing habits.
+              Get a comprehensive summary of your grocery spending, including
+              total receipts scanned and lifetime spending in each food
+              category. Gain a deeper understanding of your purchasing habits.
             </p>
           </div>
           {/* Image representing the lifetime stats pie chart */}
@@ -97,24 +109,25 @@ export default function Home() {
         </section>
       </main>
       <footer className={styles.footer}>
-      <div>
-        {/* Copyright Information */}
-        <p>© 2024 BudgetByte</p>
-      </div>
-      <div>
-        {/* Contact Information */}
-        <p>Contact Us: BudgetByte@budgetbyte.com</p>
-      </div>
-    </footer>
+        <div>
+          {/* Copyright Information */}
+          <p>© 2024 BudgetByte</p>
+        </div>
+        <div>
+          {/* Contact Information */}
+          <p>Contact us: support@budgetbyte.com</p>
+        </div>
+      </footer>
       {/* Footer Section: Contact and Legal Information */}
-      
     </div>
   );
 }
 
-{/* <footer className={styles.footer}>
+{
+  /* <footer className={styles.footer}>
    
         <p>© 2024 BudgetByte</p>
       
         <p>Contact Us: BudgetByte@budgetbyte.com</p>
-      </footer> */}
+      </footer> */
+}
