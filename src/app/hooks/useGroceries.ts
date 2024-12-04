@@ -6,8 +6,7 @@ import {
   getGroceriesSubcollection,
 } from '../firebase/firebaseService';
 
-// Define an interface to represent the structure of a grocery item
-interface GroceryItem {
+export interface GroceryItem {
   id: string;
   itemName: string;
   itemPrice: string;
@@ -15,7 +14,13 @@ interface GroceryItem {
   quantity: number;
 }
 
-const useGroceries = (userID: string | null) => {
+interface Receipt {
+  receiptBalance: number;
+  receiptDate: number;
+  id: string;
+}
+
+const useGroceries = (userID: string) => {
   const [groceries, setGroceries] = useState<GroceryItem[]>([]);
   const [receiptBalance, setReceiptBalance] = useState<number>(0);
   const [receiptDate, setReceiptDate] = useState<number>(0);
@@ -23,7 +28,10 @@ const useGroceries = (userID: string | null) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const addGrocery = async (newItem: any) => {
+  /** Adds a new grocery item to the current receipt.
+   * Updates the local state to include the new item.
+   */
+  const addGrocery = async (newItem: Omit<GroceryItem, 'id'>) => {
     if (!receiptID) return;
     try {
       const groceryID = await addGroceryItem(receiptID, newItem);
@@ -33,6 +41,10 @@ const useGroceries = (userID: string | null) => {
     }
   };
 
+  /**
+   * Deletes a grocery item from the current receipt.
+   * Updates the local state to exclude the deleted item.
+   */
   const deleteGrocery = async (groceryID: string) => {
     if (!receiptID) return;
     try {
@@ -43,6 +55,10 @@ const useGroceries = (userID: string | null) => {
     }
   };
 
+  /**
+   * Fetches the most recent receipt for the user and its associated groceries.
+   * Updates state with the receipt data and groceries.
+   */
   const fetchMostRecentReceipt = useCallback(async () => {
     if (userID) {
       setLoading(true);
@@ -61,9 +77,9 @@ const useGroceries = (userID: string | null) => {
           if (!groceriesSnapshot.empty) {
             setGroceries(
               groceriesSnapshot.docs.map((doc) => ({
-                ...(doc.data() as GroceryItem),
+                ...(doc.data() as Omit<GroceryItem, 'id'>),
                 id: doc.id,
-              }))
+              })),
             );
           } else {
             setGroceries([]);
@@ -79,22 +95,34 @@ const useGroceries = (userID: string | null) => {
     }
   }, [userID]);
 
+  /**
+   * Updates a single field of a grocery item in the local state.
+   * @param groceryID - The ID of the grocery item to update.
+   * @param fieldName - The field to update.
+   * @param value - The new value for the field.
+   * */
   const updateGroceryItem = (
     groceryID: string,
     fieldName: keyof GroceryItem,
-    value: GroceryItem[keyof GroceryItem] // Fix applied here
+    value: GroceryItem[keyof GroceryItem],
   ) => {
     setGroceries((prev) =>
       prev.map((item) =>
-        item.id === groceryID ? { ...item, [fieldName]: value } : item
-      )
+        item.id === groceryID ? { ...item, [fieldName]: value } : item,
+      ),
     );
   };
 
-  const setGroceriesState = (updatedGroceries) => {
+  /**
+   * Replaces the current groceries list with a new list.
+   * Useful for batch updates or refreshing the state.
+   * @param updatedGroceries: The new groceries list.
+   */
+  const setGroceriesState = (updatedGroceries: GroceryItem[]) => {
     setGroceries(updatedGroceries);
   };
 
+  // Fetch the most recent receipt and its groceries when the userID changes
   useEffect(() => {
     fetchMostRecentReceipt();
   }, [userID, fetchMostRecentReceipt]);

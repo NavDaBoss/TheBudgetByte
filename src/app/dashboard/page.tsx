@@ -17,10 +17,22 @@ import Navbar from '../components/Navbar';
 import Summary from '../components/Summary';
 import Receipt from '../components/Receipt';
 
+interface FoodGroupSummary {
+  type: string;
+  totalCost: number;
+  pricePercentage: number;
+}
+
+interface SummaryData {
+  foodGroups: FoodGroupSummary[];
+  totalCost: number;
+}
+
 const Dashboard = () => {
   const router = useRouter();
   const currentUser = auth.currentUser;
 
+  // State management for groceries and receipt
   const {
     groceries,
     receiptID,
@@ -31,24 +43,28 @@ const Dashboard = () => {
     updateGroceryItem,
     setGroceriesState,
     refetch,
-  } = useGroceries(currentUser?.uid || null);
+  } = useGroceries(currentUser?.uid);
 
-  const [summaryData, setSummaryData] = useState({
+  // State for summary calculations
+  const [summaryData, setSummaryData] = useState<SummaryData>({
     foodGroups: [],
     totalCost: 0,
   });
 
-  const updateLocalGroceries = (updatedGroceries) => {
+  // Updates the local groceries state
+  const updateLocalGroceries = (updatedGroceries: GroceryItem[]) => {
     setGroceriesState(updatedGroceries);
   };
 
-  const handleAdd = async (newItem) => {
+  // Handles adding a new grocery item
+  const handleAdd = async (newItem: Omit<GroceryItem, 'id'>) => {
     try {
       if (!receiptID) return;
 
+      // Add to Firebase and update local state
       const groceryID = await addGroceryItem(receiptID, newItem);
 
-      const newGroceryItem = { ...newItem, id: groceryID };
+      const newGroceryItem: GroceryItem = { ...newItem, id: groceryID };
       const updatedGroceries = [...groceries, newGroceryItem];
       updateLocalGroceries(updatedGroceries);
 
@@ -72,10 +88,13 @@ const Dashboard = () => {
     }
   };
 
-  const handleDelete = async (groceryID) => {
+  // Handles deleting a grocery item
+  const handleDelete = async (groceryID: string) => {
     try {
-      await deleteGroceryItem(receiptID, groceryID);
+      if (!receiptID) return;
 
+      // Delete from Firebase and update local state
+      await deleteGroceryItem(receiptID, groceryID);
       const updatedGroceries = groceries.filter(
         (item) => item.id !== groceryID,
       );
@@ -87,11 +106,20 @@ const Dashboard = () => {
     }
   };
 
-  const handleUpdate = async (groceryID, fieldName, value) => {
+  // Handles updating a field in a grocery item
+  const handleUpdate = async (
+    groceryID: string,
+    fieldName: keyof GroceryItem,
+    value: GroceryItem[keyof GroceryItem],
+  ) => {
     try {
+      if (!receiptID) return;
+
+      // Update Firebase and local state
       await updateGroceryField(receiptID, groceryID, fieldName, value);
       await updateGroceryItem(groceryID, fieldName, value);
 
+      // Recalculate the summary for price changes
       if (fieldName === 'itemPrice') {
         recalculateSummary();
       }
@@ -100,44 +128,42 @@ const Dashboard = () => {
     }
   };
 
-  const recalculateSummary = async (updatedGroceries = groceries) => {
-    if (!receiptID) {
-      console.error('ReceiptID is not available. Skipping recalculation.');
-      return;
-    }
-
-    const updatedFoodGroups = {};
+  // Recalculates the summary for groceries and updates Firebase if needed
+  const recalculateSummary = async (
+    updatedGroceries: GroceryItem[] = groceries,
+  ) => {
+    const updatedFoodGroups: Record<string, number> = {};
     let totalCost = 0.0;
 
+    // Calculated total cost and group-wise costs
     updatedGroceries.forEach((item) => {
-      const foodGroup = item.foodGroup;
-      const price = parseFloat(item.itemPrice || 0) * (item.quantity || 0);
+      const { foodGroup, itemPrice, quantity } = item;
+      const price = parseFloat(itemPrice || 0) * (quantity || 0);
 
-      if (!updatedFoodGroups[foodGroup]) {
-        updatedFoodGroups[foodGroup] = 0;
-      }
-
-      updatedFoodGroups[foodGroup] += price;
+      updatedFoodGroups[foodGroup] =
+        (updatedFoodGroups[foodGroup] || 0) + price;
       totalCost += price;
     });
 
     totalCost = Math.round(totalCost * 100) / 100;
 
-    const foodGroups = Object.entries(updatedFoodGroups).map(
-      ([type, groupCost]) => {
-        const roundedGroupCost = Math.round(groupCost * 100) / 100;
-        const percentage = totalCost > 0 ? (groupCost / totalCost) * 100 : 0;
-        return {
-          type,
-          totalCost: roundedGroupCost,
-          pricePercentage: Math.round(percentage * 100) / 100,
-        };
-      },
-    );
+    // Transform food group data into summary format
+    const foodGroups: FoodGroupSummary[] = Object.entries(
+      updatedFoodGroups,
+    ).map(([type, groupCost]) => {
+      const roundedGroupCost = Math.round(groupCost * 100) / 100;
+      const percentage = totalCost > 0 ? (groupCost / totalCost) * 100 : 0;
+      return {
+        type,
+        totalCost: roundedGroupCost,
+        pricePercentage: Math.round(percentage * 100) / 100,
+      };
+    });
 
     setSummaryData({ foodGroups, totalCost });
 
     try {
+      // Update receipt balance in Firebase if it has changed
       if (totalCost !== receiptBalance) {
         await updateReceiptBalance(receiptID, totalCost);
       }
@@ -146,6 +172,7 @@ const Dashboard = () => {
     }
   };
 
+  // Redirect to login if user is not authenticated
   useEffect(() => {
     if (!currentUser) {
       router.push('/login');
@@ -153,9 +180,11 @@ const Dashboard = () => {
   }),
     [currentUser, router];
 
+  // Recalculate the summary whenever groceries change
   useEffect(() => {
     recalculateSummary();
   }, [groceries]);
+
   return (
     <div className="page">
       <Navbar />
