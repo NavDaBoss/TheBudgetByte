@@ -71,16 +71,37 @@
 }
 
 /* Paragraph text inside text block */
-.textBlock p {
-  font-size: 1.8vw; /* Font size relative to viewport width for responsiveness */
-  margin: 10px 0; /* Margin between paragraphs */
-  padding: 40px; /* Padding around the text */
+.textBlock h2 {
+  font-size: 2.3vw; /* Font size relative to viewport width for responsiveness */
+  margin-left: 40px;
   text-align: left; /* Align text to the left */
+}
+
+.textBlock p {
+  font-size: 1.7vw; /* Font size relative to viewport width for responsiveness */
+  margin: 10px 0; /* Margin between other items */
+  padding: 10px;
+  padding-left: 40px; /* Padding around the text */
+  padding-right: 40px;
+  text-align: left; /* Align text to the left */
+  color: var(--grey3);
 }
 
 /* Scan Receipt button styling */
 .scanBtn {
   background-color: #00c853; /* Green background for scan button */
+  color: #fff; /* White text */
+  border: none; /* No border */
+  padding: 10px 20px; /* Button padding */
+  font-size: 24px; /* Font size */
+  cursor: pointer; /* Change cursor on hover */
+  margin-top: 10px; /* Add top margin */
+  border-radius: 5px; /* Rounded corners */
+  margin-left: 40px; /* Add left margin */
+}
+
+.lgnBtn1 {
+  background-color: black; /* Green background for scan button */
   color: #fff; /* White text */
   border: none; /* No border */
   padding: 10px 20px; /* Button padding */
