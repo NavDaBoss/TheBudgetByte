@@ -49,7 +49,7 @@ const Summary = ({ data, totalCost }) => {
           label: (tooltipItem) => {
             const index = tooltipItem.dataIndex;
             const item = pieData[index];
-            return `$${item.totalCost}`;
+            return `$${item.totalCost.toFixed(2)}`;
           },
         },
       },
@@ -75,7 +75,7 @@ const Summary = ({ data, totalCost }) => {
           label: (tooltipItem) => {
             const index = tooltipItem.dataIndex;
             const item = pieData[index];
-            return `$${item.totalCost}`;
+            return `$${item.totalCost.toFixed(2)}`;
           },
         },
       },
