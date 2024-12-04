@@ -1,5 +1,10 @@
 import { db } from '../firebase/firebaseConfig';
-import { collection, addDoc, updateDoc, DocumentReference } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  DocumentReference,
+} from 'firebase/firestore';
 import { updateUsersYearlyOverview } from './yearlyOverview/updateYearlyData';
 
 type GroceryItem = {
@@ -28,7 +33,7 @@ export const saveReceiptDataToFirestore = async (
   apiResponse: OpenAIResponse,
   confirmedDate: string,
   selectedImage: File,
-  currentUserUid: string
+  currentUserUid: string,
 ): Promise<void> => {
   if (!apiResponse || !confirmedDate || !selectedImage || !currentUserUid) {
     throw new Error('Missing required parameters');
@@ -36,23 +41,29 @@ export const saveReceiptDataToFirestore = async (
 
   try {
     // Add main receipt document
-    const receiptDocRef: DocumentReference = await addDoc(collection(db, 'receiptData'), {
-      receiptDate: confirmedDate,
-      receiptBalance: parseFloat(
+    const receiptDocRef: DocumentReference = await addDoc(
+      collection(db, 'receiptData'),
+      {
+        receiptDate: confirmedDate,
+        receiptBalance: parseFloat(
+          apiResponse.groceries
+            .reduce((sum, item) => sum + item.totalPrice, 0)
+            .toFixed(2),
+        ),
+        submittedTimestamp: new Date(),
+        fileName: selectedImage.name,
+        userID: currentUserUid,
+      },
+    );
+
+    console.log(
+      'receiptBalance:',
+      parseFloat(
         apiResponse.groceries
           .reduce((sum, item) => sum + item.totalPrice, 0)
-          .toFixed(2)
+          .toFixed(2),
       ),
-      submittedTimestamp: new Date(),
-      fileName: selectedImage.name,
-      userID: currentUserUid,
-    });
-    
-    console.log('receiptBalance:', parseFloat(
-        apiResponse.groceries
-          .reduce((sum, item) => sum + item.totalPrice, 0)
-          .toFixed(2)
-      ))
+    );
     // Update receipt document with receiptID
     await updateDoc(receiptDocRef, { receiptID: receiptDocRef.id });
     console.log('Main receipt data saved with ID:', receiptDocRef.id);

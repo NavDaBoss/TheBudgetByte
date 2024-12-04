@@ -160,12 +160,11 @@ export default function OcrUploadButton({
     }
 
     try {
-
       await saveReceiptDataToFirestore(
         apiResponse,
         confirmedDate,
         selectedImage,
-        (currentUser as FirebaseUser).uid
+        (currentUser as FirebaseUser).uid,
       );
 
       updateUsersYearlyOverview(apiResponse.groceries, confirmedDate);
