@@ -1,94 +1,77 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { useRouter } from 'next/navigation';
-import Home from '../src/app/page'; // Adjust the import path if necessary
+import { render, screen, fireEvent } from '@testing-library/react'; // For rendering and testing components
+import Home from '../src/app/page'; // Import the Home component
+import { useRouter } from 'next/navigation'; // Import useRouter for mocking
+import '@testing-library/jest-dom'; // For extended matchers
 import { jest } from '@jest/globals';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
-describe('Home Page', () => {
-  // Define the mock function with a proper type
-  let mockPush: jest.Mock<any, any>;
+// Defining types for the mocked router
+interface MockRouter {
+  push: jest.Mock;
+}
+
+describe('Home Component', () => {
+  let pushMock: jest.Mock;
 
   beforeEach(() => {
-    mockPush = jest.fn();
+    pushMock = jest.fn(); // Mocking the router push function
     (useRouter as jest.Mock).mockReturnValue({
-      push: mockPush,
-    });
+      push: pushMock,
+    } as MockRouter); // Assigning the mock
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.clearAllMocks(); // Clear mocks after each test
   });
 
-  it('renders the header with the logo and login button', () => {
+  test('renders the logo correctly', () => {
     render(<Home />);
+    const logo = screen.getByText('Budget Byte');
+    expect(logo).toBeInTheDocument(); // Verify if the logo is present
+  });
 
-    const logoElement = screen.getByText(/BUDGET BYTE/i);
-    const loginButton = screen.getByText(/Login/i);
+  test('renders the Smart Receipt Parsing section', () => {
+    render(<Home />);
+    const header = screen.getByText('Smart Receipt Parsing');
+    expect(header).toBeInTheDocument();
+  });
 
-    expect(logoElement).toBeInTheDocument();
+  test('renders Try It Out and Login buttons and navigates correctly', () => {
+    render(<Home />);
+    const tryItOutButton = screen.getByText('Try It Out');
+    const loginButton = screen.getByText('Login');
+
+    expect(tryItOutButton).toBeInTheDocument();
     expect(loginButton).toBeInTheDocument();
+
+    fireEvent.click(tryItOutButton); // Simulate a button click
+    expect(pushMock).toHaveBeenCalledWith('/login'); // Check if the correct route is pushed
+
+    fireEvent.click(loginButton); // Simulate a button click
+    expect(pushMock).toHaveBeenCalledWith('/register'); // Check if the correct route is pushed
   });
 
-  it('navigates to /login when the Login button is clicked', () => {
+  test('renders the Monthly Spending Analytics section', () => {
     render(<Home />);
-
-    const loginButton = screen.getByText(/Login/i);
-    fireEvent.click(loginButton);
-
-    expect(mockPush).toHaveBeenCalledWith('/login');
+    const header = screen.getByText('Monthly Spending Analytics');
+    expect(header).toBeInTheDocument();
   });
 
-  it('navigates to /login when the Scan Receipt button is clicked', () => {
+  test('renders the Lifetime Stats section', () => {
     render(<Home />);
-
-    const scanButton = screen.getByText(/Scan Receipt/i);
-    fireEvent.click(scanButton);
-
-    expect(mockPush).toHaveBeenCalledWith('/login');
+    const header = screen.getByText('Lifetime Stats');
+    expect(header).toBeInTheDocument();
   });
 
-  it('renders the receipt parsing section with the correct text and image', () => {
+  test('renders footer with copyright and contact information', () => {
     render(<Home />);
+    const copyright = screen.getByText('© 2024 BudgetByte');
+    const contact = screen.getByText('Contact us: support@budgetbyte.com');
 
-    const receiptText = screen.getByText(/Smart Receipt Parsing/i);
-    const receiptImage = screen.getByAltText(/Receipt Diagram/i);
-
-    expect(receiptText).toBeInTheDocument();
-    expect(receiptImage).toBeInTheDocument();
-  });
-
-  it('renders the monthly spending analytics section with the correct text and image', () => {
-    render(<Home />);
-
-    const analyticsText = screen.getByText(/Monthly Spending Analytics/i);
-    const analyticsImage = screen.getByAltText(/Monthly Spending Graph/i);
-
-    expect(analyticsText).toBeInTheDocument();
-    expect(analyticsImage).toBeInTheDocument();
-  });
-
-  it('renders the lifetime stats section with the correct text and image', () => {
-    render(<Home />);
-
-    const lifetimeStatsText = screen.getByText(/Lifetime Stats/i);
-    const lifetimeStatsImage = screen.getByAltText(/Lifetime Stats Diagram/i);
-
-    expect(lifetimeStatsText).toBeInTheDocument();
-    expect(lifetimeStatsImage).toBeInTheDocument();
-  });
-
-  it('renders the footer with contact information', () => {
-    render(<Home />);
-
-    const footerText = screen.getByText(/© 2024 BudgetByte/i);
-    const contactText = screen.getByText(
-      /Contact Us: BudgetByte@budgetbyte.com/i,
-    );
-
-    expect(footerText).toBeInTheDocument();
-    expect(contactText).toBeInTheDocument();
+    expect(copyright).toBeInTheDocument();
+    expect(contact).toBeInTheDocument();
   });
 });

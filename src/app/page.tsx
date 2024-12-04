@@ -30,20 +30,24 @@ export default function Home() {
         <section className={styles.section}>
           <div className={styles.textBlock}>
             {/* Description of the Receipt Parsing feature */}
-            <h2><strong>Smart Receipt Parsing</strong></h2>
+            <h2>
+              <strong>Smart Receipt Parsing</strong>
+            </h2>
             <p>
-              Upload your grocery
-              receipts, and our AI will automatically parse and categorize the
-              items into food groups like fruits, vegetables, grains, protein,
-              and others. Easily edit items to ensure accurate tracking.
+              Upload your grocery receipts, and our AI will automatically parse
+              and categorize the items into food groups like fruits, vegetables,
+              grains, protein, and others. Easily edit items to ensure accurate
+              tracking.
             </p>
             {/* Scan Receipt Button: Redirects to login or receipt scanning page */}
-            <button className={styles.scanBtn} onClick={navigateToLogin}>
-              Try It Out
-            </button>
-            <button className={styles.lgnBtn1} onClick={navigateToRegister}>
-              Login
-            </button>
+            <div className='buttonContainer'>
+              <button className={styles.scanBtn} onClick={navigateToLogin}>
+                Try It Out
+              </button>
+              <button className={styles.lgnBtn1} onClick={navigateToRegister}>
+                Login
+              </button>
+            </div>
           </div>
           {/* Image representing receipt parsing */}
           <Image
@@ -69,12 +73,13 @@ export default function Home() {
           />
           <div className={styles.textBlock}>
             {/* Description of the Monthly Spending Analytics feature */}
-            <h2><strong>Monthly Spending Analytics</strong></h2>
+            <h2>
+              <strong>Monthly Spending Analytics</strong>
+            </h2>
             <p>
-              Visualize your
-              grocery expenses over time with detailed breakdowns by food group.
-              Track trends in your spending habits and see where your budget is
-              going.
+              Visualize your grocery expenses over time with detailed breakdowns
+              by food group. Track trends in your spending habits and see where
+              your budget is going.
             </p>
           </div>
         </section>
@@ -83,12 +88,13 @@ export default function Home() {
         <section className={styles.section}>
           <div className={styles.textBlock}>
             {/* Description of the Lifetime Stats feature */}
-            <h2><strong>Lifetime Stats</strong></h2>
+            <h2>
+              <strong>Lifetime Stats</strong>
+            </h2>
             <p>
-              Get a comprehensive summary of
-              your grocery spending, including total receipts scanned and
-              lifetime spending in each food category. Gain a deeper
-              understanding of your purchasing habits.
+              Get a comprehensive summary of your grocery spending, including
+              total receipts scanned and lifetime spending in each food
+              category. Gain a deeper understanding of your purchasing habits.
             </p>
           </div>
           {/* Image representing the lifetime stats pie chart */}
