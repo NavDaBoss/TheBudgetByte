@@ -1,7 +1,7 @@
 # BudgetByte User Manual
 
 Welcome to the source code for BudgetByte, a health and wealth app aimed to track and analyze grocery spending.
-This application is built with Next.js, React, TypeScript, MUI components, and Firebase. It uses Tesseract's OCR API to parse receipt data and ChatGPT's API to categorize the data.
+This application is built with Next.js, React, TypeScript, MUI components, and Firebase. It uses Tesseract's OCR API to parse receipt data and ChatGPT's API to extract the individual items from the raw OCR text and categorize the data.
 
 ## Core Features
 
