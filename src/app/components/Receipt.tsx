@@ -11,6 +11,7 @@ import {
   updateOverviewWhenPriceChanged,
   updateOverviewWhenQuantityChanged,
 } from '../backend/updateYearlyData';
+import { FoodTypes } from '../backend/yearlyOverviewInterface';
 
 const foodGroupOptions = ['Grains', 'Vegetables', 'Fruits', 'Protein', 'Dairy'];
 
@@ -155,6 +156,17 @@ const ReceiptRow = ({ item, onUpdate, onDelete, receiptDate }) => {
 
   const handleEdit = (field) => {
     setIsEditing(field);
+  };
+
+  const handleDelete = () => {
+    updateOverviewWhenFoodGroupChanged(
+      receiptDate,
+      /* old food group */ item.foodGroup,
+      /* new food group */ 'Uncategorized' as FoodTypes,
+      item.itemPrice * item.quantity,
+      item.quantity,
+    );
+    onDelete(item.id);
   };
 
   const handleInput = (fieldName, value) => {
@@ -349,7 +361,7 @@ const ReceiptRow = ({ item, onUpdate, onDelete, receiptDate }) => {
         </td>
       ))}
       <td className="receipt-item-delete-column">
-        <DeleteIcon className="delete-icon" onClick={() => onDelete(item.id)} />
+        <DeleteIcon className="delete-icon" onClick={() => handleDelete()} />
       </td>
     </tr>
   );
@@ -369,7 +381,7 @@ const SearchBar = ({ filterText, onFilterTextChange }) => {
   );
 };
 
-const AddItemForm = ({ onClose, onAdd }) => {
+const AddItemForm = ({ onClose, onAdd, receiptDate }) => {
   const [newItem, setNewItem] = useState({
     itemName: '',
     quantity: 1,
@@ -392,7 +404,6 @@ const AddItemForm = ({ onClose, onAdd }) => {
       } else if (/^\d*\.?\d{0,2}$/.test(value)) {
         const floatValue = parseFloat(value);
         updatedValue = floatValue > 999.99 ? 999.99 : floatValue;
-        updatedValue = Math.round(updatedValue * 100) / 100;
       }
     } else if (field === 'itemName') {
       updatedValue = value.slice(0, 50).toUpperCase();
@@ -424,6 +435,13 @@ const AddItemForm = ({ onClose, onAdd }) => {
   const handleSubmit = () => {
     if (newItem.itemName && newItem.itemPrice > 0) {
       onAdd(newItem);
+      updateOverviewWhenFoodGroupChanged(
+        receiptDate,
+        /* old food group */ 'Uncategorized' as FoodTypes,
+        /* new food group */ newItem.foodGroup as FoodTypes,
+        newItem.itemPrice * newItem.quantity,
+        newItem.quantity,
+      );
       onClose();
     } else {
       alert('Please fill in all fields with valid values.');
@@ -563,7 +581,11 @@ const Receipt = ({
         </div>
       </div>
       {showAddForm && (
-        <AddItemForm onClose={() => setShowAddForm(false)} onAdd={onAdd} />
+        <AddItemForm
+          onClose={() => setShowAddForm(false)}
+          onAdd={onAdd}
+          receiptDate={receiptDate}
+        />
       )}
       <div className="receipt-table-wrapper">
         <table className="receipt-component-table">
