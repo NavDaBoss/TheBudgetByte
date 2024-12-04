@@ -5,7 +5,6 @@ import {
   updateDoc,
   DocumentReference,
 } from 'firebase/firestore';
-import { updateUsersYearlyOverview } from './yearlyOverview/updateYearlyData';
 
 type GroceryItem = {
   itemName: string;
@@ -23,11 +22,12 @@ type OpenAIResponse = {
 /**
  * Saves receipt data to Firestore, including groceries subcollection and updates the yearly overview.
  *
- * @param apiResponse - The parsed response containing receipt and groceries data.
- * @param confirmedDate - The confirmed receipt date.
- * @param selectedImage - The selected image file from the user.
- * @param currentUserUid - The UID of the currently authenticated user.
- * @throws Throws an error if required parameters are missing or an operation fails.
+ * @param {OpenAIResponse} apiResponse - The parsed response containing receipt and groceries data.
+ * @param {string} confirmedDate - The confirmed receipt date in 'MM/DD/YYYY' format.
+ * @param {File} selectedImage - The uploaded image file representing the receipt.
+ * @param {string} currentUserUid - The UID of the currently authenticated user.
+ * @return {Promise<void>} A promise that resolves when the data is successfully saved.
+ * @throws {Error} Throws an error if required parameters are missing or an operation fails.
  */
 export const saveReceiptDataToFirestore = async (
   apiResponse: OpenAIResponse,
@@ -54,15 +54,6 @@ export const saveReceiptDataToFirestore = async (
         fileName: selectedImage.name,
         userID: currentUserUid,
       },
-    );
-
-    console.log(
-      'receiptBalance:',
-      parseFloat(
-        apiResponse.groceries
-          .reduce((sum, item) => sum + item.totalPrice, 0)
-          .toFixed(2),
-      ),
     );
     // Update receipt document with receiptID
     await updateDoc(receiptDocRef, { receiptID: receiptDocRef.id });

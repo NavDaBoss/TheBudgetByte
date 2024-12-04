@@ -3,8 +3,7 @@
 import '../styles/OcrUploadButton.css';
 import React, { useState } from 'react';
 import Tesseract from 'tesseract.js';
-import { db, auth } from '../firebase/firebaseConfig'; // Import Firestore config
-import { collection, addDoc, updateDoc } from 'firebase/firestore'; // Import Firestore methods
+import { auth } from '../firebase/firebaseConfig'; // Import Firestore config
 
 // MUI
 import Button from '@mui/material/Button';
