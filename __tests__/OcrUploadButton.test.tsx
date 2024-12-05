@@ -27,10 +27,6 @@ jest.mock('firebase/firestore', () => ({
   where: jest.fn(),
 }));
 
-// jest.mock('../src/app/analytics/updateYearlyData', () => ({
-//   updateUsersYearlyOverview: jest.fn(),
-// }));
-
 jest.mock('../src/app/api/openai/route.js', () => jest.fn());
 
 describe('OcrUploadButton', () => {
@@ -103,85 +99,4 @@ describe('OcrUploadButton', () => {
     });
   });
 
-  // test('saves data to Firestore after confirmation', async () => {
-  //   const mockOnUploadComplete = jest.fn();
-
-  //   global.fetch = jest.fn(() =>
-  //     Promise.resolve({
-  //       ok: true,
-  //       json: () =>
-  //         Promise.resolve({
-  //           receiptDate: '08/10/2024',
-  //           groceries: [
-  //             {
-  //               itemName: 'ROTISSERIE',
-  //               itemPrice: 4.99,
-  //               quantity: 1,
-  //               foodGroup: 'Protein',
-  //               totalPrice: 4.99,
-  //             },
-  //           ],
-  //         }),
-  //     })
-  //   );
-
-  //   // global.fetch = jest.fn(() =>
-  //   //   Promise.resolve({
-  //   //     ok: true,
-  //   //     json: () => Promise.resolve({
-  //   //       receiptDate: '2024/11/11',
-  //   //       groceries: [
-  //   //         {
-  //   //           itemName: 'Milk',
-  //   //           itemPrice: 2.99,
-  //   //           quantity: 1,
-  //   //           foodGroup: 'Dairy',
-  //   //           totalPrice: 2.99,
-  //   //         },
-  //   //         {
-  //   //           itemName: 'Bread',
-  //   //           itemPrice: 3.49,
-  //   //           quantity: 2,
-  //   //           foodGroup: 'Grains',
-  //   //           totalPrice: 6.98,
-  //   //         },
-  //   //         {
-  //   //           itemName: 'Apples',
-  //   //           itemPrice: 1.5,
-  //   //           quantity: 4,
-  //   //           foodGroup: 'Fruits',
-  //   //           totalPrice: 6.0,
-  //   //         },
-  //   //       ],
-  //   //     }),
-  //   //   } as Response)
-  //   // );
-
-  //   render(<OcrUploadButton onUploadComplete={mockOnUploadComplete} />);
-
-  //   // Open dialog
-  //   fireEvent.click(screen.getByText('Upload Receipt'));
-
-  //   // Upload a file
-  //   const fileInput = screen.getByLabelText('Upload files');
-  //   const mockFile = new File(['mockContent'], 'mockReceipt.jpg', { type: 'image/jpeg' });
-  //   fireEvent.change(fileInput, { target: { files: [mockFile] } });
-
-  //   // Click the Parse button
-  //   fireEvent.click(screen.getByText('Upload and Parse'));
-
-  //   await waitFor(() => {
-  //     expect(screen.getByLabelText('Confirm or Enter Receipt Date')).toBeInTheDocument();
-  //   });
-
-  //   // Enter receipt date and confirm
-  //   const receiptDateInput = screen.getByLabelText('Confirm or Enter Receipt Date');
-  //   fireEvent.change(receiptDateInput, { target: { value: '2024-11-11' } });
-
-  //   fireEvent.click(screen.getByText('Confirm and Save'));
-
-  //   await waitFor(() => {
-  //     expect(mockOnUploadComplete).toHaveBeenCalled();
-  //   });
-  // });
 });
