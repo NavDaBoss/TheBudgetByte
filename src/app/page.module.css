@@ -169,21 +169,26 @@
     flex-direction: row;
     align-items: flex-start; /* Center buttons horizontally */
     justify-content: flex-start; /* Center buttons vertically */
-    gap: 10px; /* Add space between buttons */
+    gap: 20px; /* Add space between buttons */
     width: 100%; /* Ensure container takes full width */
-    margin: 0px 0px;
+    margin-left: 40px;
   }
 
   /* General button styling for mobile */
   .scanBtn,
   .lgnBtn1 {
     font-size: 2vw; /* Scale font size */
-    padding: 4px 8px; /* Adjust padding */
+    /* padding: 4px 8px; */
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    padding-top: 1vw;
+    padding-bottom: 1vw;
     border-radius: 5px; /* Adjust border radius */
     width: 50%; /* Make both buttons the same width */
     max-width: 100px; /* Limit max width */
     max-height: 30px;
     text-align: center; /* Center text inside buttons */
+    margin: 0px;
   }
 
   /* Main content adjustments for mobile */
